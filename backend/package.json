@@ -1,0 +1,21 @@
+{
+  "name": "car_renter",
+  "version": "1.0.0",
+  "description": "application for car renting",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "node": "^15.2.0",
+    "osmosis": "^1.1.10",
+    "pg": "^8.5.1",
+    "pg-promise": "^10.7.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

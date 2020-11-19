@@ -3,51 +3,69 @@ const osmosis = require('osmosis');
 var app = express()
 const fs = require('fs');
 const pool = require('./database/db');
-data = require('./data.json')
 
-let rawdata = fs.readFileSync('data1.json');
-let cars = JSON.parse(rawdata);
+
+//let rawdata = fs.readFileSync('data.json');
+//let cars = JSON.parse(rawdata);
 
 
 InsertMarks = function(cars) {
   isNewCar = true
   i = 0
   for (let car of Object.values(cars)) {
-  if (isNewCar) {
-    prev = car
-    isNewCar = false
-    continue
-  }
-  if (prev.car == car.car) {
-    continue
-  } else {
-    prev = car
-    i++
-    pool.connect((err, client, release) => {
-      if (err) {
-        return console.error('Error acquiring client', err.stack)
-      }
-      client.query('INSERT INTO mark(id_mark, name) VALUES (DEFAULT, $1)', [car.car], (err, result) => {
-        release()
+    if (isNewCar) {
+      prev = car
+      isNewCar = false
+      continue
+    }
+    if (prev.car == car.car) {
+      continue
+    } else {
+      prev = car
+      i++
+      pool.connect((err, client, release) => {
         if (err) {
-          return console.error('Error executing query', err.stack)
+          return console.error('Error acquiring client', err.stack)
         }
-        console.log(result.rows)
+        client.query('INSERT INTO mark(id_mark, name) VALUES (DEFAULT, $1)', [car.car], (err, result) => {
+          release()
+          if (err) {
+            return console.error('Error executing query', err.stack)
+          }
+          console.log(result.rows)
+        })
       })
-    })
+    }
   }
-}}
+}
 
 InsertModels = function(cars) {
   pool.connect(async (err, client, release) => {
     result = await client.query('SELECT * FROM mark')
     console.log(result.rows)
     //await pool.query('INSERT INTO model VALUES(DEFAULT, $1, $2)', [])
-    for (let car of Object.values(result.rows)) {
-      await pool.query('INSERT INTO model VALUES(DEFAULT, (SELECT id_mark FROM mark WHERE name = $1), $2)', [car.toString(), car.model])
+    for (let car of Object.values(cars)) {
+      try {
+        await pool.query('INSERT INTO model VALUES(DEFAULT, (SELECT id_mark FROM mark WHERE name = $1), $2)', [car.car, car.model])
+      } catch (e) {
+          console.log(e)
+      }
     }    
   })
 }
+
+// pool.connect((err, client, release) => {
+//   if (err) {
+//     return console.error('Error acquiring client', err.stack)
+//   }
+//   client.query('SELECT * FROM mark',(err, result) => {
+//     if (err) {
+//       return console.error('Error executing query', err.stack)
+//     }
+//     console.log(result.rows)
+//   })
+//   release()
+// })
 
 // pool.connect(async (err, client, release) => {
 //   result = await client.query('SELECT * FROM mark')
@@ -72,8 +90,38 @@ InsertModels = function(cars) {
 
 let savedData = [];
 
-function getVehileModels() {
-    // Return a promise as execution of request is time-dependent
+function getVechileMarks()
+{
+  return new Promise((resolve, reject) => {
+    let response;
+    i = 0
+    osmosis
+        .get('https://auto.ru/catalog/cars/')
+        .delay(2000)
+        .find('.search-form-v2-list .search-form-v2-list__text-item')
+        .set({
+          car : 'a',
+        })
+        .data(function(data) {
+          console.log(data)
+          savedData.push(data)
+          i++
+        })
+        .data((res)=> response = res)
+        .error(err => reject(err))
+        .done(() => resolve(response))
+});
+}
+
+// getVechileMarks().then(res => {
+//   fs.writeFile('data1.json', JSON.stringify(savedData, null, 4), function(err) {
+//     if(err) console.error(err);
+//     else console.log('Data Saved to data.json file')})
+//   }).catch(err => {
+//   console.log(err)
+// })
+
+function getVeсhileModels() {
     return new Promise((resolve, reject) => {
       let response;
       i = 0
@@ -100,8 +148,8 @@ function getVehileModels() {
   });
 }
 
-getVehileModels().then(res => {
-  fs.writeFile('data1.json', JSON.stringify(savedData, null, 4), function(err) {
+getVeсhileModels().then(res => {
+  fs.writeFile('data.json', JSON.stringify(savedData, null, 4), function(err) {
     if(err) console.error(err);
     else console.log('Data Saved to data.json file')
 })}).catch(err => {

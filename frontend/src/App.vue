@@ -1,26 +1,37 @@
 <template>
-  <div>
-    <h1>TEST!!!</h1>
-  </div>
+	<el-container>
+	<el-header><navbar/></el-header>
+	<el-main><car-container v-bind:cars="cars"/></el-main>
+	</el-container>
+
 </template>
 
 <script>
-export default {
-  name: 'App',
-  data: {
-  },
-  components: {
-  }
+
+import Navbar from './components/Navbar.vue'
+import CarContainer from './components/CarsContainer.vue'
+
+export default { 
+	name: 'App',
+	components: {
+		Navbar, 
+		CarContainer
 }
+}
+
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+	margin : 0;
+	padding : 0;
+}
+
+.el-header {
+	padding: 0;
+}
+
+.el-main {
+	padding: 20px 0px;
 }
 </style>

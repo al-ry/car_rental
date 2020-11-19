@@ -9,45 +9,47 @@ let rawdata = fs.readFileSync('data1.json');
 let cars = JSON.parse(rawdata);
 
 
-InsertMarks = function(cars) {
-  isNewCar = true
-  i = 0
-  for (let car of Object.values(cars)) {
-  if (isNewCar) {
-    prev = car
-    isNewCar = false
-    continue
-  }
-  if (prev.car == car.car) {
-    continue
-  } else {
-    prev = car
-    i++
-    pool.connect((err, client, release) => {
-      if (err) {
-        return console.error('Error acquiring client', err.stack)
-      }
-      client.query('INSERT INTO mark(id_mark, name) VALUES (DEFAULT, $1)', [car.car], (err, result) => {
-        release()
-        if (err) {
-          return console.error('Error executing query', err.stack)
-        }
-        console.log(result.rows)
-      })
-    })
-  }
-}}
+// InsertMarks = function(cars) {
+//   isNewCar = true
+//   i = 0
+//   for (let car of Object.values(cars)) {
+//   if (isNewCar) {
+//     prev = car
+//     isNewCar = false
+//     continue
+//   }
 
-InsertModels = function(cars) {
-  pool.connect(async (err, client, release) => {
-    result = await client.query('SELECT * FROM mark')
-    console.log(result.rows)
-    //await pool.query('INSERT INTO model VALUES(DEFAULT, $1, $2)', [])
-    for (let car of Object.values(result.rows)) {
-      await pool.query('INSERT INTO model VALUES(DEFAULT, (SELECT id_mark FROM mark WHERE name = $1), $2)', [car.toString(), car.model])
-    }    
-  })
-}
+//   if (prev.car == car.car) {
+//     continue
+//   } else {
+//     prev = car
+//     i++
+
+//     pool.connect((err, client, release) => {
+//       if (err) {
+//         return console.error('Error acquiring client', err.stack)
+//       }
+//       client.query('INSERT INTO mark(id_mark, name) VALUES (DEFAULT, $1)', [car.car], (err, result) => {
+//         release()
+//         if (err) {
+//           return console.error('Error executing query', err.stack)
+//         }
+//         console.log(result.rows)
+//       })
+//     })
+//   }
+// }}
+
+// InsertModels = function(cars) {
+//   pool.connect(async (err, client, release) => {
+//     result = await client.query('SELECT * FROM mark')
+//     console.log(result.rows)
+//     //await pool.query('INSERT INTO model VALUES(DEFAULT, $1, $2)', [])
+//     for (let car of Object.values(result.rows)) {
+//       await pool.query('INSERT INTO model VALUES(DEFAULT, (SELECT id_mark FROM mark WHERE name = $1), $2)', [car.toString(), car.model])
+//     }    
+//   })
+// }
 
 // pool.connect(async (err, client, release) => {
 //   result = await client.query('SELECT * FROM mark')

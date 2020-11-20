@@ -1,0 +1,911 @@
+[
+    {
+        "car": "Audi"
+    },
+    {
+        "car": "BMW"
+    },
+    {
+        "car": "Chery"
+    },
+    {
+        "car": "Chevrolet"
+    },
+    {
+        "car": "Citroen"
+    },
+    {
+        "car": "Daewoo"
+    },
+    {
+        "car": "Ford"
+    },
+    {
+        "car": "Geely"
+    },
+    {
+        "car": "Honda"
+    },
+    {
+        "car": "Hyundai"
+    },
+    {
+        "car": "Kia"
+    },
+    {
+        "car": "LADA (ВАЗ)"
+    },
+    {
+        "car": "Land Rover"
+    },
+    {
+        "car": "Lexus"
+    },
+    {
+        "car": "Lifan"
+    },
+    {
+        "car": "Mazda"
+    },
+    {
+        "car": "Mercedes-Benz"
+    },
+    {
+        "car": "Mitsubishi"
+    },
+    {
+        "car": "Nissan"
+    },
+    {
+        "car": "Opel"
+    },
+    {
+        "car": "Peugeot"
+    },
+    {
+        "car": "Renault"
+    },
+    {
+        "car": "Skoda"
+    },
+    {
+        "car": "Subaru"
+    },
+    {
+        "car": "Suzuki"
+    },
+    {
+        "car": "Toyota"
+    },
+    {
+        "car": "Volkswagen"
+    },
+    {
+        "car": "Volvo"
+    },
+    {
+        "car": "ГАЗ"
+    },
+    {
+        "car": "УАЗ"
+    },
+    {
+        "car": "AC"
+    },
+    {
+        "car": "Acura"
+    },
+    {
+        "car": "Adler"
+    },
+    {
+        "car": "Alfa Romeo"
+    },
+    {
+        "car": "Alpina"
+    },
+    {
+        "car": "Alpine"
+    },
+    {
+        "car": "AM General"
+    },
+    {
+        "car": "AMC"
+    },
+    {
+        "car": "Apal"
+    },
+    {
+        "car": "Ariel"
+    },
+    {
+        "car": "Aro"
+    },
+    {
+        "car": "Asia"
+    },
+    {
+        "car": "Aston Martin"
+    },
+    {
+        "car": "Audi"
+    },
+    {
+        "car": "Aurus"
+    },
+    {
+        "car": "Austin"
+    },
+    {
+        "car": "Austin Healey"
+    },
+    {
+        "car": "Autobianchi"
+    },
+    {
+        "car": "BAIC"
+    },
+    {
+        "car": "Bajaj"
+    },
+    {
+        "car": "Baltijas Dzips"
+    },
+    {
+        "car": "Batmobile"
+    },
+    {
+        "car": "Bentley"
+    },
+    {
+        "car": "Bertone"
+    },
+    {
+        "car": "Bilenkin"
+    },
+    {
+        "car": "Bio auto"
+    },
+    {
+        "car": "Bitter"
+    },
+    {
+        "car": "BMW"
+    },
+    {
+        "car": "Borgward"
+    },
+    {
+        "car": "Brabus"
+    },
+    {
+        "car": "Brilliance"
+    },
+    {
+        "car": "Bristol"
+    },
+    {
+        "car": "Bufori"
+    },
+    {
+        "car": "Bugatti"
+    },
+    {
+        "car": "Buick"
+    },
+    {
+        "car": "BYD"
+    },
+    {
+        "car": "Byvin"
+    },
+    {
+        "car": "Cadillac"
+    },
+    {
+        "car": "Callaway"
+    },
+    {
+        "car": "Carbodies"
+    },
+    {
+        "car": "Caterham"
+    },
+    {
+        "car": "Chana"
+    },
+    {
+        "car": "Changan"
+    },
+    {
+        "car": "ChangFeng"
+    },
+    {
+        "car": "Changhe"
+    },
+    {
+        "car": "Chery"
+    },
+    {
+        "car": "CHERYEXEED"
+    },
+    {
+        "car": "Chevrolet"
+    },
+    {
+        "car": "Chrysler"
+    },
+    {
+        "car": "Citroen"
+    },
+    {
+        "car": "Cizeta"
+    },
+    {
+        "car": "Coggiola"
+    },
+    {
+        "car": "Cord"
+    },
+    {
+        "car": "Dacia"
+    },
+    {
+        "car": "Dadi"
+    },
+    {
+        "car": "Daewoo"
+    },
+    {
+        "car": "Daihatsu"
+    },
+    {
+        "car": "Daimler"
+    },
+    {
+        "car": "Dallara"
+    },
+    {
+        "car": "Datsun"
+    },
+    {
+        "car": "De Tomaso"
+    },
+    {
+        "car": "Deco Rides"
+    },
+    {
+        "car": "Delage"
+    },
+    {
+        "car": "DeLorean"
+    },
+    {
+        "car": "Derways"
+    },
+    {
+        "car": "DeSoto"
+    },
+    {
+        "car": "DKW"
+    },
+    {
+        "car": "Dodge"
+    },
+    {
+        "car": "DongFeng"
+    },
+    {
+        "car": "Doninvest"
+    },
+    {
+        "car": "Donkervoort"
+    },
+    {
+        "car": "DS"
+    },
+    {
+        "car": "DW Hower"
+    },
+    {
+        "car": "E-Car"
+    },
+    {
+        "car": "Eagle"
+    },
+    {
+        "car": "Eagle Cars"
+    },
+    {
+        "car": "Excalibur"
+    },
+    {
+        "car": "FAW"
+    },
+    {
+        "car": "Ferrari"
+    },
+    {
+        "car": "Fiat"
+    },
+    {
+        "car": "Fisker"
+    },
+    {
+        "car": "Flanker"
+    },
+    {
+        "car": "Ford"
+    },
+    {
+        "car": "Foton"
+    },
+    {
+        "car": "FSO"
+    },
+    {
+        "car": "Fuqi"
+    },
+    {
+        "car": "GAC"
+    },
+    {
+        "car": "Geely"
+    },
+    {
+        "car": "Genesis"
+    },
+    {
+        "car": "Geo"
+    },
+    {
+        "car": "GMC"
+    },
+    {
+        "car": "Gonow"
+    },
+    {
+        "car": "Gordon"
+    },
+    {
+        "car": "GP"
+    },
+    {
+        "car": "Great Wall"
+    },
+    {
+        "car": "Hafei"
+    },
+    {
+        "car": "Haima"
+    },
+    {
+        "car": "Hanomag"
+    },
+    {
+        "car": "Haval"
+    },
+    {
+        "car": "Hawtai"
+    },
+    {
+        "car": "Heinkel"
+    },
+    {
+        "car": "Hindustan"
+    },
+    {
+        "car": "Hispano-Suiza"
+    },
+    {
+        "car": "Holden"
+    },
+    {
+        "car": "Honda"
+    },
+    {
+        "car": "Horch"
+    },
+    {
+        "car": "HuangHai"
+    },
+    {
+        "car": "Hudson"
+    },
+    {
+        "car": "Hummer"
+    },
+    {
+        "car": "Hyundai"
+    },
+    {
+        "car": "Infiniti"
+    },
+    {
+        "car": "Innocenti"
+    },
+    {
+        "car": "International"
+    },
+    {
+        "car": "Invicta"
+    },
+    {
+        "car": "Iran Khodro"
+    },
+    {
+        "car": "Isdera"
+    },
+    {
+        "car": "Isuzu"
+    },
+    {
+        "car": "IVECO"
+    },
+    {
+        "car": "JAC"
+    },
+    {
+        "car": "Jaguar"
+    },
+    {
+        "car": "Jeep"
+    },
+    {
+        "car": "Jensen"
+    },
+    {
+        "car": "Jinbei"
+    },
+    {
+        "car": "JMC"
+    },
+    {
+        "car": "Kia"
+    },
+    {
+        "car": "Koenigsegg"
+    },
+    {
+        "car": "KTM AG"
+    },
+    {
+        "car": "LADA (ВАЗ)"
+    },
+    {
+        "car": "Lamborghini"
+    },
+    {
+        "car": "Lancia"
+    },
+    {
+        "car": "Land Rover"
+    },
+    {
+        "car": "Landwind"
+    },
+    {
+        "car": "Lexus"
+    },
+    {
+        "car": "Liebao Motor"
+    },
+    {
+        "car": "Lifan"
+    },
+    {
+        "car": "Ligier"
+    },
+    {
+        "car": "Lincoln"
+    },
+    {
+        "car": "LiXiang"
+    },
+    {
+        "car": "Logem"
+    },
+    {
+        "car": "Lotus"
+    },
+    {
+        "car": "LTI"
+    },
+    {
+        "car": "Lucid"
+    },
+    {
+        "car": "Luxgen"
+    },
+    {
+        "car": "Mahindra"
+    },
+    {
+        "car": "Marcos"
+    },
+    {
+        "car": "Marlin"
+    },
+    {
+        "car": "Marussia"
+    },
+    {
+        "car": "Maruti"
+    },
+    {
+        "car": "Maserati"
+    },
+    {
+        "car": "Maybach"
+    },
+    {
+        "car": "Mazda"
+    },
+    {
+        "car": "McLaren"
+    },
+    {
+        "car": "Mega"
+    },
+    {
+        "car": "Mercedes-Benz"
+    },
+    {
+        "car": "Mercury"
+    },
+    {
+        "car": "Metrocab"
+    },
+    {
+        "car": "MG"
+    },
+    {
+        "car": "Microcar"
+    },
+    {
+        "car": "Minelli"
+    },
+    {
+        "car": "MINI"
+    },
+    {
+        "car": "Mitsubishi"
+    },
+    {
+        "car": "Mitsuoka"
+    },
+    {
+        "car": "Morgan"
+    },
+    {
+        "car": "Morris"
+    },
+    {
+        "car": "Nash"
+    },
+    {
+        "car": "Nio"
+    },
+    {
+        "car": "Nissan"
+    },
+    {
+        "car": "Noble"
+    },
+    {
+        "car": "Oldsmobile"
+    },
+    {
+        "car": "Opel"
+    },
+    {
+        "car": "Osca"
+    },
+    {
+        "car": "Packard"
+    },
+    {
+        "car": "Pagani"
+    },
+    {
+        "car": "Panoz"
+    },
+    {
+        "car": "Perodua"
+    },
+    {
+        "car": "Peugeot"
+    },
+    {
+        "car": "PGO"
+    },
+    {
+        "car": "Piaggio"
+    },
+    {
+        "car": "Plymouth"
+    },
+    {
+        "car": "Pontiac"
+    },
+    {
+        "car": "Porsche"
+    },
+    {
+        "car": "Premier"
+    },
+    {
+        "car": "Proton"
+    },
+    {
+        "car": "PUCH"
+    },
+    {
+        "car": "Puma"
+    },
+    {
+        "car": "Qoros"
+    },
+    {
+        "car": "Qvale"
+    },
+    {
+        "car": "RAM"
+    },
+    {
+        "car": "Rambler"
+    },
+    {
+        "car": "Ravon"
+    },
+    {
+        "car": "Reliant"
+    },
+    {
+        "car": "Renaissance"
+    },
+    {
+        "car": "Renault"
+    },
+    {
+        "car": "Renault Samsung"
+    },
+    {
+        "car": "Rezvani"
+    },
+    {
+        "car": "Rimac"
+    },
+    {
+        "car": "Rinspeed"
+    },
+    {
+        "car": "Roewe"
+    },
+    {
+        "car": "Rolls-Royce"
+    },
+    {
+        "car": "Ronart"
+    },
+    {
+        "car": "Rover"
+    },
+    {
+        "car": "Saab"
+    },
+    {
+        "car": "Saipa"
+    },
+    {
+        "car": "Saleen"
+    },
+    {
+        "car": "Santana"
+    },
+    {
+        "car": "Saturn"
+    },
+    {
+        "car": "Scion"
+    },
+    {
+        "car": "Sears"
+    },
+    {
+        "car": "SEAT"
+    },
+    {
+        "car": "Shanghai Maple"
+    },
+    {
+        "car": "ShuangHuan"
+    },
+    {
+        "car": "Simca"
+    },
+    {
+        "car": "Skoda"
+    },
+    {
+        "car": "Smart"
+    },
+    {
+        "car": "Soueast"
+    },
+    {
+        "car": "Spectre"
+    },
+    {
+        "car": "Spyker"
+    },
+    {
+        "car": "SsangYong"
+    },
+    {
+        "car": "Steyr"
+    },
+    {
+        "car": "Studebaker"
+    },
+    {
+        "car": "Subaru"
+    },
+    {
+        "car": "Suzuki"
+    },
+    {
+        "car": "Talbot"
+    },
+    {
+        "car": "TATA"
+    },
+    {
+        "car": "Tatra"
+    },
+    {
+        "car": "Tazzari"
+    },
+    {
+        "car": "Tesla"
+    },
+    {
+        "car": "Think"
+    },
+    {
+        "car": "Tianma"
+    },
+    {
+        "car": "Tianye"
+    },
+    {
+        "car": "Tofas"
+    },
+    {
+        "car": "Toyota"
+    },
+    {
+        "car": "Trabant"
+    },
+    {
+        "car": "Tramontana"
+    },
+    {
+        "car": "Triumph"
+    },
+    {
+        "car": "TVR"
+    },
+    {
+        "car": "Ultima"
+    },
+    {
+        "car": "Vauxhall"
+    },
+    {
+        "car": "Vector"
+    },
+    {
+        "car": "Venturi"
+    },
+    {
+        "car": "Volkswagen"
+    },
+    {
+        "car": "Volvo"
+    },
+    {
+        "car": "Vortex"
+    },
+    {
+        "car": "W Motors"
+    },
+    {
+        "car": "Wanderer"
+    },
+    {
+        "car": "Wartburg"
+    },
+    {
+        "car": "Westfield"
+    },
+    {
+        "car": "Wiesmann"
+    },
+    {
+        "car": "Willys"
+    },
+    {
+        "car": "Xin Kai"
+    },
+    {
+        "car": "Xpeng"
+    },
+    {
+        "car": "Yulon"
+    },
+    {
+        "car": "Zastava"
+    },
+    {
+        "car": "Zenos"
+    },
+    {
+        "car": "Zenvo"
+    },
+    {
+        "car": "Zibar"
+    },
+    {
+        "car": "Zotye"
+    },
+    {
+        "car": "ZX"
+    },
+    {
+        "car": "Автокам"
+    },
+    {
+        "car": "ГАЗ"
+    },
+    {
+        "car": "Гоночный болид"
+    },
+    {
+        "car": "ЗАЗ"
+    },
+    {
+        "car": "ЗИЛ"
+    },
+    {
+        "car": "ЗиС"
+    },
+    {
+        "car": "ИЖ"
+    },
+    {
+        "car": "Канонир"
+    },
+    {
+        "car": "Комбат"
+    },
+    {
+        "car": "ЛуАЗ"
+    },
+    {
+        "car": "Москвич"
+    },
+    {
+        "car": "СМЗ"
+    },
+    {
+        "car": "ТагАЗ"
+    },
+    {
+        "car": "УАЗ"
+    },
+    {
+        "car": "Ё-мобиль"
+    }
+]

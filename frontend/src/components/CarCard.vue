@@ -1,26 +1,54 @@
 <template>
-    <el-card :body-style="{ padding: '0px' }" class="car_card">
-      <div style="padding: 14px;">
-        <span>{{car.mark}}</span>
-        <span>{{car.model}}</span>
+    <el-card class="car_card" :body-style="{ padding: '0px' }">
+    <img :src="car.path" class="image">
+      <div>
+        <span>{{car.mark}} {{car.model}} {{car.transmission}}</span>
       </div>
     </el-card>
 </template>
 
 <script>
-
 export default {
-    //name : 'car_card',
     props : ['car']
 }
 
 </script>
 
 <style scoped>
+
+
 .car_card
 {
     max-width: 300px;
     margin-left: 10px;
+    margin-right: 20px;
+    min-height: 300px;
 }
+
+.bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .button {
+    padding: 0;
+  }
+
+  .image {
+    max-width: 300px;
+    min-height: 200px;
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
+  }
 
 </style>

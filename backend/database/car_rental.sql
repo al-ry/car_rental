@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS model
 		FOREIGN KEY(id_mark) 
 			REFERENCES mark(id_mark)
 				ON UPDATE CASCADE ON DELETE CASCADE
-)
+);
 
 CREATE TABLE IF NOT EXISTS car
 (
@@ -29,13 +29,13 @@ CREATE TABLE IF NOT EXISTS car
 	CONSTRAINT car_model_id_model_fk
 		FOREIGN KEY(id_model) 
 			REFERENCES model(id_model)		
-)
+);
 
 CREATE TABLE IF NOT EXISTS city
 (
 	id_city SERIAL NOT NULL PRIMARY KEY,
 	name VARCHAR(20) NOT NULL
-)
+);
 
 CREATE TABLE IF NOT EXISTS "user"
 (
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS "user"
 	CONSTRAINT user_city_id_city_fk
 		FOREIGN KEY(id_city) 
 			REFERENCES city(id_city)	
- ) 
+ );
 
 CREATE TABLE IF NOT EXISTS review
 (
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS review
 	CONSTRAINT review_user_id_user_fk
 		FOREIGN KEY(id_user) 
 			REFERENCES "user"(id_user)
-)
+);
 
 CREATE TABLE IF NOT EXISTS advertisment
 (
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS advertisment
 	CONSTRAINT advertisment_city_id_city_fk
 		FOREIGN KEY(id_city) 
 			REFERENCES city(id_city)
-)
+);
 
 CREATE TABLE IF NOT EXISTS booking
 (
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS booking
 	CONSTRAINT booking_user_id_user_fk
 		FOREIGN KEY(id_renter) 
 			REFERENCES "user"(id_user)
-)
+);
 
 CREATE TABLE IF NOT EXISTS lessors_review
 (
@@ -106,4 +106,4 @@ CREATE TABLE IF NOT EXISTS lessors_review
 	CONSTRAINT lessors_review_user_id_user_fk
 		FOREIGN KEY(id_renter) 
 			REFERENCES "user"(id_user)
-)
+);

@@ -1,37 +1,23 @@
 <template>
-	<el-container>
-	<el-header><navbar/></el-header>
-	<el-main><car-container v-bind:cars="cars"/></el-main>
-	</el-container>
-
+	<MainContainer/>
 </template>
 
 <script>
 
-import Navbar from './components/Navbar.vue'
-import CarContainer from './components/CarsContainer.vue'
-
+import MainContainer from "./components/MainContainer.vue"
 export default { 
 	name: 'App',
-	components: {
-		Navbar, 
-		CarContainer
-}
+	components : {
+		MainContainer
+	}
 }
 
 </script>
 
 <style>
-* {
-	margin : 0;
-	padding : 0;
+#app
+{
+	height: 100%;
 }
 
-.el-header {
-	padding: 0;
-}
-
-.el-main {
-	padding: 20px 0px;
-}
 </style>

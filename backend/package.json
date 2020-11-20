@@ -6,10 +6,10 @@
   "dependencies": {
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "node": "^15.2.0",
+    "node": "^15.2.1",
     "osmosis": "^1.1.10",
     "pg": "^8.5.1",
-    "pg-promise": "^10.7.5"
+    "pg-promise": "^10.8.0"
   },
   "devDependencies": {},
   "scripts": {

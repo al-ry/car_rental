@@ -82,36 +82,37 @@ InsertModels = function(cars) {
 function ParseDataFromAutoRu() {
 	const marksJsonFile = 'marks.json'
 	const modelsJsonFile = 'models.json'
-    getVechileMarks().then(res => {
-        fs.writeFile(marksJsonFile, JSON.stringify(res, null, 4), function(err) {
-            if(err) console.error(err);
-            else console.log('Data Saved to data.json file')})
-        }).catch(err => {
-            console.log(err)
-		})		
-	getVeсhileModels().then((res) => {
-		console.log(res)
-		fs.writeFile(modelsJsonFle, JSON.stringify(res, null, 4), function(err) {
-		if(err) console.error(err);
-		else console.log('Data Saved to data.json file')
-	})}).catch(err => {
-		console.log(err)
-	})
-    // let modelsJson = fs.readFileSync(modelsJsonFile);
-    // let models = JSON.parse(modelsJson);
+  //   getVechileMarks().then(res => {
+  //       fs.writeFile(marksJsonFile, JSON.stringify(res, null, 4), function(err) {
+  //           if(err) console.error(err);
+  //           else console.log('Data Saved to data.json file')})
+  //       }).catch(err => {
+  //           console.log(err)
+	// 	})		
+	// getVeсhileModels().then((res) => {
+	// 	console.log(res)
+	// 	fs.writeFile(modelsJsonFle, JSON.stringify(res, null, 4), function(err) {
+	// 	if(err) console.error(err);
+	// 	else console.log('Data Saved to data.json file')
+	// })}).catch(err => {
+	// 	console.log(err)
+  // })
   
-    // let marksJson = fs.readFileSync(marksJsonFile);
-    // let marks = JSON.parse(marksJson);
+    let modelsJson = fs.readFileSync(modelsJsonFile);
+    let models = JSON.parse(modelsJson);
+  
+    let marksJson = fs.readFileSync(marksJsonFile);
+    let marks = JSON.parse(marksJson);
 
-    // InsertMarks(marks)
-    // InsertModels(models)
+    InsertMarks(marks)
+    InsertModels(models)
 
-    // try {
-    //     fs.unlinkSync(marksJsonFile)
-    //     fs.unlinkSync(modelsJsonFile)
-    // } catch(err) {
-    //     console.log
-    // }
+    try {
+        fs.unlinkSync(marksJsonFile)
+        fs.unlinkSync(modelsJsonFile)
+    } catch(err) {
+        console.log();
+    }
 }
 
 ParseDataFromAutoRu();

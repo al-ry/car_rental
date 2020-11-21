@@ -70,7 +70,7 @@ export default {
           console.log(element)
           fd.append('files', element)
         });
-        // this.$emit('add-new-advetisement', this.form);
+        this.$emit('add-new-advetisement', this.form);
       },
 
       addPhoto(event)

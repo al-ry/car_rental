@@ -1,6 +1,5 @@
 var express = require('express')
 var app = express(), bodyParser = require("body-parser");
-const pool = require('./database/db');
 var addCarRouter = require('./routes/addCarRouter')
 
 

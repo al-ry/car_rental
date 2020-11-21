@@ -13,7 +13,7 @@
     "element-plus": "^1.0.1-alpha.15",
     "element-ui": "^2.14.1",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-rc.4"
+    "vue-router": "^4.0.0-rc.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

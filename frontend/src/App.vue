@@ -1,15 +1,15 @@
 <template>
-	<MainContainer/>
+	<router-view/>
 </template>
 
 <script>
 
-import MainContainer from "./components/MainContainer.vue"
+// import MainContainer from "./components/MainContainer.vue"
 export default { 
 	name: 'App',
-	components : {
-		MainContainer
-	}
+	// components : {
+	// 	MainContainer
+	// }
 }
 
 </script>

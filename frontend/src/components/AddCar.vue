@@ -11,8 +11,7 @@
                         <el-input v-model="form.model"></el-input>
                     </el-form-item>
                     <el-form-item label="Photo path">
-                         <el-input type="file" v-model="form.path"></el-input>
-                    >
+                         <input type="file" @change="addPhoto">
                     </el-form-item>
                     <el-form-item label="Transmisson">
                         <el-radio-group v-model="form.transmission">
@@ -39,13 +38,14 @@
 
 
 <script>
+
 export default {
     data() {
       return {
         form: {
           mark: '',
           model: '',
-          path: '',
+          photo: null,
           desc: '',
           transmission: ''
         },
@@ -64,8 +64,16 @@ export default {
         //         return;
         //     }
         // } надо как то проверять на прикрепление файла
+        const fd = new FormData();
+        fd.append('image', this.form.photo, this.form.photo.name)
+        this.form.photo = fd
         this.$emit('add-new-advetisement', this.form);
-        console.log(this.form.transmission)
+        console.log(this.form.photo)
+      },
+
+      addPhoto(event)
+      {
+        this.form.photo = event.target.files[0];
       }
     }
   }

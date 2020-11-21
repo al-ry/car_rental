@@ -6,8 +6,4 @@ export async function addCar(data) {
         body: JSON.stringify(data)
     })
     return await response;
-<<<<<<< Updated upstream
 }
-=======
-} 
->>>>>>> Stashed changes

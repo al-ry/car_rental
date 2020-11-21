@@ -45,11 +45,10 @@ export default {
         form: {
           mark: '',
           model: '',
-          photo: null,
           desc: '',
           transmission: ''
         },
-
+        photos: [],
         isValidInput : true
       }
     },
@@ -64,16 +63,22 @@ export default {
         //         return;
         //     }
         // } надо как то проверять на прикрепление файла
+        
         const fd = new FormData();
-        fd.append('image', this.form.photo, this.form.photo.name)
-        this.form.photo = fd
-        this.$emit('add-new-advetisement', this.form);
-        console.log(this.form.photo)
+        this.form.photo = fd;
+        this.photos.forEach(element => {
+          console.log(element)
+          fd.append('files', element)
+        });
+        // this.$emit('add-new-advetisement', this.form);
       },
 
       addPhoto(event)
       {
-        this.form.photo = event.target.files[0];
+        this.photos.push(event.target.files[0]);
+        console.log("-------");
+        console.log(this.photos)
+        console.log("-------");
       }
     }
   }

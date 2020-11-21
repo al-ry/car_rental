@@ -7,6 +7,7 @@
 <script>
 
 import CarCard from './CarCard.vue'
+import {addCar} from '../../services/addCar'
 
 export default {
     name : 'CarsConteiner',
@@ -23,9 +24,14 @@ export default {
     methods : {
         AddNewCar(car)
         {
-            console.log(car.transmission)
-            this.cars.push({id : this.cars.length, mark : car.mark, model : car.model,
-             path : car.path, transmission : car.transmission});
+            addCar(car).then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
+            // console.log(car.transmission)
+            // this.cars.push({id : this.cars.length, mark : car.mark, model : car.model,
+            //  path : car.path, transmission : car.transmission});
         }
     }
 }

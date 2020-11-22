@@ -8,5 +8,5 @@ export async function addCar(data) {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: JSON.stringify(data)
     })
-    return await response;
+    return await response.json;
 }

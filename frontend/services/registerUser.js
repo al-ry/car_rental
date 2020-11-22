@@ -6,5 +6,5 @@ export async function registerUser(info) {
         body: JSON.stringify(info)
     })
 
-    return await response;
+    return await response.json;
 }

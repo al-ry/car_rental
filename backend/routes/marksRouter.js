@@ -1,10 +1,7 @@
 const { Router } = require('express')
-const marksRouter = Router()
+const allCarsRouter = Router()
 const marksController = require('../controllers/marksController')
 
+allCarsRouter.get('/marksList', marksController.getMarks)
 
-marksRouter.get('/modelsList', marksController.getMarks)
-
-module.exports = marksRouter
-
-
+module.exports = allCarsRouter

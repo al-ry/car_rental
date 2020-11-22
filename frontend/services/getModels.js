@@ -1,9 +1,11 @@
+const axios = require('axios');
 
-
-export async function getMarks() {
-    const response = await fetch('/allCars', {
-        method: 'GET'
+export async function getModels(markName) {
+    const response = await axios.get('/modelsList', {
+        params: {
+            name: markName
+          }
     })
 
-    return await response.json();
+    return await response.data;
 }

@@ -1,14 +1,15 @@
 const {DBManager} = require('../database/db')
 
-exports.getCars = async (req, res) => {
+exports.getModels = async (req, res) => {
+    let markName = req.query.name
+    console.log(markName)
     try {
         db = new DBManager()
         db.connect()
-        result = await db.getCarsList()
-        console.log(result.rows)
+        result = await db.getMarkModels(markName)
+        console.log(result)
         res.json(result.rows)
     } catch(err) {
         console.log(err)
-        res.sendStatus(400)
     }
 }

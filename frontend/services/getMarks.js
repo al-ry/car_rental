@@ -1,7 +1,7 @@
 
 
 export async function getMarks() {
-    const response = await fetch('/allCars', {
+    const response = await fetch('/marksList', {
         method: 'GET'
     })
 

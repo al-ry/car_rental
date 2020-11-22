@@ -4,32 +4,51 @@
             <div class="modal-container">
                 <h2>Create new advertisement</h2>
                 <el-form ref="form" :model="form" label-width="120px">
-                    <!-- <el-form-item label="Mark">
-                        <el-input v-model="advertisementInfo.form.mark"></el-input>
-                    </el-form-item> -->
                     <el-form-item  label="Mark">
                       <el-select filterable v-model="selectedMark" class="mark-select" placeholder="Select">
-                        <el-option v-for="mark in marks" :value="mark" v-bind:key="mark.id"/>
+                        <el-option v-for="(mark, index) in marks" :value="mark" v-bind:key="index"/>
                       </el-select>
                     </el-form-item>
 
                     <el-form-item label="Model" >   
-                      <el-select v-model="selectedModel" class="model-select" placeholder="Select">
-                        <el-option v-for="model in models" :value="model" v-bind:key="model.id"/>
+                      <el-select filterable :disabled="selectedMark.length == 0" v-model="selectedModel" class="model-select" placeholder="Select">
+                        <el-option v-for="(model, index) in models" :value="model" v-bind:key="index"/>
                       </el-select>
                     </el-form-item>
-                    <!-- <el-form-item label="Model">
-                        <el-input v-model="advertisementInfo.form.model"></el-input>
-                    </el-form-item> -->
+
+					<el-form-item label="Year" > 
+						<el-select v-model="advertisementInfo.form.year" class="model-select" placeholder="Select">
+							<el-option v-for="year in years" :value="year" v-bind:key="year"/>
+						</el-select>
+					</el-form-item>
+
+					<el-form-item label="Body" > 
+						<el-select v-model="advertisementInfo.form.body" class="model-select" placeholder="Select">
+							<el-option v-for="(body, index) in bodies" :value="body" v-bind:key="index"/>
+						</el-select>
+					</el-form-item>
+
+                    <el-form-item label="Fuel" >   
+                      <el-select filterable v-model="advertisementInfo.form.fuel" class="model-select">
+                        <el-option label='Petrol' value='1' />
+						<el-option label='Diesel' value='2' />
+						<el-option label='Hybrid/Electro' value='3' />
+                      </el-select>
+                    </el-form-item>
+
+	
+
+                    <el-form-item label="Transmisson" >   
+                      <el-select filterable v-model="advertisementInfo.form.transmission" class="model-select">
+                        <el-option label='Manual' value='1'/>
+						<el-option label='Auto' value='2'/>
+                      </el-select>
+                    </el-form-item>
+
                     <el-form-item label="Photo path">
                          <input type="file" @change="addPhoto">
                     </el-form-item>
-                    <el-form-item label="Transmisson">
-                        <el-radio-group v-model="advertisementInfo.form.transmission">
-                        <el-radio label="Manual"></el-radio>
-                        <el-radio label="Auto"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
+
                     <el-form-item label="Description">
                         <el-input type="textarea" v-model="advertisementInfo.form.desc"></el-input>
                     </el-form-item>
@@ -49,6 +68,7 @@
 
 <script>
 import {getMarks} from '../../services/getMarks'
+import {getModels} from '../../services/getModels'
 
 export default {
     data() {
@@ -57,7 +77,11 @@ export default {
             {
                 form: {
                     desc: '',
-                    transmission: '',
+					transmission: '',
+					fuel: '',
+					year: '',
+					body: '',
+					
                     path: 'kalina.jpg'
                 },
 
@@ -70,18 +94,32 @@ export default {
             selectedModel : '',
             marks : [],
             models: []
-        }
+		}
     },
 
     watch: {
-		selectedMark()
-		{
-			this.models = [];
-			if (this.selectedMark.length > 0) {
-				this.models = this.marks[this.selectedMark]
-			}
+		selectedMark() {
+			this.models = []
+			getModels(this.selectedMark).then(res => {
+				for(var i in res) {
+					this.models.push(res[i]['name']) 
+				}
+			}).catch(err => {
+				console.log(err, "asdasd")
+			});
 		}
-    },
+	},
+
+	computed : {
+		years () {
+			const year = new Date().getFullYear()
+			return Array.from({length: year - 1900}, (value, index) => 1901 + index).reverse()
+		},
+
+		bodies () {
+			return ["Sedan", "Cabriolet", "Coupe", "Crossover","Hatchback", "Limousine", "Wagon", "SUV", "Track"]
+		}
+	},
 
 	created() {
 		getMarks().then(res => {
@@ -94,31 +132,36 @@ export default {
 	},
 
     methods: {
-        onSubmit() {
-        // // for(const field in this.form)
-        // // {
-        // //     if(!this.form[field])
-        // //     {
-        // //         this.isValidInput = false;
-        // //         console.log("error");
-        // //         return;
-        // //     }
-        // // } надо как то проверять на прикрепление файла
-        
-        // const fd = new FormData();
-        // this.form.photo = fd;
-        // this.photos.forEach(element => {
-        //   console.log(element)
-        //   fd.append('files', element)
-        // });
-        
-        this.$emit('add-new-advetisement', this.advertisementInfo.form);
-      },
+		onSubmit() {
+			this.checkInput();
+			if(this.isValidInput === true)
+			{
+				this.$emit('add-new-advetisement', this.advertisementInfo.form);
+			}
+			// const fd = new FormData();
+			// this.form.photo = fd;
+			// this.photos.forEach(element => {
+			//   console.log(element)
+			//   fd.append('files', element)
+			// });
+		},
 
-      addPhoto(event)
-      {
-        this.advertisementInfo.photos.push(event.target.files[0]);
-      },
+		checkInput() {
+			for(const field in this.advertisementInfo.form)
+			{
+				if(!this.advertisementInfo.form[field])
+				{
+					this.isValidInput = false;
+					console.log(field)
+					return;
+				}
+			}
+		},
+
+		addPhoto(event)
+		{
+			this.advertisementInfo.photos.push(event.target.files[0]);
+		},
     }
   }
 </script>
@@ -199,4 +242,5 @@ h2 {
 {
   display: block;
 }
+
 </style>

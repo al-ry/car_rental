@@ -1,7 +1,7 @@
 const { Client } = require('pg')
 
 
-export class DBManager {
+class DBManager {
   #client
 
   constructor() {
@@ -13,29 +13,26 @@ export class DBManager {
       port: 5432
     })
   }
-  connect() {
-    this.#client.connect(err => {
-      if (err) {
-        throw err
-      }
-    })
+  async connect() {
+    await this.#client.connect()
   }
 
-  insertUser(user) {
-    data = [user.name, user.phone, user.email, user.id_city, user.password]
-    query = 'INSERT INTO user VALUES(DEFAULT, $1, $2, $3, $4, $5)'
-    this.#client.query(query, data).catch(err => {
-      if (err) throw err;
-    })
+  async insertUser(user) {
+    console.log(user)
+    let data = [user.name, user.phone, user.email, user.idCity, user.password]
+    let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5)'
+    await this.#client.query(query, data)
+  }
+  async getPasswordByPhone(phone) {
+    let data = [phone]
+    let query = 'SELECT password FROM \"user\" WHERE phone = $1'
+    return await this.#client.query(query, data)
   }
 
-  close() {
-    this.#client.end(err => {
-      if (err) {
-        throw err
-      }
-    })
+  async close() {
+	   await this.#client.end()
   }
 }
 
 
+module.exports =  {DBManager}

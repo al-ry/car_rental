@@ -6,5 +6,3 @@ const addCarController = require('../controllers/addCarController')
 addCarRouter.post('/addCar', addCarController.addCar)
 
 module.exports = addCarRouter
-
-

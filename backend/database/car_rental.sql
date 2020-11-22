@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS "user"
 (
 	id_user SERIAL NOT NULL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
-	phone VARCHAR(20) NOT NULL,
+	phone VARCHAR(20) NOT NULL UNIQUE,
 	email VARCHAR(30) NOT NULL UNIQUE,
 	id_city SERIAL NOT NULL,
-	password VARCHAR(50) NOT NULL,
+	password VARCHAR(145) NOT NULL,
 	CONSTRAINT user_city_id_city_fk
 		FOREIGN KEY(id_city) 
 			REFERENCES city(id_city)	

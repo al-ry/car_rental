@@ -44,7 +44,7 @@ import {loginUser} from '../../services/loginUser'
         }
 
         loginUser(this.form).then(res => {
-                console.log(res, "ddd")
+                this.$router.push({name : "main_page"})
         }).catch(err => {
                 console.log(err)
         })

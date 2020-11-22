@@ -87,8 +87,12 @@ import {registerUser} from '../../services/registerUser'
             id_city: this.form.city,
             password: this.form.password
         }
-        console.log("test", user);
-        registerUser(user);
+
+        registerUser(user).then(res => {
+                this.$router.push({name : "main_page"})
+        }).catch(err => {
+                console.log(err)
+        })
       },
 
       OnChange()

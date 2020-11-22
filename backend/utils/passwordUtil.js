@@ -1,4 +1,5 @@
 var crypto = require('crypto')
+const {AuthorizationError} = require('../errors/authorizationErrors')
 
 var GetRandomString = function(length) {
     return crypto.randomBytes(Math.ceil(length/2)).toString('hex').slice(0, length)
@@ -20,13 +21,25 @@ var saltHashPassword = function(userPassword){
     return passwordData
 }
 
-var CheckHashPassword = function(userPassword, salt) {
+var getPasswordHash = function(userPassword, salt) {
     var passwordData = SHA512(userPassword, salt)
-    return passwordData
+    return passwordData.passwordHash
 }
 
-function checkPassword(password, passFromReq) {
-    if ()
+function checkPassword(passFromDB, passFromReq) {
+    if (passFromReq = '')
+    {
+        throw new AuthorizationError('Empty password')
+    }
+    let pass = {
+        salt : passFromDB.slice(0, 16),
+        hash : passFromDB.slice(16, passFromDB.length)
+    }
+    hashPasswordReq = getPasswordHash(passFromReq, pass.salt)
+    hashPasswordDB = pass.hash
+    if (hashPasswordDB != hashPasswordReq) {
+        throw new AuthorizationError('Incorrect password')
+    }
 }
 
 module.exports = {saltHashPassword, checkPassword}

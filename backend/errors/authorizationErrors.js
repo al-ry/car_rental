@@ -7,3 +7,5 @@ class AuthorizationError extends Error {
         this.name = 'Authorization Error';
     }
 }
+
+module.exports = {AuthorizationError}

@@ -3,7 +3,7 @@ const marksRouter = Router()
 const marksController = require('../controllers/marksController')
 
 
-marksRouter.get('/marksList', marksController.getMarks)
+marksRouter.get('/modelsList', marksController.getMarks)
 
 module.exports = marksRouter
 

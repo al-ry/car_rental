@@ -23,19 +23,15 @@ var saltHashPassword = function(userPassword){
 
 var getPasswordHash = function(userPassword, salt) {
     var passwordData = SHA512(userPassword, salt)
-    return passwordData.passwordHash
+    return passwordData
 }
 
 function checkPassword(passFromDB, passFromReq) {
-    if (passFromReq = '')
-    {
-        throw new AuthorizationError('Empty password')
-    }
     let pass = {
         salt : passFromDB.slice(0, 16),
         hash : passFromDB.slice(16, passFromDB.length)
     }
-    hashPasswordReq = getPasswordHash(passFromReq, pass.salt)
+    hashPasswordReq = getPasswordHash(passFromReq, pass.salt).passwordHash
     hashPasswordDB = pass.hash
     if (hashPasswordDB != hashPasswordReq) {
         throw new AuthorizationError('Incorrect password')

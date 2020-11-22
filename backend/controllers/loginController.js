@@ -1,5 +1,6 @@
 const {DBManager} = require('../database/db')
 const {checkPassword} = require('../utils/passwordUtil')
+const {checkLogin} = require('../utils/loginUtil')
 
 exports.login = async (req, res) => {
     data = req.body
@@ -10,7 +11,8 @@ exports.login = async (req, res) => {
     try {
         db = new DBManager()
         db.connect()
-        const result = await db.getPasswordByPhone(userData.phone)
+        const result = await db.getUserDataByPhone(userData.phone)
+        checkLogin(result.rows[0].phone)
         checkPassword(result.rows[0].password, userData.password)
         res.sendStatus(200)
     } catch (err) {

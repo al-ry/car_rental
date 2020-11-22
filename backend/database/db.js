@@ -23,9 +23,9 @@ class DBManager {
     let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5)'
     await this.#client.query(query, data)
   }
-  async getPasswordByPhone(phone) {
+  async getUserDataByPhone(phone) {
     let data = [phone]
-    let query = 'SELECT password FROM \"user\" WHERE phone = $1'
+    let query = 'SELECT phone, password FROM \"user\" WHERE phone = $1'
     return await this.#client.query(query, data)
   }
 

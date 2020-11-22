@@ -9,7 +9,7 @@
                     </el-form-item> -->
                     <el-form-item  label="Mark">
                       <el-select filterable v-model="selectedMark" class="mark-select" placeholder="Select">
-                        <el-option v-for="(mark_obj, mark) in marks" :value="mark" v-bind:key="mark.id"/>
+                        <el-option v-for="mark in marks" :value="mark" v-bind:key="mark.id"/>
                       </el-select>
                     </el-form-item>
 
@@ -48,7 +48,7 @@
 
 
 <script>
-import {getModels} from '../../services/getModels'
+import {getMarks} from '../../services/getMarks'
 
 export default {
     data() {
@@ -68,46 +68,30 @@ export default {
 
             selectedMark : '',
             selectedModel : '',
-            marks : 
-            {
-              "Toyota" : ["Avensis", "Auris"],
-              "Nissan" : ["Almera", "Sunny"],
-              "LADA" : ["Priora", "Kalina"],
-              "LADA1" : ["Priora", "Kalina"],
-              "LADA2" : ["Priora", "Kalina"],
-              "LADA3" : ["Priora", "Kalina"],
-              "LADA4" : ["Priora", "Kalina"],
-              "LADA5" : ["Priora", "Kalina"],
-              "LADA6" : ["Priora", "Kalina"],
-              "LADA7" : ["Priora", "Kalina"],
-              "LADA8" : ["Priora", "Kalina"],
-              "LADA9" : ["Priora", "Kalina"],
-              "LADA10" : ["Priora", "Kalina"],
-              "LADA11" : ["Priora", "Kalina"],
-            },
-
+            marks : [],
             models: []
         }
     },
 
     watch: {
-      selectedMark()
-      {
-          this.models = [];
-          if (this.selectedMark.length > 0) {
-              this.models = this.marks[this.selectedMark]
-          }
-      }
+		selectedMark()
+		{
+			this.models = [];
+			if (this.selectedMark.length > 0) {
+				this.models = this.marks[this.selectedMark]
+			}
+		}
     },
 
-    created() {
-        getModels(this.form).then(res => {
-                console.log(res)
-                this.$router.push({name : "main_page"})
-        }).catch(err => {
-                console.log(err)
-        })
-    },
+	created() {
+		getMarks().then(res => {
+			for(var i in res) {
+				this.marks.push(res[i]['name']) 
+			}
+		}).catch(err => {
+				console.log(err)
+		})
+	},
 
     methods: {
         onSubmit() {

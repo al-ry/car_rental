@@ -8,7 +8,7 @@ exports.getMarks = async (req, res) => {
         db.connect()
         result = await db.getMarkModels(markName)
         console.log(result)
-        res.sendStatus(200).json(result)
+        res.json(result)
     } catch(err) {
         console.log(err)
     }

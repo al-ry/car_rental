@@ -5,5 +5,5 @@ export async function loginUser(info) {
         body: JSON.stringify(info)
     })
 
-    return await response;
+    return await response.json();
 }

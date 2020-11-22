@@ -5,9 +5,10 @@ exports.getCars = async (req, res) => {
         db = new DBManager()
         db.connect()
         result = await db.getCarsList()
-        console.log(result)
-        res.sendStatus(200).json(result.rows)
+        console.log(result.rows)
+        res.json(result.rows)
     } catch(err) {
         console.log(err)
+        res.sendStatus(400)
     }
 }

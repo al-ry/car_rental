@@ -89,6 +89,7 @@ import {registerUser} from '../../services/registerUser'
         }
 
         registerUser(user).then(res => {
+                console.log(res)
                 this.$router.push({name : "main_page"})
         }).catch(err => {
                 console.log(err)

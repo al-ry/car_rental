@@ -4,12 +4,23 @@
             <div class="modal-container">
                 <h2>Create new advertisement</h2>
                 <el-form ref="form" :model="form" label-width="120px">
-                    <el-form-item label="Mark">
+                    <!-- <el-form-item label="Mark">
                         <el-input v-model="advertisementInfo.form.mark"></el-input>
+                    </el-form-item> -->
+                    <el-form-item  label="Mark">
+                      <el-select filterable v-model="selectedMark" class="mark-select" placeholder="Select">
+                        <el-option v-for="(mark_obj, mark) in marks" :value="mark" v-bind:key="mark.id"/>
+                      </el-select>
                     </el-form-item>
-                    <el-form-item label="Model">
+
+                    <el-form-item label="Model" >   
+                      <el-select v-model="selectedModel" class="model-select" placeholder="Select">
+                        <el-option v-for="model in models" :value="model" v-bind:key="model.id"/>
+                      </el-select>
+                    </el-form-item>
+                    <!-- <el-form-item label="Model">
                         <el-input v-model="advertisementInfo.form.model"></el-input>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="Photo path">
                          <input type="file" @change="addPhoto">
                     </el-form-item>
@@ -37,6 +48,7 @@
 
 
 <script>
+import {getModels} from '../../services/getModels'
 
 export default {
     data() {
@@ -44,8 +56,6 @@ export default {
             advertisementInfo:
             {
                 form: {
-                    mark: '',
-                    model: '',
                     desc: '',
                     transmission: '',
                     path: 'kalina.jpg'
@@ -53,9 +63,52 @@ export default {
 
                 photos: [],
             },
-            isValidInput : true
+
+            isValidInput : true,
+
+            selectedMark : '',
+            selectedModel : '',
+            marks : 
+            {
+              "Toyota" : ["Avensis", "Auris"],
+              "Nissan" : ["Almera", "Sunny"],
+              "LADA" : ["Priora", "Kalina"],
+              "LADA1" : ["Priora", "Kalina"],
+              "LADA2" : ["Priora", "Kalina"],
+              "LADA3" : ["Priora", "Kalina"],
+              "LADA4" : ["Priora", "Kalina"],
+              "LADA5" : ["Priora", "Kalina"],
+              "LADA6" : ["Priora", "Kalina"],
+              "LADA7" : ["Priora", "Kalina"],
+              "LADA8" : ["Priora", "Kalina"],
+              "LADA9" : ["Priora", "Kalina"],
+              "LADA10" : ["Priora", "Kalina"],
+              "LADA11" : ["Priora", "Kalina"],
+            },
+
+            models: []
         }
     },
+
+    watch: {
+      selectedMark()
+      {
+          this.models = [];
+          if (this.selectedMark.length > 0) {
+              this.models = this.marks[this.selectedMark]
+          }
+      }
+    },
+
+    created() {
+        getModels(this.form).then(res => {
+                console.log(res)
+                this.$router.push({name : "main_page"})
+        }).catch(err => {
+                console.log(err)
+        })
+    },
+
     methods: {
         onSubmit() {
         // // for(const field in this.form)
@@ -81,7 +134,7 @@ export default {
       addPhoto(event)
       {
         this.advertisementInfo.photos.push(event.target.files[0]);
-      }
+      },
     }
   }
 </script>
@@ -100,7 +153,7 @@ h2 {
 
 .modal-mask {
   position: fixed;
-  z-index: 9998;
+  z-index: 2;
   top: 0;
   left: 0;
   width: 100%;
@@ -158,4 +211,8 @@ h2 {
     color : red;
 }
 
+.mark-select, .model-select
+{
+  display: block;
+}
 </style>

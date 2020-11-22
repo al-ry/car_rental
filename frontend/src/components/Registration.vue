@@ -13,7 +13,7 @@
         <el-form-item label="City">
             <el-select v-model="form.city" placeholder="please select your city">
                 <el-option label="Казань" value="1"></el-option>
-                <el-option label="Йошкар-Ола" value="0"></el-option>
+                <el-option label="Йошкар-Ола" value="2"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="Birthday">
@@ -87,8 +87,12 @@ import {registerUser} from '../../services/registerUser'
             id_city: this.form.city,
             password: this.form.password
         }
-        console.log("test", user);
-        registerUser(user);
+
+        registerUser(user).then(res => {
+                this.$router.push({name : "main_page"})
+        }).catch(err => {
+                console.log(err)
+        })
       },
 
       OnChange()

@@ -28,7 +28,7 @@ export default {
             addCar(car).then(res => {
                 console.log(res)
                 this.cars.push({ mark: carInfo.mark, model: carInfo.model, 
-                transmission: carInfo.transmission, description: carInfo.description})
+                transmission: carInfo.transmission, description: carInfo.description, photo: car.carInfo.path})
             }).catch(err => {
                 console.log(err)
             })

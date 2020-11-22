@@ -1,14 +1,16 @@
 <template>
     <el-form ref="form" :model="form" label-width="120px" class="login-form">
         <span class="login-label">Authorization</span>
-        <el-form-item label="Login">
-            <el-input v-model="form.name"></el-input>
+        <el-form-item label="Phone">
+            <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        
+  
         <el-form-item label="Password">
             <el-input type="password" v-model="form.password"></el-input>
         </el-form-item>
-
+        <el-form-item v-if="isEmptyInput == true" class="error_message">
+            <span>All fields should be filled</span>
+        </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Submit</el-button>
             <router-link class="go-back-button" to="/"><el-button>Go back to start page</el-button></router-link>
@@ -18,18 +20,34 @@
 </template>
 
 <script>
+import {loginUser} from '../../services/loginUser'
   export default {
     data() {
       return {
         form: {
-          login: '',
+          phone: '',
           password: '',
-        }
+        },
+
+        isEmptyInput: false
       }
     },
     methods: {
       onSubmit() {
-        console.log('submit!');
+        for(const field in this.form)
+        {
+            if(!this.form[field])
+            {
+                this.isEmptyInput = true;
+                return;
+            }
+        }
+
+        loginUser(this.form).then(res => {
+                this.$router.push({name : "main_page"})
+        }).catch(err => {
+                console.log(err)
+        })
       }
     }
   }
@@ -59,6 +77,12 @@
     display: block;
     font-size: 25px;
     max-width: 150px;
+}
+
+
+.error_message
+{
+    color : red;
 }
 
 </style>

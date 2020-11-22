@@ -47,7 +47,8 @@ export default {
                     mark: '',
                     model: '',
                     desc: '',
-                    transmission: ''
+                    transmission: '',
+                    path: 'kalina.jpg'
                 },
 
                 photos: [],
@@ -74,7 +75,7 @@ export default {
         //   fd.append('files', element)
         // });
         
-        this.$emit('add-new-advetisement', this.advertisementInfo);
+        this.$emit('add-new-advetisement', this.advertisementInfo.form);
       },
 
       addPhoto(event)

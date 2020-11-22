@@ -29,6 +29,25 @@ class DBManager {
     return await this.#client.query(query, data)
   }
 
+  async getMarkModels(markName) {
+
+    let data = [markName]
+    let query = 'SELECT id_mark FROM mark WHERE name = $1'
+    let carId = await this.#client.query(query, data)
+    query = 'SELECT name FROM model WHERE id_mark = $1'
+    return await this.#client.query(query, [carId.rows[0].id_mark])
+  }
+  
+  async getCarsList() {
+    let query = 'SELECT name FROM mark'
+    return await this.#client.query(query)
+  }
+
+  async insertCar(car) {
+    let data = [car.mark]
+    let query = 'INSERT INTO car VALUES (DEFAULT, $1, $2, $3, $4, $5)'
+  }
+
   async close() {
 	   await this.#client.end()
   }

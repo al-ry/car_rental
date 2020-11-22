@@ -3,7 +3,9 @@ var app = express(), bodyParser = require("body-parser");
 var addCarRouter = require('./routes/addCarRouter')
 var registerUserRouter = require('./routes/registerUserRouter')
 var loginRouter = require('./routes/loginRouter')
-var session = require('express-session');
+var allCarsRouter = require('./routes/allCarsRouter')
+var marksRouter = require('./routes/marksRouter')
+//var session = require('express-session');
 var cors = require('cors')
 
 
@@ -22,6 +24,8 @@ app.use(bodyParser.urlencoded({extended : true}))
 app.use(addCarRouter)
 app.use(registerUserRouter)
 app.use(loginRouter)
+app.use(allCarsRouter)
+app.use(marksRouter)
 
 
 app.listen(3000, () => {

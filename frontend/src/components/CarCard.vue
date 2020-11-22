@@ -15,8 +15,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .car_card
 {
     max-width: 300px;

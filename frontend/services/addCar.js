@@ -1,4 +1,7 @@
 
+
+//import Axios from "axios";
+
 export async function addCar(data) {
     const response = await fetch('/addCar', {
         method: 'POST',
@@ -7,6 +10,3 @@ export async function addCar(data) {
     })
     return await response;
 }
-
-
-

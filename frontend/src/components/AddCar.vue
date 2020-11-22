@@ -5,22 +5,22 @@
                 <h2>Create new advertisement</h2>
                 <el-form ref="form" :model="form" label-width="120px">
                     <el-form-item label="Mark">
-                        <el-input v-model="form.mark"></el-input>
+                        <el-input v-model="advertisementInfo.form.mark"></el-input>
                     </el-form-item>
                     <el-form-item label="Model">
-                        <el-input v-model="form.model"></el-input>
+                        <el-input v-model="advertisementInfo.form.model"></el-input>
                     </el-form-item>
                     <el-form-item label="Photo path">
                          <input type="file" @change="addPhoto">
                     </el-form-item>
                     <el-form-item label="Transmisson">
-                        <el-radio-group v-model="form.transmission">
+                        <el-radio-group v-model="advertisementInfo.form.transmission">
                         <el-radio label="Manual"></el-radio>
                         <el-radio label="Auto"></el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="Description">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
+                        <el-input type="textarea" v-model="advertisementInfo.form.desc"></el-input>
                     </el-form-item>
                     <el-form-item v-if="isValidInput == false" class="error_message">
                          <span>All fields should be filled</span>
@@ -29,7 +29,6 @@
                         <el-button type="primary" v-on:click="onSubmit">Create</el-button>
                         <el-button v-on:click="$emit('close')">Cancel</el-button>
                     </el-form-item>
-
                 </el-form>
             </div>
         </div>
@@ -41,51 +40,58 @@
 
 export default {
     data() {
-      return {
-        form: {
-          mark: '',
-          model: '',
-          desc: '',
-          transmission: ''
-        },
-        photos: [],
-        isValidInput : true
-      }
+        return {
+            advertisementInfo:
+            {
+                form: {
+                    mark: '',
+                    model: '',
+                    desc: '',
+                    transmission: ''
+                },
+
+                photos: [],
+            },
+            isValidInput : true
+        }
     },
     methods: {
-      onSubmit() {
-        // for(const field in this.form)
-        // {
-        //     if(!this.form[field])
-        //     {
-        //         this.isValidInput = false;
-        //         console.log("error");
-        //         return;
-        //     }
-        // } надо как то проверять на прикрепление файла
+        onSubmit() {
+        // // for(const field in this.form)
+        // // {
+        // //     if(!this.form[field])
+        // //     {
+        // //         this.isValidInput = false;
+        // //         console.log("error");
+        // //         return;
+        // //     }
+        // // } надо как то проверять на прикрепление файла
         
-        const fd = new FormData();
-        this.form.photo = fd;
-        this.photos.forEach(element => {
-          console.log(element)
-          fd.append('files', element)
-        });
-        this.$emit('add-new-advetisement', this.form);
+        // const fd = new FormData();
+        // this.form.photo = fd;
+        // this.photos.forEach(element => {
+        //   console.log(element)
+        //   fd.append('files', element)
+        // });
+        
+        this.$emit('add-new-advetisement', this.advertisementInfo);
       },
 
       addPhoto(event)
       {
-        this.photos.push(event.target.files[0]);
-        console.log("-------");
-        console.log(this.photos)
-        console.log("-------");
+        this.advertisementInfo.photos.push(event.target.files[0]);
       }
     }
   }
 </script>
 
 
-<style scoped>
+<style>
+html, body 
+{
+  margin: 0px;
+}
+
 h2 {
     max-width: 300px;
     margin: 40px auto 40px auto;
@@ -111,7 +117,7 @@ h2 {
 .modal-container {
   width: 500px;
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 20px 30px 20px 10px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);

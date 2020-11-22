@@ -3,7 +3,7 @@
 		<el-header><navbar v-on:show-add-car="isVisibleAddMenu = true"/></el-header>
 		<el-main><car-container ref="car_container" v-bind:cars="cars"/></el-main>
         <AddCar v-if="isVisibleAddMenu == true" v-on:close="isVisibleAddMenu = false"
-         v-on:add-new-advetisement="this.$refs.car_container.AddNewCar"/>
+         v-on:add-new-advetisement="AddNewAdvertisement"/>
 	</div> 
 </template>
 
@@ -26,6 +26,11 @@ export default {
         AddCar,
 },
     methods: {
+        AddNewAdvertisement(car)
+        {
+            this.$refs.car_container.AddNewCar(car);
+            this.isVisibleAddMenu = false;
+        }
     }
 }
 
@@ -35,12 +40,14 @@ export default {
 html, body {
     overflow: auto;
 	height: 100%;
+    margin: 0px;
 }
 
 * {
 	margin : 0;
 	padding : 0;
 }
+
 .main_container
 {
 	height: 100%;

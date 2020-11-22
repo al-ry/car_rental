@@ -1,7 +1,9 @@
 
 exports.addCar = (req, res) => {
-    const car = req.body
+    car = req.body
+    json = JSON.stringify(car)
+    console.log(json)
+
     console.log(car)
-    console.log(car.photo)
     res.sendStatus(200)
 }

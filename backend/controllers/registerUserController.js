@@ -13,14 +13,14 @@ exports.registerUser = async (req, res) => {
         idCity: data.id_city,
         password: saltAndHash
     }
-    // try {
-    //     db = new DBManager()
-    //     await db.connect()
-    //     await db.insertUser(user)
-    //     await db.close()
-    //     res.sendStatus(200)
-    // } catch (err) {
-    //     console.log(err)
-    //     res.sendStatus(400)
-    // }
+    try {
+        db = new DBManager()
+        await db.connect()
+        await db.insertUser(user)
+        await db.close()
+        res.sendStatus(200)
+    } catch (err) {
+        console.log(err)
+        res.sendStatus(400)
+    }
 }

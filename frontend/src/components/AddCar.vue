@@ -94,6 +94,7 @@
 
 import {getMarks} from '../../services/getMarks'
 import {getModels} from '../../services/getModels'
+import axios from 'axios'
 
 export default {
     data() {
@@ -162,7 +163,6 @@ export default {
 			console.log(this.fileList, "That was on select file action")
 		},
 		onSubmit() {
-      console.log(this.fileList, 'fff')
 			// this.checkInput();
 			if(this.isValidInput === true)
 			{
@@ -175,8 +175,9 @@ export default {
         });
 
         fd.append('model', this.advertisementInfo.form.model)
-        console.log(fd.getAll('files')[0], 'fddff')
-				this.$emit('add-new-advetisement', fd);
+        // this.$emit('add-new-advetisement', fd);
+        
+        axios.post('/addCar', fd)
 			}
 		},
 

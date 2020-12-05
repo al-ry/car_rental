@@ -5,8 +5,8 @@
 export async function addCar(data) {
     const response = await fetch('/addCar', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
+        headers: {'Content-Type': 'multipart/form-data'},
+        body: data
     })
-    return await response.json();
+    return await response;
 }

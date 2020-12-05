@@ -11,6 +11,9 @@
         <el-form-item v-if="isEmptyInput == true" class="error_message">
             <span>All fields should be filled</span>
         </el-form-item>
+		<el-form-item v-if="isLogged == false" class="error_message">
+            <span>Invalid phone or password</span>
+        </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Submit</el-button>
             <router-link class="go-back-button" to="/"><el-button>Go back to start page</el-button></router-link>
@@ -29,27 +32,43 @@ import {loginUser} from '../../services/loginUser'
           password: '',
         },
 
-        isEmptyInput: false
+		isEmptyInput: false,
+		isLogged: true
       }
     },
     methods: {
-      onSubmit() {
-        for(const field in this.form)
-        {
-            if(!this.form[field])
-            {
-                this.isEmptyInput = true;
-                return;
-            }
-        }
-
-        loginUser(this.form).then(res => {
-                console.log(res)
-                this.$router.push({name : "main_page"})
-        }).catch(err => {
-                console.log(err)
-        })
-      }
+	checkInput() {
+		for(const field in this.form)
+		{
+			if(!this.form[field])
+			{
+				this.isLogged = true
+				this.isEmptyInput = true;
+				return;
+			}
+		}
+	},
+	
+	onSubmit() {
+		this.checkInput() 
+		if(this.isEmptyInput === false)
+		{
+				loginUser(this.form).then(res => {
+				if(res.status == 200)
+				{
+					this.$router.push({name : "main_page"})
+				}
+				else
+				{
+					this.isEmptyInput = false;
+					this.isLogged = false;
+				}
+				
+				}).catch(err => {
+					console.log(err)
+				})
+			}
+		}
     }
   }
 </script>

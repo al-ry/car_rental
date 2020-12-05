@@ -24,11 +24,11 @@ export default {
     methods : {
         AddNewCar(car)
         {
-            var carInfo = car.form
+            // var carInfo = car.form
             addCar(car).then(res => {
                 console.log(res)
-                this.cars.push({ mark: carInfo.mark, model: carInfo.model, 
-                transmission: carInfo.transmission, description: carInfo.description, photo: car.carInfo.path})
+                // this.cars.push({ mark: carInfo.mark, model: carInfo.model, 
+                // transmission: carInfo.transmission, description: carInfo.description, photo: car.carInfo.path})
             }).catch(err => {
                 console.log(err)
             })

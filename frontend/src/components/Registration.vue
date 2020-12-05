@@ -21,17 +21,20 @@
         </el-form-item>
 
         <el-form-item label="Password">
-            <el-input v-model="form.password"></el-input>
+            <el-input type="password" v-model="form.password"></el-input>
         </el-form-item>
 
         <el-form-item label="Confirm password">
-            <el-input v-model="form.confirmPassword"></el-input>
+            <el-input type="password" v-model="form.confirmPassword"></el-input>
         </el-form-item>
         <el-form-item v-if="doesPasswordsMatch == false" class="error_message">
             <span>Passwords does not math</span>
         </el-form-item>
-        <el-form-item v-if="isEmptyInput == true" class="error_message">
+        <el-form-item v-if="isValidInput == false" class="error_message">
             <span>All fields should be filled</span>
+        </el-form-item>
+        <el-form-item v-if="isRegistered == false" class="error_message">
+            <span>User already exists</span>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -57,49 +60,57 @@ import {registerUser} from '../../services/registerUser'
         },
 
         doesPasswordsMatch: true,
-        isEmptyInput: false,
+        isValidInput: true,
+        isRegistered : true,
+
       }
     },
     methods: {
-      onSubmit() {
-        this.isEmptyInput = false
-        console.log("Form", this.form);
-        for(const field in this.form)
-        {
-            if(!this.form[field])
+        checkInput() {
+            for(const field in this.form)
             {
-                this.isEmptyInput = true;
-                console.log("error", field);
-                return;
+                if(!this.form[field])
+                {
+                    this.isRegistered = true
+                    this.doesPasswordsMatch = true,
+                    this.isValidInput = false;
+                    return;
+                }
             }
-        } 
-        
-        if (this.form.password != this.form.confirmPassword)
-        {
-            this.doesPasswordsMatch = false
-            return;
-        }
 
-        let user = {
-            name: this.form.name,
-            phone: this.form.phone,
-            email: this.form.email,
-            id_city: this.form.city,
-            password: this.form.password
-        }
+            this.isValidInput = true;
+        },
 
-        registerUser(user).then(res => {
-                console.log(res)
-                this.$router.push({name : "main_page"})
-        }).catch(err => {
-                console.log(err)
-        })
-      },
+        onSubmit() {
+            this.checkInput() 
+            if(this.isValidInput === true) {
+                if (this.form.password != this.form.confirmPassword) {
+                    this.doesPasswordsMatch = false
+                    return;
+                }
 
-      OnChange()
-      {
-          console.log("test");
-      }
+                let user = {
+                    name: this.form.name,
+                    phone: this.form.phone,
+                    email: this.form.email,
+                    id_city: this.form.city,
+                    password: this.form.password
+                }
+
+                registerUser(user).then(res => {
+                    if (res.status == 200) {
+                        this.$router.push({name : "main_page"})
+                    }        
+                    else {
+                        this.isEmptyInput = false;
+                        this.isRegistered = false;
+                        this.doesPasswordsMatch = true;
+                    }
+                    }).catch(err => {
+                        console.log(err)
+                })
+            }  
+        },
     }
   }
 </script>

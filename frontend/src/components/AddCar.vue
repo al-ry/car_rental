@@ -4,6 +4,7 @@
             <div class="modal-container">
                 <h2>Create new advertisement</h2>
                 <el-form ref="form" :model="form" label-width="120px">
+                  <el-form-item>
                     <el-form-item  label="Mark">
                       <el-select filterable v-model="selectedMark" class="mark-select" placeholder="Select">
                         <el-option v-for="(mark, index) in marks" :value="mark" v-bind:key="index"/>
@@ -16,38 +17,60 @@
                       </el-select>
                     </el-form-item>
 
-					<el-form-item label="Year" > 
-						<el-select v-model="advertisementInfo.form.year" class="model-select" placeholder="Select">
-							<el-option v-for="year in years" :value="year" v-bind:key="year"/>
-						</el-select>
-					</el-form-item>
-
-					<el-form-item label="Body" > 
-						<el-select v-model="advertisementInfo.form.body" class="model-select" placeholder="Select">
-							<el-option v-for="(body, index) in bodies" :value="body" v-bind:key="index"/>
-						</el-select>
-					</el-form-item>
+                    <el-form-item label="Year" > 
+                      <el-select v-model="advertisementInfo.form.year" class="model-select" placeholder="Select">
+                        <el-option v-for="year in years" :value="year" v-bind:key="year"/>
+                      </el-select>
+                    </el-form-item>
+                    </el-form-item>
+                  <el-form-item>
+                    <el-form-item label="Body" > 
+                      <el-select v-model="advertisementInfo.form.body" class="model-select" placeholder="Select">
+                        <el-option v-for="(body, index) in bodies" :value="body" v-bind:key="index"/>
+                      </el-select>
+                    </el-form-item>
 
                     <el-form-item label="Fuel" >   
                       <el-select filterable v-model="advertisementInfo.form.fuel" class="model-select">
                         <el-option label='Petrol' value='1' />
-						<el-option label='Diesel' value='2' />
-						<el-option label='Hybrid/Electro' value='3' />
+                        <el-option label='Diesel' value='2' />
+                        <el-option label='Hybrid/Electro' value='3' />
                       </el-select>
                     </el-form-item>
-
-	
 
                     <el-form-item label="Transmisson" >   
                       <el-select filterable v-model="advertisementInfo.form.transmission" class="model-select">
                         <el-option label='Manual' value='1'/>
-						<el-option label='Auto' value='2'/>
+                        <el-option label='Auto' value='2'/>
                       </el-select>
                     </el-form-item>
-
-                    <el-form-item label="Photo path">
-                         <input type="file" @change="addPhoto">
-                    </el-form-item>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-upload
+						class="upload-demo"
+						:auto-upload="false"
+						:file-list="fileList"
+						:on-change="handleChange"
+						:list-type=picture
+						>
+						<template #trigger>
+							<el-button size="small" type="primary">select file</el-button>
+						</template>
+						<el-button
+							size="small"
+							type="success"
+							@click="submitUpload"
+							>upload to server</el-button
+						>
+						<template #tip>
+							<div class="el-upload__tip">
+							jpg/png files with a size less than 500kb
+							</div>
+						</template>
+						</el-upload>
+                    <!-- <el-form-item label="Photo path">
+                         <input type="file" @change="handleChange">
+                    </el-form-item> -->
 
                     <el-form-item label="Description">
                         <el-input type="textarea" v-model="advertisementInfo.form.desc"></el-input>
@@ -59,6 +82,7 @@
                         <el-button type="primary" v-on:click="onSubmit">Create</el-button>
                         <el-button v-on:click="$emit('close')">Cancel</el-button>
                     </el-form-item>
+                  </el-form-item>
                 </el-form>
             </div>
         </div>
@@ -67,25 +91,25 @@
 
 
 <script>
+
 import {getMarks} from '../../services/getMarks'
 import {getModels} from '../../services/getModels'
 
 export default {
     data() {
         return {
+			fileList: [],
             advertisementInfo:
             {
                 form: {
                     desc: '',
-					transmission: '',
-					fuel: '',
-					year: '',
-					body: '',
+                    transmission: '',
+                    fuel: '',
+                    year: '',
+                    body: '',
 					
                     path: 'kalina.jpg'
                 },
-
-                photos: [],
             },
 
             isValidInput : true,
@@ -131,19 +155,28 @@ export default {
 		})
 	},
 
-    methods: {
+	methods: {
+
+		handleChange(file) {
+			this.fileList.push(file)
+			console.log(this.fileList, "That was on select file action")
+		},
 		onSubmit() {
 			this.checkInput();
 			if(this.isValidInput === true)
 			{
-				this.$emit('add-new-advetisement', this.advertisementInfo.form);
+				this.advertisementInfo.form.mark = this.selectedMark
+				this.advertisementInfo.form.model = this.selectedModel
+
+				const fd = new FormData();
+				this.fileList.forEach(element => {
+				fd.append('files', element)
+				});
+				this.$emit('add-new-advetisement', fd);
 			}
-			// const fd = new FormData();
-			// this.form.photo = fd;
-			// this.photos.forEach(element => {
-			//   console.log(element)
-			//   fd.append('files', element)
-			// });
+
+			
+
 		},
 
 		checkInput() {
@@ -156,11 +189,7 @@ export default {
 					return;
 				}
 			}
-		},
 
-		addPhoto(event)
-		{
-			this.advertisementInfo.photos.push(event.target.files[0]);
 		},
     }
   }
@@ -175,7 +204,7 @@ html, body
 
 h2 {
     max-width: 300px;
-    margin: 40px auto 40px auto;
+    margin: 20px auto 20px auto;
 }
 
 .modal-mask {
@@ -196,7 +225,7 @@ h2 {
 }
 
 .modal-container {
-  width: 500px;
+  width: 900px;
   margin: 0px auto;
   padding: 20px 30px 20px 10px;
   background-color: #fff;
@@ -236,6 +265,31 @@ h2 {
 .error_message
 {
     color : red;
+}
+
+.el-upload--picture-card
+{
+  height: 60px;
+  width: 60px;
+  line-height: 70px;
+}
+.el-form-item
+{
+  margin-left: 20px;
+}
+
+.el-form
+{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.el-upload-list--picture-card .el-upload-list__item 
+{
+  height: 60px;
+  width: 60px;
+  line-height: 70px;
 }
 
 .mark-select, .model-select

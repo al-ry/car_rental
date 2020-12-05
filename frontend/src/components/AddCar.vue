@@ -46,7 +46,7 @@
                     </el-form-item>
                   </el-form-item>
                   <el-form-item>
-                    <el-upload
+                    <!-- <el-upload
 						class="upload-demo"
 						:auto-upload="false"
 						:file-list="fileList"
@@ -67,10 +67,10 @@
 							jpg/png files with a size less than 500kb
 							</div>
 						</template>
-						</el-upload>
-                    <!-- <el-form-item label="Photo path">
+						</el-upload> -->
+                    <el-form-item label="Photo path">
                          <input type="file" @change="handleChange">
-                    </el-form-item> -->
+                    </el-form-item>
 
                     <el-form-item label="Description">
                         <el-input type="textarea" v-model="advertisementInfo.form.desc"></el-input>
@@ -98,7 +98,7 @@ import {getModels} from '../../services/getModels'
 export default {
     data() {
         return {
-			fileList: [],
+        fileList: [],
             advertisementInfo:
             {
                 form: {
@@ -109,7 +109,6 @@ export default {
                     fuel: '',
                     year: '',
                     body: '',
-				
                 },
             },
 
@@ -159,12 +158,12 @@ export default {
 	methods: {
 
 		handleChange(file) {
-      this.fileList.push(file)
-      console.log(file['raw'], "That is file")
+      this.fileList.push(file.target.files[0])
 			console.log(this.fileList, "That was on select file action")
 		},
 		onSubmit() {
-			this.checkInput();
+      console.log(this.fileList, 'fff')
+			// this.checkInput();
 			if(this.isValidInput === true)
 			{
 				this.advertisementInfo.form.mark = this.selectedMark
@@ -172,9 +171,11 @@ export default {
 
 				const fd = new FormData();
 				this.fileList.forEach(element => {
-          fd.append('files', element['raw'])
+          fd.append('files', element)
         });
-        fd.append('data', this.advertisementInfo.form)
+
+        fd.append('model', this.advertisementInfo.form.model)
+        console.log(fd.getAll('files')[0], 'fddff')
 				this.$emit('add-new-advetisement', fd);
 			}
 		},

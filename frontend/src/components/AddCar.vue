@@ -103,12 +103,13 @@ export default {
             {
                 form: {
                     desc: '',
+                    mark: '',
+                    model: '',
                     transmission: '',
                     fuel: '',
                     year: '',
                     body: '',
-					
-                    path: 'kalina.jpg'
+				
                 },
             },
 
@@ -158,7 +159,8 @@ export default {
 	methods: {
 
 		handleChange(file) {
-			this.fileList.push(file)
+      this.fileList.push(file)
+      console.log(file['raw'], "That is file")
 			console.log(this.fileList, "That was on select file action")
 		},
 		onSubmit() {
@@ -170,13 +172,11 @@ export default {
 
 				const fd = new FormData();
 				this.fileList.forEach(element => {
-				fd.append('files', element)
-				});
+          fd.append('files', element['raw'])
+        });
+        fd.append('data', this.advertisementInfo.form)
 				this.$emit('add-new-advetisement', fd);
 			}
-
-			
-
 		},
 
 		checkInput() {
@@ -185,7 +185,6 @@ export default {
 				if(!this.advertisementInfo.form[field])
 				{
 					this.isValidInput = false;
-					console.log(field)
 					return;
 				}
 			}

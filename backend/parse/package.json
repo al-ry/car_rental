@@ -1,7 +1,6 @@
 {
-  "name": "parse",
+  "name": "parser",
   "version": "1.0.0",
-  "description": "",
   "main": "parseAutoRuData.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
-    "osmosis": "^1.1.10"
-  }
+    "osmosis": "^1.1.10",
+    "pg": "^8.5.1"
+  },
+  "description": ""
 }

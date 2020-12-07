@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS car
 	id_mark SERIAL NOT NULL,
 	id_model SERIAL NOT NULL,
 	transmission SMALLINT NOT NULL,
+	year SMALLINT NOT NULL,
 	fuel SMALLINT NOT NULL,
 	body SMALLINT NOT NULL,
 	CONSTRAINT car_mark_id_mark_fk

@@ -2,12 +2,11 @@ const {DBManager} = require('../database/db')
 
 exports.getModels = async (req, res) => {
     let markName = req.query.name
-    console.log(markName)
     try {
         db = new DBManager()
-        db.connect()
+        await db.connect()
         result = await db.getMarkModels(markName)
-        console.log(result)
+        await db.close()
         res.json(result.rows)
     } catch(err) {
         console.log(err)

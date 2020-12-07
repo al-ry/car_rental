@@ -1,7 +1,16 @@
+const { nanoid } = require('nanoid')
+
+const {DBManager} = require('../database/db')
+
 
 exports.addCar = (req, res) => {
-    car = req.body
-    json = JSON.stringify(car)
-    console.log(car)
+    const car = req.body
+    const file = req.files
+    try {
+        db = new DBManager()
+        db.connect()
+    } catch (err) {
+
+    }
     res.sendStatus(200)
 }

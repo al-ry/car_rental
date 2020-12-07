@@ -43,7 +43,7 @@ function getVeсhileModels() {
             .set({
               model : 'a'
             }).data(function(data) {
-				console.log(data)
+				      console.log(data)
             	savedData.push(data);
             })
             .data((res) => response = savedData)
@@ -58,7 +58,7 @@ InsertMarks = function(cars) {
     pool.connect((err, client, release) => {
         for (let car of Object.values(cars)) {
             client.query('INSERT INTO mark(id_mark, name) VALUES (DEFAULT, $1)', [car.car], (err, result) => {
-            })
+        })
 		}
 		done()
 		client.release()

@@ -1,6 +1,6 @@
+const { urlencoded } = require('express')
 const {DBManager} = require('../database/db')
 const {checkPassword} = require('../utils/passwordUtil')
-const {checkLogin} = require('../utils/loginUtil')
 
 exports.login = async (req, res) => {
     data = req.body
@@ -10,14 +10,19 @@ exports.login = async (req, res) => {
     }
     try {
         db = new DBManager()
-        db.connect()
-        const result = await db.getUserDataByPhone(userData.phone)
-        checkLogin(result.rows[0].phone)
-        checkPassword(result.rows[0].password, userData.password)
-        res.sendStatus(200)
+        await db.connect()
+        const user = await db.getUserDataByPhone(userData.phone)
+        const city = await db.getCityNameById(user.id_city)
+        await db.close()
+        checkPassword(user.password, userData.password)
+        req.session.user = user.phone
+        delete user.id_city
+        delete user.password
+        user.city = city.name
+        res.status(200).json(user)
     } catch (err) {
         console.log(err)
-        res.sendStatus(400)
-    };
+        res.status(400).json({error: err.message})
+    }
 }
 

@@ -3,9 +3,9 @@ const {DBManager} = require('../database/db')
 exports.getMarks = async (req, res) => {
     try {
         db = new DBManager()
-        db.connect()
+        await db.connect()
         result = await db.getCarsList()
-        console.log(result.rows)
+        await db.close()
         res.json(result.rows)
     } catch(err) {
         console.log(err)

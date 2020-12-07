@@ -2,6 +2,9 @@ const { Router } = require('express')
 const addCarRouter = Router()
 const addCarController = require('../controllers/addCarController')
 
-addCarRouter.post('/addCar', addCarController.addCar)
+const {uploadAdvertisment} = require('../config/multerStorageConfig')
+
+
+addCarRouter.post('/addCar', uploadAdvertisment.array('files'), addCarController.addCar)
 
 module.exports = addCarRouter

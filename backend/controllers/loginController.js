@@ -15,11 +15,14 @@ exports.login = async (req, res) => {
         const city = await db.getCityNameById(user.id_city)
         await db.close()
         checkPassword(user.password, userData.password)
-        req.session.isAuth = true
-        delete user.id_city
-        delete user.password
-        user.city = city.name
-        res.status(200).json(user)
+        let userInfo = {
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+            city: city.name
+        }
+        req.session.user = userInfo
+        res.status(200).json(userInfo)
     } catch (err) {
         console.log(err)
         res.status(400).json({error: err.message})

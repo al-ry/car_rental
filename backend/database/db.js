@@ -33,6 +33,7 @@ class DBManager {
     }
     return result.rows[0]
   }
+
   async getCityNameById(id) {
     let data = [id]
     let query = 'SELECT name FROM city WHERE id_city = $1'

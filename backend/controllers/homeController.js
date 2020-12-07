@@ -1,7 +1,7 @@
 exports.checkSession = async (req, res) => {
-    if (req.session.isAuth) {
+    if (req.session.user) {
         console.log(req.session)
-        res.sendStatus(200)
+        res.status(200).json(req.session.user)
     } else {
         res.sendStatus(400)
     }

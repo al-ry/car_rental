@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
         await db.findByPhone(user.phone)
         await db.insertUser(user)
         await db.close()
-        req.session.user = user
+        req.session.isAuth = true
         res.sendStatus(200)
     } catch (err) {
         res.status(400).json({errror: err.message})

@@ -9,6 +9,7 @@ var modelsRouter = require('./routes/modelsRouter')
 var citiesRouter = require('./routes/citiesRouter')
 var logoutRouter = require('./routes/logoutRouter')
 var userSession = require('./config/sessionsConfig')
+var homeRouter = require('./routes/homeRouter')
 //var session = require('express-session');
 // var cors = require('cors')
 // app.use(cors({  
@@ -25,6 +26,7 @@ app.use(marksRouter)
 app.use(modelsRouter)
 app.use(citiesRouter)
 app.use(logoutRouter)
+app.use(homeRouter)
 
 app.listen(3000, () => {
   console.log('Server started on port 3000...')

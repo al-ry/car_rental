@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
         const city = await db.getCityNameById(user.id_city)
         await db.close()
         checkPassword(user.password, userData.password)
-        req.session.user = user.phone
+        req.session.isAuth = true
         delete user.id_city
         delete user.password
         user.city = city.name

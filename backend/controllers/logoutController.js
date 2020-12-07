@@ -2,7 +2,7 @@ const session = require("express-session")
 
 exports.logout = (req, res) => {
     console.log('from here')
-    if (req.session.user) {
+    if (req.session.isAuth) {
         req.session.destroy((err) =>{
             res.sendStatus(200)
         })

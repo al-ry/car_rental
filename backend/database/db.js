@@ -1,3 +1,4 @@
+const connectPgSimple = require('connect-pg-simple')
 const { Client } = require('pg')
 require('dotenv').config()
 
@@ -18,7 +19,6 @@ class DBManager {
   }
 
   async insertUser(user) {
-    console.log(user)
     let data = [user.name, user.phone, user.email, user.idCity, user.password]
     let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5)'
     await this.#client.query(query, data)
@@ -34,12 +34,27 @@ class DBManager {
     return result.rows[0]
   }
 
+  async getUserIdByPhone(phone) { 
+    let data = [phone]
+    let query = 'SELECT id_user FROM \"user\" WHERE phone = $1'
+    let result = await this.#client.query(query, data)
+    return result.rows[0].id_user
+  }
+
   async getCityNameById(id) {
     let data = [id]
     let query = 'SELECT name FROM city WHERE id_city = $1'
     let res = await this.#client.query(query, data)
     return res.rows[0]
   }
+  async getCityIdByName(name) {
+    console.log(name)
+    let data = [name]
+    let query = 'SELECT id_city FROM city WHERE name = $1'
+    let res = await this.#client.query(query, data)
+    return res.rows[0].id_city
+  }
+
 
   async getMarkModels(markName) {
     let data = [markName]
@@ -52,7 +67,8 @@ class DBManager {
   async getCarIdByName(markName) {
     let data = [markName]
     let query = 'SELECT id_mark FROM mark WHERE name = $1'
-    return await this.#client.query(query, data)
+    let result = await this.#client.query(query, data)
+    return result.rows[0].id_mark
   }
 
   async findByEmail(email) {
@@ -62,6 +78,13 @@ class DBManager {
     if (result.rowCount > 0) {
       throw new Error('Email already used')
     }
+  }
+
+  async getCarModelByName(modelName, markId) {
+    let data = [markId, modelName]
+    let query = 'SELECT id_model FROM model WHERE id_mark = $1 AND name = $2'
+    let result = await this.#client.query(query, data)
+    return result.rows[0].id_model
   }
   
   async findByPhone(phone) {
@@ -92,14 +115,41 @@ class DBManager {
   }
 
   async insertCar(car) {
-    let data = [car.mark]
-    let query = 'INSERT INTO car VALUES (DEFAULT, $1, $2, $3, $4, $5)'
+    let data = [car.markId, car.modelId, car.transmission, car.year, car.fuel, car.body]
+    let query = 'INSERT INTO car VALUES (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id_car'
+    let result = await this.#client.query(query, data)
+    return result.rows[0].id_car
+  }
+
+  async getUserAdvertisments(userId){ 
+    let data = [userId]
+    let query = 'SELECT * FROM advertisment WHERE id_user = $1'
+    let result = await this.#client.query(query, data)
+    return result.rows
+  }
+
+  async insertAdvertisment(advrtsmnt) {
+    let data = [advrtsmnt.idCar, advrtsmnt.idUser, advrtsmnt.idCity, advrtsmnt.cost, advrtsmnt.description, advrtsmnt.isOpen, advrtsmnt.photosPath]
+    let query = 'INSERT INTO advertisment (id_advertisment, id_car, id_user, id_city, cost, description, is_open, photo_path) ' +
+                'VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7)'
+    await this.#client.query(query, data)
+  }
+
+  async beginTransaction() {
+    await this.#client.query('BEGIN')
+  }
+
+  async commitTransaction() {
+    await this.#client.query('COMMIT')
+  }
+
+  async rollbackTransaction() {
+    await this.#client.query('ROLLBACK')
   }
 
   async close() {
 	   await this.#client.end()
   }
 }
-
 
 module.exports = {DBManager}

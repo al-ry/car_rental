@@ -2,13 +2,13 @@ const multer = require('multer')
 const fs = require('fs');
 const nanoid = require('nanoid')
 const path = require('path');
+require('dotenv').config()
+
 
 const storageAdvertismentConfig = multer.diskStorage({
   destination: (req, file, cb) => {
-    //cb(null, path.join('uploads/'))
-    console.log(req.test)
-    fs.mkdir(path.join(__dirname, '../uploads/', req.body.unique), function(){
-      cb(null, path.join(__dirname, '../uploads/', req.body.unique));
+    fs.mkdir(path.join(__dirname, process.env.ADVERTISMENT_STORAGE, req.body.uid), function(){
+      cb(null, path.join(__dirname, process.env.ADVERTISMENT_STORAGE, req.body.uid));
     });
   },
   filename: function (req, file, cb) {
@@ -18,6 +18,16 @@ const storageAdvertismentConfig = multer.diskStorage({
   }
 });
 
-const uploadAdvertisment = multer({storage:storageAdvertismentConfig})
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/png" || 
+    file.mimetype === "image/jpg"|| 
+    file.mimetype === "image/jpeg") {
+    cb(null, true)
+  } else {
+    cb(new Error("File should have jpg, jpeg or png extension"))
+  }
+}
+
+const uploadAdvertisment = multer({storage:storageAdvertismentConfig, fileFilter: fileFilter})
 
 module.exports = { uploadAdvertisment }

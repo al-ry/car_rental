@@ -1,4 +1,6 @@
 const { DBManager } = require('../database/db')
+const fs = require('fs')
+require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 exports.getAdvertisments = async (req, res) => {
     console.log(req.query)
@@ -8,9 +10,8 @@ exports.getAdvertisments = async (req, res) => {
             await db.connect()
             let userId = await db.getUserIdByPhone(req.query.phone)
             let advertisments = await db.getUserAdvertisments(userId)
-            console.log(advertisments)
             await db.close()
-            res.sendStatus(200)
+            res.status(200).json(advertisments)
         } catch (err) {
             console.log(err)
             res.sendStatus(400)

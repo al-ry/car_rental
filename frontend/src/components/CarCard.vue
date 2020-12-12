@@ -1,9 +1,7 @@
 <template>
     <el-card class="car_card" :body-style="{ padding: '0px' }">
     <img :src="car.path" class="image">
-      <div>
-        <span>{{car.mark}} {{car.model}} {{car.transmission}}</span>
-      </div>
+    <div><span>{{car.mark}}</span></div>
     </el-card>
 </template>
 
@@ -18,6 +16,7 @@ export default {
 .car_card
 {
     max-width: 300px;
+    min-width: 320px;
     margin-left: 10px;
     margin-right: 20px;
     min-height: 300px;
@@ -33,7 +32,7 @@ export default {
   }
 
   .image {
-    max-width: 300px;
+    max-width: 320px;
     min-height: 200px;
     width: 100%;
     display: block;

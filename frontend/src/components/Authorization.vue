@@ -24,7 +24,7 @@
 
 <script>
 import {loginUser} from '../../services/loginUser'
-  export default {
+export default {
     data() {
       return {
         form: {
@@ -37,40 +37,40 @@ import {loginUser} from '../../services/loginUser'
       }
     },
     methods: {
-	checkInput() {
-		for(const field in this.form)
-		{
-			if(!this.form[field])
-			{
-				this.isLogged = true
-				this.isEmptyInput = true;
-				return;
-			}
-		}
-	},
-	
-	onSubmit() {
-		this.checkInput() 
-		if(this.isEmptyInput === false)
-		{
-				loginUser(this.form).then(res => {
-				if(res.status == 200)
-				{
-					this.$router.push({name : "main_page"})
-				}
-				else
-				{
-					this.isEmptyInput = false;
-					this.isLogged = false;
-				}
-				
-				}).catch(err => {
-					console.log(err)
-				})
-			}
-		}
+        checkInput() {
+            for(const field in this.form)
+            {
+                if(!this.form[field])
+                {
+                    this.isLogged = true
+                    this.isEmptyInput = true;
+                    return;
+                }
+            }
+        },
+
+        onSubmit() {
+            this.checkInput() 
+            if(this.isEmptyInput === false)
+            {
+                loginUser(this.form).then(res => {
+                    if(res.status == 200) {
+                        this.$router.push({name : "main_page"})
+                        res.json().then(data=> {
+                            this.$store.commit('LoginUser', data)    
+                        })
+                    }
+                    else {
+                        this.isEmptyInput = false;
+                        this.isLogged = false;
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+        }
     }
-  }
+}
 </script>
 
 <style>

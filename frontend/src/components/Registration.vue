@@ -100,14 +100,16 @@ import {registerUser} from '../../services/registerUser'
                 registerUser(user).then(res => {
                     if (res.status == 200) {
                         this.$router.push({name : "main_page"})
+                        this.$store.commit('LoginUser', this.form)
                     }        
                     else {
                         this.isEmptyInput = false;
                         this.isRegistered = false;
                         this.doesPasswordsMatch = true;
+                        console.log('user exists')
                     }
                     }).catch(err => {
-                        console.log(err)
+                        console.log(err, "sdasdasd")
                 })
             }  
         },

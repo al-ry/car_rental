@@ -1,12 +1,8 @@
 
-
-//import Axios from "axios";
+import axios from 'axios'
 
 export async function addCar(data) {
-    const response = await fetch('/addCar', {
-        method: 'POST',
-        headers: {'Content-Type': 'multipart/form-data; boundary=' + data._boundary},
-        body: data
-    })
+    const response = await axios.post('/addCar', data)
+
     return await response;
 }

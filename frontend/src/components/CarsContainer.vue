@@ -7,7 +7,6 @@
 <script>
 
 import CarCard from './CarCard.vue'
-import {addCar} from '../../services/addCar'
 
 export default {
     name : 'CarsConteiner',
@@ -17,21 +16,29 @@ export default {
 
     data() {
 		return {
-		cars : []
+        cars : [ 
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+            {mark: "Lada", model: "Granta", year:"2017", path:"granta.jpg"},
+        ]
 		}
     },
     
     methods : {
-        AddNewCar(car)
-        {
-            // var carInfo = car.form
-            addCar(car).then(res => {
-                console.log(res)
-                // this.cars.push({ mark: carInfo.mark, model: carInfo.model, 
-                // transmission: carInfo.transmission, description: carInfo.description, photo: car.carInfo.path})
-            }).catch(err => {
-                console.log(err)
-            })
+        AddNewCar(car) {
+            this.cars.push({ mark: car.mark, model: car.model, 
+            transmission: car.transmission, description: car.description})
         }
     }
 }
@@ -40,14 +47,13 @@ export default {
 <style scoped>
 .car-container
 {
-    background: #ebc4c4;
+    background: #f2f2f2;
     max-width: 1920px;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     margin: auto;
     padding: 10px 10px;
     height: 100%;
-    grid-template-columns: 300px 300px 300px 300px;
-    grid-template-rows: 265px 265px 265px;
-    grid-gap: 30px 50px;
 }
 </style>

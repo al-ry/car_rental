@@ -11,6 +11,7 @@
 import Navbar from './Navbar.vue'
 import CarContainer from './CarsContainer.vue'
 import AddCar from './AddCar.vue'
+import {continueSession} from '../../services/continueSession.js'
 
 export default {
 
@@ -31,12 +32,28 @@ export default {
             this.$refs.car_container.AddNewCar(car);
             this.isVisibleAddMenu = false;
         }
+    },
+
+    created() {
+        continueSession().then(res => {
+            if (res.status == 200) {
+                this.$store.commit('LoginUser', res.data)
+            }
+        }).catch(err => {
+            console.log(err, 'error')
+        })
     }
 }
 
 </script>
 
-<style scoped>
+<style>
+#app
+{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
 html, body {
     overflow: auto;
 	height: 100%;
@@ -48,10 +65,10 @@ html, body {
 	padding : 0;
 }
 
-.main_container
+/* .main_container
 {
 	height: 100%;
-}
+} */
 
 .el-header {
 	padding: 0;
@@ -60,5 +77,6 @@ html, body {
 .el-main {
 	padding: 0px;
 	height: 100%;
+    overflow: hidden;
 }
 </style>

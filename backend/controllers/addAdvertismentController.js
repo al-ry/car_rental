@@ -1,4 +1,3 @@
-const { nanoid } = require('nanoid')
 const {DBManager} = require('../database/db')
 const fs = require('fs')
 require('dotenv').config()

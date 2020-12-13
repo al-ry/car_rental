@@ -121,16 +121,28 @@ class DBManager {
     return result.rows[0].id_car
   }
 
-  async getUserAdvertisments(userId){ 
+  async getUserAdvertisments(userId) { 
     let data = [userId]
-    let query = 'SELECT id_advertisment, cost, description, transmission, is_open, photo_path, fuel, year, body, mark_name, model_name, city_name FROM advertisment ' +
+    let query = 'SELECT id_advertisment, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'INNER JOIN (SELECT id_city, name AS city_name FROM city) AS city ON city.id_city = advertisment.id_city ' +
-                'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
-                'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON car.id_model = model.id_model ' +
+                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
+                'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
+                'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
                 'WHERE id_user = $1'
     let result = await this.#client.query(query, data)
     return result.rows
+  }
+
+  async closeAdvertisment(id) {
+    let data = [id]
+    let query = 'UPDATE advertisment SET is_open = 0 WHERE id_advertisment = $1'
+    await this.#client.query(query, data)
+  }
+
+  async reopenAdvertisment(id) {
+    let data = [id]
+    let query = 'UPDATE advertisment SET is_open = 1 WHERE id_advertisment = $1'
+    await this.#client.query(query, data)
   }
 
   async insertAdvertisment(advrtsmnt) {

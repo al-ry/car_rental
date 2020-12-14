@@ -8,7 +8,7 @@ uploadAdvertisment.array('files', 6)
 
 exports.addAdvertisment = async (req, res) => {
     const advrtsmnt = req.body
-    const photosPath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, req.body.uid)
+    const photosPath = path.join(process.env.ADVERTISMENT_STORAGE, req.body.uid)
     db = new DBManager()
     try {
         await db.connect()

@@ -1,5 +1,7 @@
 const { DBManager } = require('../database/db')
 const fs = require('fs')
+const path = require('path');
+require('dotenv').config()
 exports.getAdvertisments = async (req, res) => {
     db = new DBManager()
     try {
@@ -16,8 +18,11 @@ exports.getAdvertisments = async (req, res) => {
 
 function addAbsolutePathsToEachAdvertisments(advertisments) {
     advertisments.forEach(advrtsmnt => {
-        paths = getFilesPathsFromDirectory(advrtsmnt.photo_path)
+        const photosPath = path.join(__dirname, advrtsmnt.photo_path)
+        console.log(photosPath)
+        paths = getFilesPathsFromDirectory(photosPath)
         advrtsmnt.photo_path = paths
+        
         console.log(advrtsmnt)
     })
     return advertisments
@@ -27,7 +32,7 @@ function getFilesPathsFromDirectory(path) {
     files = fs.readdirSync(path, {withFileTypes: true})
     paths = []
     files.forEach(elem => {
-        paths.push(path + elem.name)
+        paths.push(process.env.ADVERTISMENT_STORAGE + '\\' + elem.name)
     })
     return paths
 }

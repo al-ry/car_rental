@@ -6,6 +6,8 @@ const store = createStore({
     },
     mutations: {
         LoginUser(state, payload) {
+            let name = payload.name 
+            payload.name = name[0].toUpperCase() + name.slice(1)
             state.loggedUser = payload
         },
         LogOutUser(state) {
@@ -18,19 +20,32 @@ const store = createStore({
     modules: {},
 
     getters: {
+        GetUserInfo(state) {
+            return state.loggedUser
+        },
+        
         GetUserName(state) {
             if(!state.loggedUser) {
                 return "Stranger"
             }
-            return state.loggedUser.name
+
+            return state.loggedUser.name;          
         },
 
         GetUserPhone(state) {
             return state.loggedUser.phone
         },
 
-        LoginState(state) {
-            return state.loggedUser ? false : true; 
+        GetUserCity(state) {
+            return state.loggedUser.city
+        },
+        
+        GetUserEmail(state) {
+            return state.loggedUser.email
+        },
+
+        isLoggedIn(state) {
+            return state.loggedUser ? true : false; 
         }
 
     }

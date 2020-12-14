@@ -1,7 +1,7 @@
 <template>
     <div class="main_container">
 		<el-header><navbar v-on:show-add-car="isVisibleAddMenu = true"/></el-header>
-		<el-main><car-container ref="car_container" v-bind:cars="cars"/></el-main>
+		<el-main><car-container ref="car_container"/></el-main>
         <AddCar v-if="isVisibleAddMenu == true" v-on:close="isVisibleAddMenu = false"
          v-on:add-new-advetisement="AddNewAdvertisement"/>
 	</div> 
@@ -25,7 +25,7 @@ export default {
 		Navbar, 
         CarContainer,
         AddCar,
-},
+    },
     methods: {
         AddNewAdvertisement(car)
         {
@@ -65,10 +65,10 @@ html, body {
 	padding : 0;
 }
 
-/* .main_container
+.main_container
 {
 	height: 100%;
-} */
+}
 
 .el-header {
 	padding: 0;
@@ -77,6 +77,6 @@ html, body {
 .el-main {
 	padding: 0px;
 	height: 100%;
-    overflow: hidden;
+    overflow: hidden; 
 }
 </style>

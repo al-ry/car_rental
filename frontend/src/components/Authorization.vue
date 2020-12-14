@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Submit</el-button>
-            <router-link class="go-back-button" to="/"><el-button>Go back to start page</el-button></router-link>
+            <el-button @click="goBack">Go back to start page</el-button>
             <router-link class="have-account-link" to="/registration">Don`t have an account?</router-link>
         </el-form-item>
     </el-form>
@@ -48,7 +48,10 @@ export default {
                 }
             }
         },
-
+        
+        goBack() {
+            this.$router.push('/home')
+        },
         onSubmit() {
             this.checkInput() 
             if(this.isEmptyInput === false)

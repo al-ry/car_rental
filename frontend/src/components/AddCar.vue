@@ -1,13 +1,12 @@
 <template>
-    <div class="modal-mask">
-        <div class="modal-wrapper">
-            <div class="modal-container">
-                <el-form ref="form" :model="form">
-                  <el-form-item>
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<el-form ref="form" :model="form">
+                <el-form-item>
                     <el-form-item  label="Mark">
-                      <el-select filterable v-model="selectedMark" class="mark-select" placeholder="Select">
-                        <el-option v-for="(mark, index) in marks" :value="mark" v-bind:key="index"/>
-                      </el-select>
+						<el-select filterable v-model="selectedMark" class="mark-select" placeholder="Select">
+							<el-option v-for="(mark, index) in marks" :value="mark" v-bind:key="index"/>
+						</el-select>
                     </el-form-item>
 
                     <el-form-item label="Model" >   
@@ -24,76 +23,71 @@
 
                     <el-form-item label="City" >   
                       <el-select filterable v-model="advertisementInfo.form.city" class="model-select">
-                        <el-option label='Manual' value='1'/>
+                        <el-option v-for="(city, index) in cities" :value="city" v-bind:key="index"/>
                       </el-select>
                     </el-form-item>
-                    </el-form-item>
-                  <el-form-item>
+                </el-form-item>
+
+                <el-form-item>
                     <el-form-item label="Body" > 
-                      <el-select v-model="advertisementInfo.form.body" class="model-select" placeholder="Select">
-                        <el-option v-for="(body, index) in bodies" :value="body" v-bind:key="index"/>
-                      </el-select>
+						<el-select v-model="advertisementInfo.form.body" class="model-select" placeholder="Select">
+							<el-option v-for="(body, index) in bodies" :label='body' :value='index+1' v-bind:key="index"/>
+						</el-select>
                     </el-form-item>
 
                     <el-form-item label="Fuel" >   
-                      <el-select filterable v-model="advertisementInfo.form.fuel" class="model-select">
-                        <el-option label='Petrol' value='1' />
-                        <el-option label='Diesel' value='2' />
-                        <el-option label='Hybrid/Electro' value='3' />
-                      </el-select>
+						<el-select filterable v-model="advertisementInfo.form.fuel" class="model-select">
+							<el-option label='Petrol' value='1' />
+							<el-option label='Diesel' value='2' />
+							<el-option label='Hybrid/Electro' value='3' />
+						</el-select>
                     </el-form-item>
 
                     <el-form-item label="Transmisson" >   
-                      <el-select filterable v-model="advertisementInfo.form.transmission" class="model-select">
-                        <el-option label='Manual' value='1'/>
-                        <el-option label='Auto' value='2'/>
-                      </el-select>
+						<el-select filterable v-model="advertisementInfo.form.transmission" class="model-select">
+							<el-option label='Manual' value='1'/>
+							<el-option label='Auto' value='2'/>
+						</el-select>
                     </el-form-item>
-          
+        
                     <el-form-item label="Price a day ₽" >   
-                      <el-input v-model="advertisementInfo.form.price" type="number" min="1"></el-input>
+						<el-input v-model="advertisementInfo.form.cost" type="number" min="1"></el-input>
                     </el-form-item>
-                  </el-form-item>
+                </el-form-item>
 
-                  <el-form-item label="Photos" class="upload_photo_block" style={text-align:left}>
-                    <el-upload
-						class="upload-demo"
-						:auto-upload="false"
-						:file-list="fileList"
-						:on-change="handleChange"
-						:on-remove="handleRemove"
-						:list-type=picture
-						>
+                <el-form-item label="Photos" class="upload_photo_block" style={text-align:left}>
+                    <el-upload class="upload-demo" :auto-upload="false" :file-list="fileList" :limit=6 :on-change="handleChange"
+						:on-remove="handleRemove" :list-type=picture>
 						<template #default>
 							<el-button size="medium" type="primary">select file</el-button>
 						</template>
 					</el-upload>
 					</el-form-item>
 					<el-form-item class="description_block">
-                    <el-form-item label="Description">
-                        <el-input type="textarea" v-model="advertisementInfo.form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item v-if="isValidInput == false" class="error_message">
-                         <span>All fields should be filled</span>
-                    </el-form-item>
-                  </el-form-item>
+						<el-form-item label="Description">
+							<el-input type="textarea"  resize="none" size="medium" v-model="advertisementInfo.form.description"></el-input>
+						</el-form-item>
+						<el-form-item v-if="errorMessage != ''" class="error_message">
+							<span>{{errorMessage}}</span>
+						</el-form-item>
+					</el-form-item>
 
                     <el-form-item class="form_buttons_block">
                         <el-button type="submit" v-on:click="onSubmit">Create</el-button>
                         <el-button v-on:click="$emit('close')">Cancel</el-button>
                     </el-form-item>
-                </el-form>
-            </div>
-        </div>
-    </div>
+            </el-form>
+		</div>
+	</div>
 </template>
-
 
 <script>
 import { addCar } from '../../services/addCar'
-import {getMarks} from '../../services/getMarks'
-import {getModels} from '../../services/getModels'
-
+import { getMarks } from '../../services/getMarks'
+import { getModels } from '../../services/getModels'
+import { getCities } from '../../services/getCities'
+import {mapGetters} from 'vuex'
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     data() {
@@ -102,24 +96,26 @@ export default {
             advertisementInfo:
             {
                 form: {
-                    desc: '',
-                    mark: '',
-                    model: '',
-                    transmission: '',
-                    fuel: '',
+					model: '',
+					mark: '',
+					transmission: '',
+					fuel: '',
+					body: '',
                     year: '',
-                    body: '',
-                    city: '',
-                    price: ''
+					description: '',
+					cost: '',
+					city: '',
+					uid: 1,
+					phone: 1,		
                 },
             },
 
-            isValidInput : true,
-
+			errorMessage : "",
             selectedMark : '',
             selectedModel : '',
             marks : [],
-            models: []
+			models: [],
+			cities: []
 		}
     },
 
@@ -133,6 +129,7 @@ export default {
 			}).catch(err => {
 				console.log(err, "asdasd")
 			});
+			this.selectedModel = ''
 		}
 	},
 
@@ -144,13 +141,28 @@ export default {
 
 		bodies () {
 			return ["Sedan", "Cabriolet", "Coupe", "Crossover","Hatchback", "Limousine", "Wagon", "SUV", "Track"]
-		}
+		},
+
+		...mapGetters(['isLoggedIn']),
+
+		userPhone() {
+            return this.$store.getters.GetUserPhone;
+        }
 	},
 
 	created() {
 		getMarks().then(res => {
 			for(var i in res) {
 				this.marks.push(res[i]['name']) 
+			}
+		}).catch(err => {
+				console.log(err)
+		})
+
+		getCities().then(res => {
+			for(var i in res.data) {
+				this.cities.push(res.data[i]['name'])
+				
 			}
 		}).catch(err => {
 				console.log(err)
@@ -175,18 +187,23 @@ export default {
 		},
 
 		onSubmit() {
+
 			this.advertisementInfo.form.mark = this.selectedMark
 			this.advertisementInfo.form.model = this.selectedModel
-			this.checkInput();
-			if(this.isValidInput === true)
+			if(this.isCorrectInfo() && this.isLoggedIn)
 			{
-				const fd = new FormData();
+				this.advertisementInfo.form.phone = this.userPhone
+				this.advertisementInfo.form.uid = uuidv4()
+				const data = new FormData();
+				for(const field in this.advertisementInfo.form) {
+					data.append(field, this.advertisementInfo.form[field])
+				}	
+
 				this.fileList.forEach(element => {
-					fd.append('files', element)
+					data.append('files', element)
 				});
 
-				fd.append('model', JSON.stringify(this.advertisementInfo.form))
-				addCar(fd).then(res => {
+				addCar(data).then(res => {
 					this.$emit('add-new-advetisement', this.advertisementInfo.form);
 					console.log(res)
 				}).catch(err => {
@@ -195,18 +212,31 @@ export default {
 			}
 		},
 
-		checkInput() {
+		isCorrectInfo() {
 			for(const field in this.advertisementInfo.form)
 			{
 				if(!this.advertisementInfo.form[field])
 				{
-					this.isValidInput = false;
+					this.errorMessage = "All fields should be filled"
 					console.log(field)
-					return;
+					return false;
 				}
 			}
-			this.isValidInput = true;
 
+			if (this.advertisementInfo.form.cost < 1) {
+				this.errorMessage = "Price should be at least 1 RUB"
+				return false
+			}
+			else if (this.advertisementInfo.form.cost > 500000) {
+				this.errorMessage = "Price cant be < 500000"
+				return false
+			}
+			else if(this.fileList.length == 0) {
+				this.errorMessage = "No photo attached"
+				return false
+			}
+
+			return true
 		},
 
 		createUniqueId() {
@@ -218,6 +248,41 @@ export default {
 
 
 <style scoped>
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 100px auto;
+  padding: 20px;
+  border: 1px solid #888;
+  max-width: 700px;
+	height: auto; /*HERE*/
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 label.el-form-item__label
 {
@@ -248,7 +313,7 @@ h2 {
 	margin-bottom: 20px;
 }
 
-.modal-mask {
+/* .modal-mask {
   position: fixed;
   z-index: 2;
   top: 0;
@@ -296,7 +361,7 @@ h2 {
 
 .modal-leave-active {
   opacity: 0;
-}
+} */
 
 /* .modal-enter .modal-container,
 .modal-leave-active .modal-container {

@@ -1,25 +1,58 @@
 <template>
     <el-card class="car_card" :body-style="{ padding: '0px' }">
-    <img :src="car.path" class="image">
-    <div><span>{{car.mark}}</span></div>
-    </el-card>
+      <img :src="car.path" class="image">
+      <div class="mark-model-container">
+        <span>{{car.mark}}&nbsp;{{car.model}}</span>
+      </div>
+      <div class="description-container">
+        <span>Year: {{car.year}}<br/></span>
+        <span>Transmission: {{getModifiedTransmission(car.transmission)}}</span>
+      </div>
+      <div class="price-block">
+        <span>Price: {{getModifiedPrice(car.cost)}} &#x20bd;</span>
+      </div>
+      </el-card>
 </template>
 
 <script>
 export default {
-    props : ['car']
+    props : ['car'],
+    methods: {
+      getModifiedPrice(cost) {
+        return cost.slice(0, cost.length - 5)
+      },
+
+      getModifiedTransmission() {
+        var transmission
+        switch(this.car.transmission) {
+          case 1:
+            transmission = "Manual";
+            break;
+          case 2:
+            transmission = "Auto";
+            break;
+          default:
+            transmission = "Manual";
+            break;
+        }
+
+        return transmission
+      }
+    },
+
 }
 
 </script>
 
-<style scoped>
+<style>
+
 .car_card
 {
     max-width: 300px;
     min-width: 320px;
     margin-left: 10px;
     margin-right: 20px;
-    min-height: 300px;
+    margin-bottom: 20px;
 }
 
 .bottom {
@@ -47,5 +80,25 @@ export default {
   .clearfix:after {
       clear: both
   }
+
+.mark-model-container
+{
+  margin: 10px 0 0 20px;
+  font: Courier, monospace;
+  font-size: 20px
+}
+
+.description-container
+{
+  margin: 5px 0 5px 20px;
+  font-size: 16px;
+}
+
+.price-block
+{
+  text-align: right;
+  margin: 5px 20px 10px 0;
+  font-size: 18px;
+}
 
 </style>

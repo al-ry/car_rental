@@ -1,3 +1,6 @@
+
+import axios from "axios"
+
 export async function logOutUser() {
-    return await axios.get('/logoutUser', {withCredentials: true})
+    return await axios.post('/logoutUser')
 }

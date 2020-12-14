@@ -1,14 +1,10 @@
 <template>
-	<router-view/>
+	<router-view></router-view>
 </template>
 
 <script>
-// import MainContainer from "./components/MainContainer.vue"
 export default { 
 	name: 'App',
-	// components : {
-	// 	MainContainer
-	// }
 }
 
 </script>
@@ -19,5 +15,4 @@ export default {
 {
 	height: 100%;
 }
-
 </style>

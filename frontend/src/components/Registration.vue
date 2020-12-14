@@ -38,7 +38,7 @@
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Create</el-button>
-            <router-link class="go-back-button" to="/"><el-button>Go back to start page</el-button></router-link>
+            <router-link class="go-back-button" to="/home"><el-button>Go back to start page</el-button></router-link>
         </el-form-item>
     </el-form>
 </template>

@@ -18,9 +18,7 @@ exports.getAdvertisments = async (req, res) => {
 
 function addAbsolutePathsToEachAdvertisments(advertisments) {
     advertisments.forEach(advrtsmnt => {
-        const photosPath = path.join(__dirname, advrtsmnt.photo_path)
-        console.log(photosPath)
-        paths = getFilesPathsFromDirectory(photosPath)
+        paths = getFilesPathsFromDirectory(advrtsmnt.photo_path)
         advrtsmnt.photo_path = paths
         
         console.log(advrtsmnt)
@@ -28,11 +26,13 @@ function addAbsolutePathsToEachAdvertisments(advertisments) {
     return advertisments
 }
 
-function getFilesPathsFromDirectory(path) {
-    files = fs.readdirSync(path, {withFileTypes: true})
+function getFilesPathsFromDirectory(relativePath) {
+    const absolutePath = path.join(__dirname, relativePath)
+    files = fs.readdirSync(absolutePath, {withFileTypes: true})
     paths = []
+    console.log(files)
     files.forEach(elem => {
-        paths.push(process.env.ADVERTISMENT_STORAGE + '\\' + elem.name)
+        paths.push(relativePath + '\\' + elem.name)
     })
     return paths
 }

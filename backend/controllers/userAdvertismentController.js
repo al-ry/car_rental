@@ -33,7 +33,7 @@ function getFilesPathsFromDirectory(relativePath) {
     paths = []
     console.log(files)
     files.forEach(elem => {
-        paths.push(relativePath + '\\' + elem.name)
+        paths.push(relativePath + '/' + elem.name)
     })
     return paths
 }

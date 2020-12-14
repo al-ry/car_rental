@@ -16,6 +16,7 @@ exports.login = async (req, res) => {
         await db.close()
         checkPassword(user.password, userData.password)
         let userInfo = {
+            id: user.id_user,
             name: user.name,
             phone: user.phone,
             email: user.email,

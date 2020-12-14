@@ -20,13 +20,14 @@ class DBManager {
 
   async insertUser(user) {
     let data = [user.name, user.phone, user.email, user.idCity, user.password]
-    let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5)'
-    await this.#client.query(query, data)
+    let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5) RETURNING id_user'
+    let res = await this.#client.query(query, data)
+    return res.rows[0].id_user
   }
 
   async getUserDataByPhone(phone) {
     let data = [phone]
-    let query = 'SELECT phone, email, name, id_city, password FROM \"user\" WHERE phone = $1'
+    let query = 'SELECT id_user, phone, email, name, id_city, password FROM \"user\" WHERE phone = $1'
     let result = await this.#client.query(query, data)
     if (result.rowCount == 0) {
       throw new Error('Incorrect phone')
@@ -78,6 +79,18 @@ class DBManager {
     if (result.rowCount > 0) {
       throw new Error('Email already used')
     }
+  }
+
+  async getAdvertismentInfo(id) {
+    let data = [id]
+    let query = 'SELECT cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
+                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
+                'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
+                'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
+                'WHERE id_advertisment = $1'
+    let res = await this.#client.query(query, data)
+    return res.rows[0]
   }
 
   async getCarModelByName(modelName, markId) {

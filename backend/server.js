@@ -14,6 +14,7 @@ var userAdvertismentsRouter = require('./routes/userAdvertismentRotuer')
 var closeAdvertismentRouter = require('./routes/closeAdvertisment')
 var reopenAdvertismentRouter = require('./routes/reopenAdvertisment')
 var bookCarRouter = require('./routes/bookCarRouter')
+var advertismentInfoRouter = require('./routes/advertismentInfoRouter')
 var cors = require('cors')
 
 app.use(cors({  
@@ -39,6 +40,8 @@ app.use(userAdvertismentsRouter)
 app.use(closeAdvertismentRouter)
 app.use(reopenAdvertismentRouter)
 app.use(bookCarRouter)
+app.use(advertismentInfoRouter)
+
 
 app.listen(3000, () => {
   console.log('Server started on port 3000...')

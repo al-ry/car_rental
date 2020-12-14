@@ -3,11 +3,10 @@ const fs = require('fs')
 require('dotenv').config()
 const path = require('path');
 const {uploadAdvertisment} = require('../config/multerStorageConfig')
-
+const {nanoid} = require('nanoid');
 uploadAdvertisment.array('files', 6)
 
 exports.addAdvertisment = async (req, res) => {
-    console.log(req.body)
     const advrtsmnt = req.body
     const photosPath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, req.body.uid)
     db = new DBManager()
@@ -18,9 +17,8 @@ exports.addAdvertisment = async (req, res) => {
         modelId = await db.getCarModelByName(req.body.model, markId)
         newCar = CreateCar(markId, modelId, advrtsmnt.transmission, advrtsmnt.year, advrtsmnt.fuel, advrtsmnt.body)
         idCar = await db.insertCar(newCar)
-        idUser = await db.getUserIdByPhone(req.body.phone)
         idCity = await db.getCityIdByName(advrtsmnt.city)
-        advertisment = CreateAdvertisment(idCar, idUser, idCity, advrtsmnt.cost, advrtsmnt.description, photosPath)
+        advertisment = CreateAdvertisment(idCar, req.session.user.id, idCity, advrtsmnt.cost, advrtsmnt.description, photosPath)
         await db.insertAdvertisment(advertisment)
         await db.commitTransaction()
         res.sendStatus(200)

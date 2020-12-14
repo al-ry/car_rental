@@ -29,6 +29,7 @@ function addAbsolutePathsToEachAdvertisments(advertisments) {
 
 function getFilesPathsFromDirectory(relativePath) {
     const absolutePath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, relativePath)
+    console.log(absolutePath)
     files = fs.readdirSync(absolutePath, {withFileTypes: true})
     paths = []
     console.log(files)

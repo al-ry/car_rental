@@ -4,12 +4,11 @@ require('dotenv').config()
 const path = require('path');
 const {uploadAdvertisment} = require('../config/multerStorageConfig')
 const {nanoid} = require('nanoid');
-uploadAdvertisment.array('files', 6)
 
+uploadAdvertisment.array('files', 6)
 exports.addAdvertisment = async (req, res) => {
     const advrtsmnt = req.body
     const photosPath = path.join(req.body.uid)
-    console.log(photosPath)
     db = new DBManager()
     try {
         await db.connect()

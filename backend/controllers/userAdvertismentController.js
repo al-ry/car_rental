@@ -2,6 +2,7 @@ const { DBManager } = require('../database/db')
 const fs = require('fs')
 const path = require('path');
 require('dotenv').config()
+
 exports.getAdvertisments = async (req, res) => {
     db = new DBManager()
     try {
@@ -27,7 +28,7 @@ function addAbsolutePathsToEachAdvertisments(advertisments) {
 }
 
 function getFilesPathsFromDirectory(relativePath) {
-    const absolutePath = path.join(__dirname, relativePath)
+    const absolutePath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, relativePath)
     files = fs.readdirSync(absolutePath, {withFileTypes: true})
     paths = []
     console.log(files)

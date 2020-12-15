@@ -146,8 +146,8 @@ class DBManager {
     return result.rows
   }
 
-  async getAdvetismentListPart(start, end) {
-    let data = [start, end]
+  async getAdvetismentListPart(start, limit) {
+    let data = [start, limit]
     let query = 'SELECT id_advertisment, cost, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +

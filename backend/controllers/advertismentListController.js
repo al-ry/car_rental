@@ -7,7 +7,7 @@ exports.getList = async (req, res) => {
     try {
         await db.connect()
         pagesCount = await db.getAdvertismentsCount()
-        results.rows  = await db.getAdvetismentListPart(results.current.startPos, results.current.endPos)
+        results.rows  = await db.getAdvetismentListPart(results.current.startPos, results.current.limit)
         results.rows.photo_path = addPhotoPathToEachAdvertisments(results.rows)
         await db.close()
         pagesCountInt = parseInt(pagesCount)
@@ -29,8 +29,7 @@ const path = require('path');
 function addPhotoPathToEachAdvertisments(advertisments) {
     advertisments.forEach(advrtsmnt => {
         paths = getFirstImageFromFolder(advrtsmnt.photo_path)
-        advrtsmnt.photo_path = paths
-        
+        advrtsmnt.photo_path = paths   
         console.log(advrtsmnt)
     })
     return advertisments
@@ -38,7 +37,6 @@ function addPhotoPathToEachAdvertisments(advertisments) {
 
 function getFirstImageFromFolder(relativePath) {
     const absolutePath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, relativePath)
-    console.log(absolutePath)
     files = fs.readdirSync(absolutePath, {withFileTypes: true})
     return (relativePath + '/' + files[0].name)
 }

@@ -1,6 +1,8 @@
 const {DBManager} = require('../database/db')
 const fs = require('fs')
 const path = require('path');
+const {getFilesPathsFromDirectory} = require('../utils/filesUtil')
+
 exports.getInfo = async (req, res) => {
     db = new DBManager()
     try {
@@ -17,15 +19,3 @@ exports.getInfo = async (req, res) => {
         res.status(400).json({err: "Cannot get advertisment info"})
     }
 } 
-
-
-function getFilesPathsFromDirectory(relativePath) {
-    const absolutePath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, relativePath)
-    files = fs.readdirSync(absolutePath, {withFileTypes: true})
-    paths = []
-    console.log(files)
-    files.forEach(elem => {
-        paths.push(relativePath + '/' + elem.name)
-    })
-    return paths
-}

@@ -83,7 +83,7 @@ class DBManager {
 
   async getAdvertismentInfo(id) {
     let data = [id]
-    let query = 'SELECT cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+    let query = 'SELECT id_user, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
@@ -144,6 +144,25 @@ class DBManager {
                 'WHERE id_user = $1'
     let result = await this.#client.query(query, data)
     return result.rows
+  }
+
+  async getAdvetismentListPart(start, end) {
+    let data = [start, end]
+    let query = 'SELECT id_advertisment, cost, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
+                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
+                'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
+                'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
+                'WHERE is_open = 1' +
+                'ORDER BY id_advertisment DESC ' +
+                'LIMIT $2 OFFSET $1'
+    let res = await this.#client.query(query, data)
+    return res.rows
+  }
+
+  async getAdvertismentsCount() {
+    let res = await this.#client.query('SELECT COUNT(is_open) as total_count FROM advertisment WHERE is_open = 1')
+    return res.rows[0].total_count
   }
 
   async closeAdvertisment(id) {

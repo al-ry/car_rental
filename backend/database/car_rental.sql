@@ -90,7 +90,9 @@ CREATE TABLE IF NOT EXISTS booking
 	id_booking SERIAL NOT NULL PRIMARY KEY,
 	id_advertisment SERIAL NOT NULL,
 	id_renter SERIAL NOT NULL,
-	is_accepted SMALLINT NOT NULL,
+	state SMALLINT NOT NULL,
+	/*     
+	*/
 	"start" DATE NOT NULL,
 	"end" DATE NOT NULL,
 	CONSTRAINT booking_advertisment_id_advertisment_fk

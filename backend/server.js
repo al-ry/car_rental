@@ -18,7 +18,7 @@ const advertismentListRouter = require('./routes/advertismentListRouter')
 const cors = require('cors');
 const editAdvertismentRouter = require('./routes/editAdvertismentRouter');
 const acceptBookingRouter = require('./routes/acceptBooking')
-
+const bookedDatesRouter = require('./routes/bookedDatesRouter')
 app.use(cors({  
   credentials: true,
   origin: true
@@ -46,7 +46,7 @@ app.use(advertismentInfoRouter)
 app.use(advertismentListRouter)
 app.use(editAdvertismentRouter)
 app.use(acceptBookingRouter)
-
+app.use(bookedDatesRouter)
 app.listen(3000, () => {
   console.log('Server started on port 3000...')
 })

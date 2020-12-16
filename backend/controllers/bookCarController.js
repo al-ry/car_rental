@@ -9,7 +9,7 @@ exports.bookCar = async (req, res) => {
         end: data.end,
         idAdvertisment: data.idAdvertisment,
         idUser: req.session.user.id,
-        isAccepted: 0
+        state: 0
     }
     try {
         db.connect()

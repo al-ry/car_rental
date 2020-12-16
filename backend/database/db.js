@@ -170,6 +170,18 @@ class DBManager {
     return res.rows
   }
 
+  async getIncomingRequsets(idUser) {
+    let data = [idUser] 
+    console.log(data)
+    let query = 'SELECT start, "end", renter_name, renter_phone FROM booking ' +
+                'INNER JOIN (SELECT id_user AS id_renter, name AS renter_name, phone AS renter_phone FROM "user") '+
+                'AS renter ON renter.id_renter = booking.id_renter '+
+                'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment '+
+                'WHERE state = 0 AND advertisment.id_user = $1'
+    let res = await this.#client.query(query, data)
+    return res.rows
+  }
+
   async getAdvertismentsCount() {
     let res = await this.#client.query('SELECT COUNT(is_open) as total_count FROM advertisment WHERE is_open = 1')
     return res.rows[0].total_count
@@ -207,8 +219,20 @@ class DBManager {
 
   async acceptBooking(idBooking) {
     let data = [idBooking]
-    let query = 'UPDATE booking SET state = 1 WHERE id_booking = $1'
-    await this.#client.query(query, data)
+    let query = 'UPDATE booking SET state = 1 WHERE id_booking = $1 RETURNING id_booking'
+    let res = await this.#client.query(query, data)
+    if (!res.rowCount) {
+      throw new Error('Incorrect booking identifier')
+    }
+  }
+
+  async declineBooking(idBooking) {
+    let data = [idBooking]
+    let query = 'UPDATE booking SET state = 2 WHERE id_booking = $1 RETURNING id_booking'
+    let res = await this.#client.query(query, data)
+    if (!res.rowCount) {
+      throw new Error('Incorrect booking identifier')
+    }
   }
 
   async beginTransaction() {

@@ -21,6 +21,7 @@ exports.registerUser = async (req, res) => {
         const userData = await db.getUserDataByPhone(user.phone)
         const city = await db.getCityNameById(userData.id_city)
         await db.close()
+        //TODO: delete user id from userInfo
         const userInfo = {
             id: userId,
             name: userData.name,

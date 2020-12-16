@@ -1,4 +1,3 @@
-const { urlencoded } = require('express')
 const {DBManager} = require('../database/db')
 const {checkPassword} = require('../utils/passwordUtil')
 
@@ -8,13 +7,14 @@ exports.login = async (req, res) => {
         phone: data.phone,
         password: data.password
     }
+    db = new DBManager()
     try {
-        db = new DBManager()
         await db.connect()
         const user = await db.getUserDataByPhone(userData.phone)
         const city = await db.getCityNameById(user.id_city)
         await db.close()
         checkPassword(user.password, userData.password)
+        //TODO: delete user id from userInfo
         let userInfo = {
             id: user.id_user,
             name: user.name,

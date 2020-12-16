@@ -1,5 +1,8 @@
 const {DBManager} = require('../database/db')
 
+//TODO: should add checking for if already booked 
+//      check is advertisment open
+
 exports.bookCar = async (req, res) => {
     let data = req.body           
     const db = new DBManager()

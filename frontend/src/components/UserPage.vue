@@ -6,10 +6,10 @@
                 <el-avatar :size="200" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             </div>
             <div class="info_block">
-                <span>Name: <span class="info_text">{{userInfo.name}}</span></span>
-                <span>Phone: <span class="info_text">{{userInfo.phone}}</span></span>
-                <span>Email: <span class="info_text">{{userInfo.email}}</span></span>
-                <span>City: <span class="info_text">{{userInfo.city}}</span></span>
+                <span><i class="el-icon-user icon"></i> <span class="info_text">{{userInfo.name}}</span></span>
+                <span><i class="el-icon-phone-outline icon"></i> <span class="info_text">{{userInfo.phone}}</span></span>
+                <span><i class="el-icon-postcard icon"></i> <span class="info_text">{{userInfo.email}}</span></span>
+                <span><i class="el-icon-location icon"></i> <span class="info_text">{{userInfo.city}}</span></span>
             </div>
         </div>
         <el-tabs type="border-card" class="user_activity_tabs" @tab-click="showAdvertisementList">
@@ -126,7 +126,7 @@ export default {
             setTimeout(() => {
             this.fullscreenLoading = false;
             }, 500);
-      },
+        },
     },
 }
 </script>
@@ -153,7 +153,7 @@ export default {
     background: #996699;
 }
 
-.cars_containter
+/* .cars_containter
 {
     max-width: 900px;
     display: flex;
@@ -161,7 +161,7 @@ export default {
     justify-content: center;
     margin: auto;
     padding: 20px 10px 10px 10px;
-}
+} */
 
 .el-tabs__header
 {
@@ -176,6 +176,12 @@ export default {
 .el-page-header 
 {
     padding: 10px 0 10px 20px;
+}
+
+.icon
+{
+    margin-right: 5px;
+    font-weight: 700;
 }
 
 .info_block

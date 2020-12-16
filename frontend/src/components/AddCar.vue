@@ -395,7 +395,7 @@ h2 {
 .upload_photo_block
 {
 	display:flex;
-	align-items: start;
+	align-items: flex-start;
 	flex-direction: column;
 	margin-left: 40px;
 }

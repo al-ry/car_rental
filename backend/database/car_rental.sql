@@ -83,6 +83,8 @@ CREATE TABLE IF NOT EXISTS advertisment
 			REFERENCES city(id_city)
 );
 
+drop table advertisment cascade
+
 CREATE TABLE IF NOT EXISTS booking
 (
 	id_booking SERIAL NOT NULL PRIMARY KEY,

@@ -1,6 +1,6 @@
 <template>
     <el-card class="car_card" :body-style="{ padding: '0px' }">
-      <img :src="car.path" class="image">
+      <img :src="getModifiedPath()" class="image">
       <div class="mark-model-container">
         <span>{{car.mark}}&nbsp;{{car.model}}</span>
       </div>
@@ -18,6 +18,11 @@
 export default {
     props : ['car'],
     methods: {
+
+      getModifiedPath() {
+        return 'uploads/' + this.car.photo_path
+      },
+
       getModifiedPrice(cost) {
         return cost.slice(0, cost.length - 5)
       },
@@ -44,15 +49,16 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 
 .car_card
 {
     max-width: 300px;
+    max-height: 320px;
     min-width: 320px;
     margin-left: 10px;
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .bottom {
@@ -66,7 +72,7 @@ export default {
 
   .image {
     max-width: 320px;
-    min-height: 200px;
+    height: 230px;
     width: 100%;
     display: block;
   }

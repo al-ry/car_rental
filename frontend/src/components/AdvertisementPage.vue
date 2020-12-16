@@ -5,18 +5,27 @@
                 <el-avatar :size="150" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             </div>
             <div class="lessor_info">
-                <span>Name: Stas Gaisin</span>
-                <span>Phone: 89021089168</span>
+                <span><i class="el-icon-user icon"></i>Stas Gaisin</span>
+                <span><i class="el-icon-phone-outline icon"></i>89021089168</span>
                 <span>Rating ....</span>
+                <button @click="ShowAdvertisementInfo">asdas</button>
             </div>
         </div>
         <div class="book_block">
-            <el-carousel class="image_carousel">
-                <el-carousel-item v-for="item in 4" :key="item">
-                <h3 class="small">item </h3>
+            <el-carousel class="image_carousel" ref="carousel" :initial-index=1 :autoplay="false">
+                <el-carousel-item v-for="(photo, index) in advertisement" v-bind:key="index">
+                    <img class="image" :src="getModifiedPath(photo)" >
                 </el-carousel-item>
             </el-carousel>
-            
+            <div>
+                    <el-date-picker
+      v-model="value1"
+      type="daterange"
+      range-separator="To"
+      start-placeholder="Start date"
+      end-placeholder="End date" :disabledDate="validateDate">
+    </el-date-picker>
+            </div>
         </div>
         <div class="description_block">
             <span>Mark: Lada</span>
@@ -30,17 +39,46 @@
 </template>
 
 <script>
+import {getAdvertismentInfo} from '../../services/getAdvertisementInfo'
+
 export default {
-    props : ['advertisement'],
+    data() {
+        return {
+            advertisement: []
+        }
+    },
+
     methods : {
         ShowAdvertisementInfo() {
-            console.log(this.advertisement.mark)
+            console.log(this.advertisement)
+        },
+
+        getModifiedPath(photo) {          
+            return '../uploads/' + photo
+        },
+
+        validateDate(date) {
+            console.log(date)
+            return true
         }
+
+    },
+    async beforeCreate() {
+        console.log(this.$route.params.id)
+        await getAdvertismentInfo(this.$route.params.id).then(res => {
+            this.advertisement = res.data.photo_path
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
+        this.$refs.carousel.next();
     }
+    
 }
 </script>
 
 <style scoped>
+
   .el-carousel__item h3 {
     color: #475669;
     font-size: 14px;
@@ -56,10 +94,21 @@ background-color: #99a9bf;
 .el-carousel__item:nth-child(2n+1) {
 background-color: #d3dce6;
 }
-  
+.icon
+{
+    margin-right: 5px;
+    font-weight: 700;
+}
+
 .image_carousel
 {
     max-width: 500px;
+}
+
+.image
+{
+    height: 100%;
+    width: 100%;
 }
 
 .advertisement_page
@@ -89,6 +138,8 @@ background-color: #d3dce6;
 .book_block
 {
     margin-top: 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 .description_block

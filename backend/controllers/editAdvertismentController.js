@@ -1,12 +1,12 @@
 const { DBManager } = require('../database/db')
 
-exports.getCities = async (req, res) => {
-    db = new DBManager()
+exports.edit = async (req, res) => {
+    console.log('editing..')
     try {
+        db = new DBManager()
         await db.connect()
-        let cities = await db.getCities()
         await db.close()
-        res.json(cities.rows)
+        res.sendStatus(200)
     } catch (err) {
         console.log(err)
         res.sendStatus(400)

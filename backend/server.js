@@ -1,22 +1,23 @@
-var express = require('express')
-var app = express(), bodyParser = require("body-parser");
-
-var addAdvertismentRouter = require('./routes/addAdvertismentRouter')
-var registerUserRouter = require('./routes/registerUserRouter')
-var loginRouter = require('./routes/loginRouter')
-var marksRouter = require('./routes/marksRouter')
-var modelsRouter = require('./routes/modelsRouter')
-var citiesRouter = require('./routes/citiesRouter')
-var logoutRouter = require('./routes/logoutRouter')
-var userSession = require('./config/sessionsConfig')
-var homeRouter = require('./routes/homeRouter')
-var userAdvertismentsRouter = require('./routes/userAdvertismentRotuer')
-var closeAdvertismentRouter = require('./routes/closeAdvertisment')
-var reopenAdvertismentRouter = require('./routes/reopenAdvertisment')
-var bookCarRouter = require('./routes/bookCarRouter')
-var advertismentInfoRouter = require('./routes/advertismentInfoRouter')
-var advertismentListRouter = require('./routes/advertismentListRouter')
-var cors = require('cors')
+const express = require('express')
+const app = express(), bodyParser = require("body-parser");
+const addAdvertismentRouter = require('./routes/addAdvertismentRouter')
+const registerUserRouter = require('./routes/registerUserRouter')
+const loginRouter = require('./routes/loginRouter')
+const marksRouter = require('./routes/marksRouter')
+const modelsRouter = require('./routes/modelsRouter')
+const citiesRouter = require('./routes/citiesRouter')
+const logoutRouter = require('./routes/logoutRouter')
+const userSession = require('./config/sessionsConfig')
+const homeRouter = require('./routes/homeRouter')
+const userAdvertismentsRouter = require('./routes/userAdvertismentRotuer')
+const closeAdvertismentRouter = require('./routes/closeAdvertisment')
+const reopenAdvertismentRouter = require('./routes/reopenAdvertisment')
+const bookCarRouter = require('./routes/bookCarRouter')
+const advertismentInfoRouter = require('./routes/advertismentInfoRouter')
+const advertismentListRouter = require('./routes/advertismentListRouter')
+const cors = require('cors');
+const editAdvertismentRouter = require('./routes/editAdvertismentRouter');
+const acceptBookingRouter = require('./routes/acceptBooking')
 
 app.use(cors({  
   credentials: true,
@@ -43,6 +44,8 @@ app.use(reopenAdvertismentRouter)
 app.use(bookCarRouter)
 app.use(advertismentInfoRouter)
 app.use(advertismentListRouter)
+app.use(editAdvertismentRouter)
+app.use(acceptBookingRouter)
 
 app.listen(3000, () => {
   console.log('Server started on port 3000...')

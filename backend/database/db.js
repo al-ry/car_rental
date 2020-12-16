@@ -183,6 +183,18 @@ class DBManager {
                 'VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7)'
     await this.#client.query(query, data)
   }
+  async insertCarBooking(booking) {
+    console.log(booking)
+    let data = [booking.idAdvertisment, booking.idUser, booking.isAccepted, booking.start, booking.end]
+    let query = 'INSERT INTO booking VALUES (DEFAULT, $1, $2, $3, $4, $5)'
+    await this.#client.query(query, data)
+  }
+
+  async acceptBooking(idBooking) {
+    let data = [idBooking]
+    let query = 'UPDATE booking SET is_accepted = 1 WHERE id_booking = $1'
+    await this.#client.query(query, data)
+  }
 
   async beginTransaction() {
     await this.#client.query('BEGIN')

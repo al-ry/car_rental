@@ -1,12 +1,13 @@
 const { DBManager } = require('../database/db')
 
-exports.getCities = async (req, res) => {
+exports.accept = async (req, res) => {
     db = new DBManager()
+    console.log(req.body.idBooking)
     try {
         await db.connect()
-        let cities = await db.getCities()
+        await db.acceptBooking(req.body.idBooking)
         await db.close()
-        res.json(cities.rows)
+        res.sendStatus(200)
     } catch (err) {
         console.log(err)
         res.sendStatus(400)

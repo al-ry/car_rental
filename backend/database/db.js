@@ -83,13 +83,12 @@ class DBManager {
 
   async getAdvertismentInfo(id) {
     let data = [id]
-    let query = 'SELECT state, start, "end", cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+    let query = 'SELECT cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
                 'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
                 'INNER JOIN (SELECT id_user, name AS user_name, phone AS user_phone FROM \"user\") AS \"user\" ON \"user\".id_user = advertisment.id_user ' +
-                'LEFT JOIN (SELECT id_advertisment, state,start, "end" FROM booking) AS booking ON booking.id_advertisment = advertisment.id_advertisment ' +
                 'WHERE advertisment.id_advertisment = $1'
     let res = await this.#client.query(query, data)
     return res.rows[0]

@@ -222,17 +222,17 @@ class DBManager {
   }
   async insertCarBooking(booking) {
     let query = 'SELECT * FROM advertisment WHERE is_open = 1 AND id_advertisment = $1'
-    let res = await this.#client.query(query, data)
-    if (!res.rowsCount) {
-      throw new Error('Advertisment was closed by user', [booking.idAdvertisement])
+    let res = await this.#client.query(query, [booking.idAdvertisement])
+    if (!res.rowCount) {
+      throw new Error('Advertisment was closed by user')
     }
-    let data = [booking.idAdvertisement, booking.start, booking.end]
-    query = 'SELECT * FROM booking ' +
-            'WHERE state = 1 AND ' +
-                  'id_advertisment = $1 AND ' + 
-                  '((start >= $2) AND (end <= $2)) AND )'
-    res = this.#client.query(query, data)
-    data = [booking.idAdvertisement, booking.idUser, booking.state, booking.start, booking.end]
+    // let data = [booking.idAdvertisement, booking.start, booking.end]
+    // query = 'SELECT * FROM booking ' +
+    //         'WHERE state = 1 AND ' +
+    //               'id_advertisment = $1 AND ' + 
+    //               '((start >= $2) AND (end <= $2)) AND )'
+    // res = this.#client.query(query, data)
+    let data = [booking.idAdvertisement, booking.idUser, booking.state, booking.start, booking.end]
     query = 'INSERT INTO booking VALUES (DEFAULT, $1, $2, $3, $4, $5)'
     await this.#client.query(query, data)
   }

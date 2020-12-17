@@ -187,7 +187,6 @@ export default {
 		},
 
 		onSubmit() {
-
 			this.advertisementInfo.form.mark = this.selectedMark
 			this.advertisementInfo.form.model = this.selectedModel
 			if(this.isCorrectInfo() && this.isLoggedIn)
@@ -238,10 +237,6 @@ export default {
 
 			return true
 		},
-
-		createUniqueId() {
-
-		}
     }
   }
 </script>

@@ -13,11 +13,14 @@
             </div>
         </div>
         <el-tabs type="border-card" class="user_activity_tabs" @tab-click="showAdvertisementList">
-            <el-tab-pane label="Your book requests">
-                <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-                    <el-table-column prop="date" label="Date" width="180"></el-table-column>
-                    <el-table-column prop="name" label="Name" width="180"></el-table-column>
-                    <el-table-column prop="address" label="Address"></el-table-column>
+            <el-tab-pane label="Your book requests" >
+                <el-table :data="tableData" height="500" style="width: 100%" :row-class-name="tableRowClassName">
+                    <el-table-column prop="date" label="Name" width="180"></el-table-column>
+                    <el-table-column prop="name" label="Phone" width="180"></el-table-column>
+                    <el-table-column prop="name" label="Start" width="180"></el-table-column>
+                    <el-table-column prop="name" label="End" width="180"></el-table-column>
+                    <el-table-column prop="name" label="Status" width="180"></el-table-column>
+
                 </el-table>
             </el-tab-pane>
             <el-tab-pane label="Your advertisement"  class="cars_containter" >
@@ -43,11 +46,6 @@ export default {
 
     computed: {
         ...mapGetters(['GetUserInfo']),
-        // userInfoName()
-        // {
-        //     // console.log(this.userInfo.name, "in user info name")
-        //     return this.userInfo.name
-        // }
     },
 
     data() {
@@ -65,6 +63,42 @@ export default {
                 name: 'Tom',
                 address: 'No. 189, Grove St, Los Angeles'
             },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+                        {
+                date: '2016-05-02',
+                name: 'Tom',
+                address: 'No. 189, Grove St, Los Angeles'
+            },
+
             {
                 date: '2016-05-04',
                 name: 'Tom',

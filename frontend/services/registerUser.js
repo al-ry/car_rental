@@ -8,3 +8,5 @@ export async function registerUser(info) {
 
     return await response;
 }
+
+

@@ -4,6 +4,6 @@ const incomingBookingontroller = require('../controllers/incomingBookingControll
 const {checkSession} = require('../middlewares/checkSession')
 
 
-incomingBookingRouter.post('/incomingBooking', checkSession, incomingBookingontroller.getIncomingBooking)
+incomingBookingRouter.get('/incomingBooking', checkSession, incomingBookingontroller.getIncomingBooking)
 
 module.exports = incomingBookingRouter

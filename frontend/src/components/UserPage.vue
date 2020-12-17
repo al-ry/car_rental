@@ -14,13 +14,29 @@
         </div>
         <el-tabs type="border-card" class="user_activity_tabs" @tab-click="showAdvertisementList">
             <el-tab-pane label="Your book requests" >
-                <el-table :data="tableData" height="500" style="width: 100%" :row-class-name="tableRowClassName">
-                    <el-table-column prop="date" label="Name" width="180"></el-table-column>
-                    <el-table-column prop="name" label="Phone" width="180"></el-table-column>
-                    <el-table-column prop="name" label="Start" width="180"></el-table-column>
-                    <el-table-column prop="name" label="End" width="180"></el-table-column>
-                    <el-table-column prop="name" label="Status" width="180"></el-table-column>
+                <el-table :data="incomingRequests" height="500" style="width: 100%" :row-class-name="tableRowClassName">
+                    <el-table-column prop="mark_name" label="Car" width="180">
+                        <template #default="scope">
+                            <el-tag size="medium" @click="showAdvertisement(scope.$index, scope.row)">
+                                {{ scope.row.mark_name }} {{scope.row.model_name}}</el-tag>
+                        </template>
+                    </el-table-column>
 
+                    <el-table-column prop="renter_name" label="User" width="180">
+                        <template #default="scope">
+                            <el-tag size="medium" @click="showAdvertisement(scope.$index, scope.row)">{{ scope.row.renter_phone }}</el-tag>
+                            <span style="margin-left: 10px">{{scope.row.renter_name}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="start" label="Start" width="180"></el-table-column>
+                    <el-table-column prop="end" label="End" width="180"></el-table-column>
+                    <el-table-column prop="state" label="Status" width="100"></el-table-column>
+                    <el-table-column fixed="right" label="Operations" width="120">
+                        <template #default="scope">
+                            <el-button icon="el-icon-check" circle v-if="scope.row.state == 'Waiting'" @click="handleEdit(scope.$index, scope.row)"></el-button>
+                            <el-button icon="el-icon-error" circle v-if="scope.row.state == 'Waiting'" type="danger" @click="handleDelete(scope.$index, scope.row)"></el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-tab-pane>
             <el-tab-pane label="Your advertisement"  class="cars_containter" >
@@ -36,6 +52,8 @@
 <script>
 import {continueSession} from '../../services/continueSession'
 import {getUserAdvertisement} from '../../services/getUserAdvertisements'
+import {getIncomingRequests} from '../../services/getIncomingRequests'
+
 import CarCard from './CarCard.vue'
 import {mapGetters} from 'vuex'
 
@@ -53,77 +71,7 @@ export default {
             fullscreenLoading: false,
             userInfo: {},
             cars: [],
-            tableData:  [{
-                date: '2016-05-03',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            }, 
-            {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-                        {
-                date: '2016-05-02',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-
-            {
-                date: '2016-05-04',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-            {
-                date: '2016-05-01',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-            {
-                date: '2016-05-01',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-            {
-                date: '2016-05-01',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            },
-            {
-                date: '2016-05-01',
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles'
-            }]
+            incomingRequests: []
         }
     },
 
@@ -137,9 +85,45 @@ export default {
         }).catch(err => {
             console.log(err, 'error')
         })
+
+        getIncomingRequests().then(res => {
+            this.incomingRequests = this.formatIncomingRequests(res.data)
+            console.log(this.incomingRequests)
+        }).catch(err => {
+            console.log(err)
+        })
     },
 
     methods: {
+        showUserInfo(index, data) {
+            console.log(index, data)
+        },
+
+        showAdvertisement(index, data) {
+            this.$router.push({ name:'advertisement', params: {id: data.id_advertisment}})
+        },
+
+        formatIncomingRequests(requests) {
+            for(var index in requests) {
+                requests[index].end = new Date(requests[index].end).toDateString()
+                requests[index].start = new Date(requests[index].start).toDateString()
+                switch (requests[index].state)
+                {
+                    case 0:
+                        requests[index].state = 'Waiting';
+                        break;
+                    case 1:
+                        requests[index].state = 'Accepted'; 
+                        break;
+                    case 2: 
+                        requests[index].state = 'Declined'  
+                        break;
+                }
+            }
+
+            return requests
+        },
+
         showAdvertisementList(tab)  {
             if(tab.props.label == "Your advertisement") {                
                 getUserAdvertisement(this.GetUserInfo.phone).then(res => {

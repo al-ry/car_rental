@@ -5,47 +5,66 @@
                 <el-avatar :size="150" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             </div>
             <div class="lessor_info">
-                <span><i class="el-icon-user icon"></i>Stas Gaisin</span>
-                <span><i class="el-icon-phone-outline icon"></i>89021089168</span>
+                <span><i class="el-icon-user icon"></i>{{advertisement.user_name}}</span>
+                <span><i class="el-icon-phone-outline icon"></i>{{advertisement.user_phone}}</span>
                 <span>Rating ....</span>
                 <button @click="ShowAdvertisementInfo">asdas</button>
             </div>
         </div>
-        <div class="book_block">
+        <div class="car_block">
             <el-carousel class="image_carousel" ref="carousel" :initial-index=1 :autoplay="false">
-                <el-carousel-item v-for="(photo, index) in advertisement" v-bind:key="index">
+                <el-carousel-item v-for="(photo, index) in advertisement.photo_path" v-bind:key="index">
                     <img class="image" :src="getModifiedPath(photo)" >
                 </el-carousel-item>
             </el-carousel>
-            <div>
-                    <el-date-picker
-      v-model="value1"
-      type="daterange"
-      range-separator="To"
-      start-placeholder="Start date"
-      end-placeholder="End date" :disabledDate="validateDate">
-    </el-date-picker>
+            <div class="advertisement_info_block">
+                <div class="mark_model_block"><span>{{advertisement.mark}} {{advertisement.model}}, {{advertisement.year}}</span></div>
+                <div class="location_block"><span><i class="el-icon-location icon"></i> {{advertisement.city}}</span></div>
+                <div class="technical_block">
+                    <span><i class="el-icon-s-tools icon"></i> {{getModifiedTransmission(advertisement.transmission)}}</span>
+                    <span><i class="el-icon-truck icon"></i> {{getModifiedFuel(advertisement.fuel)}}</span>
+                </div>
+                <div class="price_block"><span>Price a day: {{getModifiedPrice(advertisement.cost)}}  &#x20bd;</span></div>
             </div>
         </div>
-        <div class="description_block">
-            <span>Mark: Lada</span>
-            <span>Model: Kalina</span>
-            <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur cumque velit 
-                delectus odit qui excepturi sapiente magni distinctio quas nisi, perferendis suscipit 
-                impedit culpa dolores animi natus ullam accusamus consectetur.
-            </span>
+        <div class="booking_block">    
+            <div class="description_block"><span class="description_title">Description:</span> {{advertisement.description}}</div>
+            <div class="booking_date" v-if="isLoggedIn">
+                <el-date-picker size="medium" v-model="dateRange" type="daterange" range-separator="To"
+                :start-placeholder="dateRange[0]" :end-placeholder="dateRange[1]" :disabledDate="validateDate"></el-date-picker>
+                <el-button type="success" class="book_button" @click="BookCar">book</el-button>
+            </div>
+
         </div>
     </el-main>
 </template>
 
 <script>
 import {getAdvertismentInfo} from '../../services/getAdvertisementInfo'
+import {continueSession} from '../../services/continueSession'
+import {getBookedDates} from '../../services/getBookedDates'
+import {bookCar} from '../../services/bookCar'
+import {mapGetters} from 'vuex'
 
 export default {
     data() {
         return {
-            advertisement: []
+            advertisement: [],
+            blockedDates: null,
+            dateRange: []
         }
+    },
+
+    computed:  {
+        ...mapGetters(['isLoggedIn']),
+    },
+
+    async created() {
+        await this.loginUser()
+        await this.requireInfo()
+        console.log(this.advertisement)
+        await this.getLockedDates()
+        this.$refs.carousel.next();
     },
 
     methods : {
@@ -53,31 +72,127 @@ export default {
             console.log(this.advertisement)
         },
 
+        getModifiedFuel(fuel) {
+            var modifiedFuel
+            switch(fuel) {
+                case 1:
+                    modifiedFuel = "Petrol";
+                    break;
+                case 2:
+                    modifiedFuel = "Diesel";
+                    break;
+                default:
+                    modifiedFuel = "Hybrid\\Electro";
+                    break;
+            }
+            return modifiedFuel
+        },
+
+        getModifiedTransmission(transmission) {
+            var modifiedTransmission
+            switch(transmission) {
+                case 1:
+                    modifiedTransmission = "Manual";
+                    break;
+                case 2:
+                    modifiedTransmission = "Auto";
+                    break;
+                default:
+                    modifiedTransmission = "Manual";
+                    break;
+            }
+
+            return modifiedTransmission
+        },
+
+        getModifiedPrice(cost) {
+            if (cost) {
+                return cost.slice(0, cost.length - 5)
+            }
+        },
+
+
         getModifiedPath(photo) {          
             return '../uploads/' + photo
         },
 
         validateDate(date) {
-            console.log(date)
-            return true
-        }
+            if (this.blockedDates) {
+                if (new Date > date) {
+                    return true;
+                }
+                
+                for (var range in this.blockedDates) {
+                    console.log(date, new Date(this.blockedDates[range].start), new Date(this.blockedDates[range].end))
+                    if (date >= new Date(this.blockedDates[range].start) 
+                        && date <= new Date(this.blockedDates[range].end)) {
+                        return true           
+                    }
 
+                }
+            }
+        },
+
+        async requireInfo() {
+            await getAdvertismentInfo(this.$route.params.id).then(res => {
+                this.advertisement = res.data
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        async getLockedDates() {
+            await getBookedDates(this.$route.params.id).then(res => {
+                this.blockedDates = res.data
+                console.log(res.data)
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        async loginUser() {
+            await continueSession().then(res => {
+                if (res.status == 200) {
+                    this.$store.commit('LoginUser', res.data)
+                }
+            }).catch(err => {
+                console.log(err, 'error')
+            })
+        },
+
+        checkDateRange() {
+            if (this.dateRange.length == 2){
+                console.log('d')
+            }
+        },
+
+        BookCar() {
+            this.checkDateRange()
+            if (this.dateRange.length == 2) {
+                bookCar(new Date(this.dateRange[0]), new Date(this.dateRange[1]), this.$route.params.id).then(res => {
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
+                this.dateRange = []
+                this.getLockedDates()
+            }
+        },
     },
-    async beforeCreate() {
-        console.log(this.$route.params.id)
-        await getAdvertismentInfo(this.$route.params.id).then(res => {
-            this.advertisement = res.data.photo_path
-            console.log(res)
-        }).catch(err => {
-            console.log(err)
-        })
-        this.$refs.carousel.next();
-    }
     
 }
 </script>
 
 <style scoped>
+html, body {
+    overflow: auto;
+	height: 100%;
+    margin: 0px;
+}
+#app {
+    height: 100%;
+    overflow: auto;
+}
 
   .el-carousel__item h3 {
     color: #475669;
@@ -101,8 +216,9 @@ background-color: #d3dce6;
 }
 
 .image_carousel
-{
+{   
     max-width: 500px;
+    min-width: 500px;
 }
 
 .image
@@ -113,38 +229,170 @@ background-color: #d3dce6;
 
 .advertisement_page
 {
-    max-width: 1200px;
-    margin:auto
+    margin: auto;
+    padding: 5px auto;
+    height: 100%;
+    overflow: auto;
+}
+
+.description_title
+{
+    font-size: 20px;
 }
 
 .lessor_info
 {
     display:flex;
     flex-direction: column;
-    margin: 20px 0 0 40px;
     font: Courier, monospace;
     font-size: 20px;
-    line-height: 40px;
+    line-height: 50px;
     color:black;
 }
 
 .lessor_block
 {
-    margin-top: 50px;
+    max-width: 1000px;
+    margin: 50px auto 0 auto;
     display: flex;
     flex-direction: row;
 }
 
-.book_block
+.car_block
 {
-    margin-top: 30px;
+    max-width: 1000px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    margin: 30px auto 0px auto;
+    padding: 0 10px 0 10px;
+}
+
+.advertisement_info_block
+{
+    margin: 0 10px 0px 40px;
+    min-width: 450px;
 }
 
 .description_block
 {
-    margin-top: 30px;
+    word-wrap: break-word;
+    font-size: 15px;
+    margin-bottom: 10px;
 }
 
+.mark_model_block
+{
+    font-size: 25px;
+}
+
+.location_block 
+{
+    font-size: 18px;
+    margin-top: 10px;
+    font-size: 20px;
+    line-height: 50px;
+}
+
+.price_block
+{
+    font-size: 28px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 70px
+}
+
+.book_button
+{
+    margin-left: 20px
+}
+
+.technical_block
+{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    line-height: 50px;
+}
+
+.booking_block
+{
+    max-width: 1000px;
+    margin: 50px auto 20px auto;
+    padding: 0 10px 0 10px;
+}
+
+.booking_date {
+    margin-top: 40px
+}
+
+
+@media screen and (max-width: 1020px) {
+    .car_block {
+      max-width: 800px;
+    }
+
+    .lessor_block {
+        max-width: 800px;
+    }
+
+    .price_block {
+        font-size: 22px;
+    }
+
+    .technical_block, .location_block  {
+        font-size: 17px;
+    }
+
+    .image_carousel
+    {   
+        max-width: 500px;
+        min-width: 400px;
+    }
+
+    .booking_block
+    {
+        max-width: 800px;
+    }
+
+    .advertisement_info_block {
+        min-width: 320px;
+    }
+
+    .description_block {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 780px) {
+    .car_block {
+        flex-direction: column;
+        max-width: 500px;
+    }
+
+    .image_carousel {   
+        max-width: 600px;
+        min-width: 320px;
+    }
+
+    .lessor_block {
+        max-width: 500px;
+    }
+
+    .advertisement_info_block
+    {
+        margin-top: 10px;
+        margin-left: 5px;
+        min-width: 320px;
+    }
+
+    .price_block
+    {
+        margin-top:20px;
+    }
+
+    .el-date-editor
+    {
+        width: 315px;
+    }
+}
 </style>

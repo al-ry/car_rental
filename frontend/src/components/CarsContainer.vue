@@ -62,7 +62,6 @@ export default {
                 this.currentPage = res.data.current.page
                 this.advertisements = res.data.rows
                 this.pageCount = res.data.pagesCount
-                console.log(this.pageCount)
             }).catch(err => {
                 console.log(err)
             })  

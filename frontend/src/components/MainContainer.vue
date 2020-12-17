@@ -73,8 +73,6 @@ export default {
     height: 100%;
 }
 
-
-
 html, body {
     overflow: auto;
 	height: 100%;

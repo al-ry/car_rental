@@ -10,7 +10,7 @@ exports.bookCar = async (req, res) => {
     const bookingData = {
         start: data.start,
         end: data.end,
-        idAdvertisment: data.idAdvertisment,
+        idAdvertisement: data.idAdvertisement,
         idUser: req.session.user.id,
         state: 0
     }

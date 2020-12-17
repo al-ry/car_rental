@@ -173,7 +173,7 @@ class DBManager {
   async getIncomingRequests(idUser) {
     let data = [idUser] 
     console.log(data)
-    let query = 'SELECT booking.id_advertisment, state, renter_name, renter_phone, start, "end", mark_name, model_name FROM booking ' +
+    let query = 'SELECT id_booking, booking.id_advertisment, state, renter_name, renter_phone, start, "end", mark_name, model_name FROM booking ' +
                 'INNER JOIN (SELECT id_user AS id_renter, name AS renter_name, phone AS renter_phone FROM "user") AS renter ON renter.id_renter = booking.id_renter ' +
                 'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
@@ -221,8 +221,19 @@ class DBManager {
     await this.#client.query(query, data)
   }
   async insertCarBooking(booking) {
-    let data = [booking.idAdvertisement, booking.idUser, booking.state, booking.start, booking.end]
-    let query = 'INSERT INTO booking VALUES (DEFAULT, $1, $2, $3, $4, $5)'
+    let query = 'SELECT * FROM advertisment WHERE is_open = 1 AND id_advertisment = $1'
+    let res = await this.#client.query(query, data)
+    if (!res.rowsCount) {
+      throw new Error('Advertisment was closed by user', [booking.idAdvertisement])
+    }
+    let data = [booking.idAdvertisement, booking.start, booking.end]
+    query = 'SELECT * FROM booking ' +
+            'WHERE state = 1 AND ' +
+                  'id_advertisment = $1 AND ' + 
+                  '((start >= $2) AND (end <= $2)) AND )'
+    res = this.#client.query(query, data)
+    data = [booking.idAdvertisement, booking.idUser, booking.state, booking.start, booking.end]
+    query = 'INSERT INTO booking VALUES (DEFAULT, $1, $2, $3, $4, $5)'
     await this.#client.query(query, data)
   }
 

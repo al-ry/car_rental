@@ -21,6 +21,6 @@ exports.bookCar = async (req, res) => {
         res.sendStatus(200)
     } catch (err) {
         console.log(err)
-        res.sendStatus(400)
+        res.status(400).json({err: err.message})
     }
 }

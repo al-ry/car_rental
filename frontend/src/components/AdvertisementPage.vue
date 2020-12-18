@@ -123,9 +123,11 @@ export default {
                 }
                 
                 for (var range in this.blockedDates) {
+                    var startDate = new Date(this.blockedDates[range].start)
+                    var endDate = new Date(this.blockedDates[range].end)
                     console.log(date, new Date(this.blockedDates[range].start), new Date(this.blockedDates[range].end))
-                    if (date >= new Date(this.blockedDates[range].start) 
-                        && date <= new Date(this.blockedDates[range].end)) {
+                    if (date >= startDate.setDate(startDate.getDate() + 1)
+                        && date <= endDate.setDate(endDate.getDate() + 1)) {
                         return true           
                     }
 
@@ -160,14 +162,15 @@ export default {
             })
         },
 
-        checkDateRange() {
-            if (this.dateRange.length == 2){
-                console.log('d')
-            }
-        },
+        // checkDateRange() {
+        //     if (this.dateRange.length == 2){
+        //         console.log('d')
+        //     }
+        // },
 
         BookCar() {
-            this.checkDateRange()
+            //this.checkDateRange()
+            console.log(new Date(this.dateRange[0]), new Date(this.dateRange[1]))
             if (this.dateRange.length == 2) {
                 bookCar(new Date(this.dateRange[0]), new Date(this.dateRange[1]), this.$route.params.id).then(res => {
                     console.log(res)

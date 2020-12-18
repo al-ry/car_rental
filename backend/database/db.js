@@ -269,6 +269,16 @@ class DBManager {
     }
   }
 
+  async insertReview(rev) {
+    let data = [rev.idAdv, rev.rate, rev.desc]
+    console.log(data)
+    let query = 'INSERT INTO review VALUES ' +
+                '(DEFAULT, ' + 
+                '(SELECT id_user FROM advertisment WHERE id_advertisment = $1), ' +
+                '$2, $3)'
+    await this.#client.query(query, data)
+  }
+
   async declineBooking(idBooking) {
     let data = [idBooking]
     let query = 'UPDATE booking SET state = 2 WHERE id_booking = $1 RETURNING id_booking'

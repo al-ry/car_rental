@@ -1,4 +1,5 @@
 const connectPgSimple = require('connect-pg-simple')
+const { query } = require('express')
 const { Client } = require('pg')
 const { BookingError, AuthorizationError, RegistrationError } = require('../errors/authorizationErrors')
 require('dotenv').config()
@@ -188,16 +189,27 @@ class DBManager {
     return res.rows
   }
 
+  async getUserReviewsByPhone(phone) {
+    let data = [phone]
+    let id = await this.getUserIdByPhone(phone)
+    console.log(id)
+    data = [id]
+    let query = 'SELECT rating, description FROM review WHERE id_user = $1'
+    let res = await this.#client.query(query, data)
+    return res.rows
+  }
+
+
   async getOutgoingRequests(idUser) {
     let data = [idUser] 
     console.log(data)
     let query = 'SELECT booking.id_advertisment, state, start, "end", mark_name, model_name FROM booking ' +
-    'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
-    'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-    'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark ' +
-    'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model ' +
-    'WHERE booking.id_renter = $1 ' + 
-    'ORDER BY state ASC'
+                'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
+                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
+                'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark ' +
+                'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model ' +
+                'WHERE booking.id_renter = $1 ' + 
+                'ORDER BY state ASC'
     let res = await this.#client.query(query, data)
     return res.rows
   }

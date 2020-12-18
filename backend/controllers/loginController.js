@@ -23,7 +23,6 @@ exports.login = async (req, res) => {
             city: cityName
         }
         req.session.user = userInfo
-        delete userInfo.id
         res.status(200).json(userInfo)
     } catch (err) {
         if (err instanceof AuthorizationError) {

@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS review
 	id_review SERIAL NOT NULL PRIMARY KEY,
 	id_user SERIAL NOT NULL,
 	rating SMALLINT NOT NULL,
+	description VARCHAR(255) NOT NULL,
 	CONSTRAINT review_user_id_user_fk
 		FOREIGN KEY(id_user) 
 			REFERENCES "user"(id_user)

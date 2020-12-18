@@ -87,7 +87,7 @@ class DBManager {
 
   async getAdvertismentInfo(id) {
     let data = [id]
-    let query = 'SELECT user_name, user_phone, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+    let query = 'SELECT advertisment.id_user,user_name, user_phone, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +

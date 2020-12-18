@@ -6,7 +6,6 @@ exports.addReview = async (req, res) => {
         rate: req.body.rate,
         desc: req.body.description
     }
-    console.log('review..')
     try {
         db = new DBManager()
         await db.connect()

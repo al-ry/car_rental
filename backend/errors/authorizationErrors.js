@@ -1,4 +1,12 @@
 
+class BookingError extends Error {
+    constructor(msg) {
+        super(msg);
+        this.message = msg;
+        this.name = 'Booking Error';
+    }
+}
+
 
 class AuthorizationError extends Error {
     constructor(msg) {
@@ -8,4 +16,12 @@ class AuthorizationError extends Error {
     }
 }
 
-module.exports = {AuthorizationError}
+class RegistrationError extends Error {
+    constructor(msg) {
+        super(msg);
+        this.message = msg;
+        this.name = 'Authorization Error';
+    }
+}
+
+module.exports = {AuthorizationError, BookingError, RegistrationError}

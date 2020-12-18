@@ -1,5 +1,6 @@
 const connectPgSimple = require('connect-pg-simple')
 const { Client } = require('pg')
+const { BookingError, AuthorizationError, RegistrationError } = require('../errors/authorizationErrors')
 require('dotenv').config()
 
 class DBManager {
@@ -19,9 +20,14 @@ class DBManager {
   }
 
   async insertUser(user) {
+    await this.findByEmail(user.phone)
+    await this.findByPhone(user.phone)
     let data = [user.name, user.phone, user.email, user.idCity, user.password]
-    let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5) RETURNING id_user'
+    let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5) RETURNING id_user, phone, email, name, id_city'
     let res = await this.#client.query(query, data)
+    console.log(res)
+    city = await this.#client.getCityNameById(res.rows[0].id_city)
+    console.log(city)
     return res.rows[0].id_user
   }
 
@@ -30,7 +36,7 @@ class DBManager {
     let query = 'SELECT id_user, phone, email, name, id_city, password FROM \"user\" WHERE phone = $1'
     let result = await this.#client.query(query, data)
     if (result.rowCount == 0) {
-      throw new Error('Incorrect phone')
+      throw new AuthorizationError('Incorrect phone')
     }
     return result.rows[0]
   }
@@ -77,7 +83,7 @@ class DBManager {
     let query = 'SELECT email FROM \"user\" WHERE email = $1'
     let result = await this.#client.query(query, data)
     if (result.rowCount > 0) {
-      throw new Error('Email already used')
+      throw new RegistrationError('Email already used')
     }
   }
 
@@ -115,7 +121,7 @@ class DBManager {
     let query = 'SELECT phone FROM \"user\" WHERE phone = $1'
     let result = await this.#client.query(query, data)
     if (result.rowCount > 0) {
-      throw new Error('Phone already used')
+      throw new RegistrationError('Phone already used')
     }
   }
   
@@ -188,12 +194,13 @@ class DBManager {
   async getOutgoingRequests(idUser) {
     let data = [idUser] 
     console.log(data)
-    let query = 'SELECT booking.id_advertisment, start, "end", mark_name, model_name FROM booking ' +
+    let query = 'SELECT booking.id_advertisment, state, start, "end", mark_name, model_name FROM booking ' +
     'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
     'INNER JOIN car ON car.id_car = advertisment.id_car ' +
     'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark ' +
     'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model ' +
-    'WHERE booking.id_renter = $1 '
+    'WHERE booking.id_renter = $1 ' + 
+    'ORDER BY state ASC'
     let res = await this.#client.query(query, data)
     return res.rows
   }
@@ -225,32 +232,24 @@ class DBManager {
     let query = 'SELECT * FROM advertisment WHERE is_open = 1 AND id_advertisment = $1'
     let res = await this.#client.query(query, [booking.idAdvertisement])
     if (!res.rowCount) {
-      throw new Error('Advertisment was closed by user')
+      throw new BookingError('Advertisment was closed by user')
     }
-    // let data = [booking.idAdvertisement, booking.start, booking.end]
-    // query = 'SELECT * FROM booking ' +
-    //         'WHERE state = 1 AND ' +
-    //               'id_advertisment = $1 AND ' + 
-    //               '((start >= $2) AND (end <= $2)) AND )'
-    // res = this.#client.query(query, data)
-    let data = [booking.idAdvertisement, booking.idUser, booking.state, booking.start, booking.end]
+    let data = [booking.idAdvertisement, booking.start, booking.end]
+    query = 'SELECT * FROM booking ' +
+            'WHERE state = 1 AND ' +
+            'id_advertisment = $1 AND ' +
+            '( ' +
+            '((start <= $2 AND "end" >= $2) OR (start <= $3  AND "end" >= $3)) OR ' +
+            '(((start >= $2) AND ' +'("end" <= $3))) ' +
+            ')'
+    res = await this.#client.query(query, data)
+    if (res.rowCount > 0) {
+      throw new BookingError('Date already booked')
+    }
+    data = [booking.idAdvertisement, booking.idUser, booking.state, booking.start, booking.end]
     query = 'INSERT INTO booking VALUES (DEFAULT, $1, $2, $3, $4, $5)'
     await this.#client.query(query, data)
   }
-
-  // async getBookingRequests(idUser) {
-  //   let data = [idUser]
-  //   let query = 'SELECT booking.id_advertisment, renter_name, renter_phone, start, "end", mark_name, model_name FROM booking ' +
-  //               'INNER JOIN (SELECT id_user AS id_renter, name AS renter_name, phone AS renter_phone FROM "user") AS renter ON renter.id_renter = booking.id_renter ' +
-  //               'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
-  //               'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-  //               'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark ' +
-  //               'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model ' +
-  //               'WHERE state = 0 AND advertisment.id_user = $1'
-  //   res = await this.#client.query(query, data)
-  //   console.log(res)
-  //   return res.rows
-  // }
 
   async acceptBooking(idBooking) {
     let data = [idBooking]

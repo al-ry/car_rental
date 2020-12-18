@@ -1,4 +1,5 @@
 const {DBManager} = require('../database/db')
+const { BookingError } = require('../errors/authorizationErrors')
 
 //TODO: should add checking for if already booked 
 //      check is advertisment open
@@ -20,7 +21,9 @@ exports.bookCar = async (req, res) => {
         db.close()
         res.sendStatus(200)
     } catch (err) {
-        console.log(err)
-        res.status(400).json({err: err.message})
+        if (err instanceof BookingError) {
+            res.status(400).json({err: err.message})
+        }
+        res.status(400).json({err: "Unexpected error"})
     }
 }

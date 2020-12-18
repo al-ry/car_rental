@@ -1,4 +1,5 @@
 const {DBManager} = require('../database/db')
+const { AuthorizationError } = require('../errors/authorizationErrors')
 const {checkPassword} = require('../utils/passwordUtil')
 
 exports.login = async (req, res) => {
@@ -11,22 +12,24 @@ exports.login = async (req, res) => {
     try {
         await db.connect()
         const user = await db.getUserDataByPhone(userData.phone)
-        const city = await db.getCityNameById(user.id_city)
+        const cityName = await db.getCityNameById(user.id_city)
         await db.close()
         checkPassword(user.password, userData.password)
-        //TODO: delete user id from userInfo
-        let userInfo = {
+        const userInfo = {
             id: user.id_user,
             name: user.name,
             phone: user.phone,
             email: user.email,
-            city: city.name
+            city: cityName
         }
         req.session.user = userInfo
+        delete userInfo.id
         res.status(200).json(userInfo)
     } catch (err) {
-        console.log(err)
-        res.status(400).json({error: err.message})
+        if (err instanceof AuthorizationError) {
+            res.status(400).json({err: err.message})
+        }
+        res.status(400).json({err: "Unexpected Error"})
     }
 }
 

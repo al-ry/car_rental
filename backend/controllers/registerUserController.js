@@ -16,24 +16,22 @@ exports.registerUser = async (req, res) => {
     db = new DBManager()
     try {
         await db.connect()
-        userId = await db.insertUser(user)
-        const userData = await db.getUserDataByPhone(user.phone)
-        const city = await db.getCityNameById(userData.id_city)
+        userData = await db.insertUser(user)
+        console.log(userData)
+        req.session.user = userData
+        const cityName = await db.getCityNameById(userData.id_city)
         await db.close()
-        //TODO: delete user id from userInfo
         const userInfo = {
-            id: userId,
             name: userData.name,
             phone: userData.phone,
             email: userData.email,
-            city: city.name
+            city: cityName
         }
-        req.session.user = userInfo
         res.status(200).json(userInfo)
     } catch (err) {
         if (err instanceof RegistrationError) {
             res.status(400).json({errror: err.message})
         } 
-        // res.status(400).json({errror: err.message})
+        res.status(400).json({errror: 'Unexpected error'})
     }
 }

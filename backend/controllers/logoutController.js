@@ -1,11 +1,10 @@
 const session = require("express-session")
 
 exports.logout = (req, res) => {
-    if (req.session.user) {
-        req.session.destroy((err) =>{
-            res.sendStatus(200)
-        })
-    } else {
-        res.sendStatus(400)
-    }
+    req.session.destroy((err) =>{
+        if (err) {
+            res.status(400).json({err: "Unexpected error"})
+        }
+        res.sendStatus(200)
+    })
 }

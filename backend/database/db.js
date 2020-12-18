@@ -7,13 +7,13 @@ class DBManager {
   #client
 
   constructor() {
-	this.#client = new Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT
-	})
+    this.#client = new Client({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT
+    })
   }
   async connect() {
     await this.#client.connect()
@@ -25,10 +25,7 @@ class DBManager {
     let data = [user.name, user.phone, user.email, user.idCity, user.password]
     let query = 'INSERT INTO \"user\" VALUES(DEFAULT, $1, $2, $3, $4, $5) RETURNING id_user, phone, email, name, id_city'
     let res = await this.#client.query(query, data)
-    console.log(res)
-    city = await this.#client.getCityNameById(res.rows[0].id_city)
-    console.log(city)
-    return res.rows[0].id_user
+    return res.rows[0]
   }
 
   async getUserDataByPhone(phone) {
@@ -52,7 +49,7 @@ class DBManager {
     let data = [id]
     let query = 'SELECT name FROM city WHERE id_city = $1'
     let res = await this.#client.query(query, data)
-    return res.rows[0]
+    return res.rows[0].name
   }
   async getCityIdByName(name) {
     console.log(name)
@@ -256,7 +253,7 @@ class DBManager {
     let query = 'UPDATE booking SET state = 1 WHERE id_booking = $1 RETURNING id_booking'
     let res = await this.#client.query(query, data)
     if (!res.rowCount) {
-      throw new Error('Incorrect booking identifier')
+      throw new BookingError('Incorrect booking identifier')
     }
   }
 
@@ -265,7 +262,7 @@ class DBManager {
     let query = 'UPDATE booking SET state = 2 WHERE id_booking = $1 RETURNING id_booking'
     let res = await this.#client.query(query, data)
     if (!res.rowCount) {
-      throw new Error('Incorrect booking identifier')
+      throw new BookingError('Incorrect booking identifier')
     }
   }
 

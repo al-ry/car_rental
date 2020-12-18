@@ -194,7 +194,19 @@ class DBManager {
     let id = await this.getUserIdByPhone(phone)
     console.log(id)
     data = [id]
-    let query = 'SELECT rating, description FROM review WHERE id_user = $1'
+    let query = 'SELECT reviewer_name, reviewer_phone, rating, description FROM review ' +
+                'INNER JOIN (SELECT id_user AS id_reviewer, name as reviewer_name, phone AS reviewer_phone FROM "user") AS reviewer ' +
+                'ON reviewer.id_reviewer = review.id_reviewer ' +
+                'WHERE id_user = $1'
+    let res = await this.#client.query(query, data)
+    return res.rows
+  }
+
+  async getUserRating(idAdv) {
+    let data = [idAdv]
+    let query = 'SELECT rating FROM review ' +
+                'INNER JOIN advertisment ON advertisment.id_user = review.id_user ' +
+                'WHERE id_advertisment = $1'
     let res = await this.#client.query(query, data)
     return res.rows
   }
@@ -270,12 +282,11 @@ class DBManager {
   }
 
   async insertReview(rev) {
-    let data = [rev.idAdv, rev.rate, rev.desc]
-    console.log(data)
+    let data = [rev.idAdv, rev.idUser, rev.rate, rev.desc]
     let query = 'INSERT INTO review VALUES ' +
                 '(DEFAULT, ' + 
                 '(SELECT id_user FROM advertisment WHERE id_advertisment = $1), ' +
-                '$2, $3)'
+                '$2, $3, $4)'
     await this.#client.query(query, data)
   }
 

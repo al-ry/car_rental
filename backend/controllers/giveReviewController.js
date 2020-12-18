@@ -4,8 +4,10 @@ exports.addReview = async (req, res) => {
     let review = {
         idAdv: req.body.idAdvertisment,
         rate: req.body.rate,
-        desc: req.body.description
+        desc: req.body.description,
+        idUser: req.session.user.id
     }
+    console.log(req.session)
     try {
         db = new DBManager()
         await db.connect()

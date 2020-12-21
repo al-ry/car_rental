@@ -24,4 +24,13 @@ class RegistrationError extends Error {
     }
 }
 
-module.exports = {AuthorizationError, BookingError, RegistrationError}
+class EditingError extends Error {
+    constructor(msg) {
+        super(msg);
+        this.message = msg;
+        this.name = 'Registration Error';
+    }
+}
+
+
+module.exports = {AuthorizationError, BookingError, RegistrationError, EditingError}

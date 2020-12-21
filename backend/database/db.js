@@ -1,7 +1,7 @@
 const connectPgSimple = require('connect-pg-simple')
 const { query } = require('express')
 const { Client } = require('pg')
-const { BookingError, AuthorizationError, RegistrationError } = require('../errors/authorizationErrors')
+const { BookingError, AuthorizationError, RegistrationError, EditingError } = require('../errors/authorizationErrors')
 require('dotenv').config()
 
 class DBManager {
@@ -279,6 +279,21 @@ class DBManager {
     if (!res.rowCount) {
       throw new BookingError('Incorrect booking identifier')
     }
+  }
+
+  async getAdvertismentInfoForEditing(info) {
+    let data = [info.idAdv, info.idUser]
+    console.log(data)
+    let query = 'SELECT cost, description, transmission, photo_path, fuel, year, body, city FROM advertisment ' +
+                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
+                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
+                'WHERE advertisment.id_advertisment = $1 AND id_user = $2'
+    let res = await this.#client.query(query, data)
+    console.log(res.rows)
+    if (res.rowCount == 0) {
+      throw new EditingError('Advertisment not found')
+    }
+    return res.rows[0]
   }
 
   async insertReview(rev) {

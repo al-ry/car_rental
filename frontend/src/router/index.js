@@ -4,6 +4,7 @@ import Authorization from '../components/Authorization.vue'
 import Registration from '../components/Registration.vue'
 import UserPage from '../components/UserPage.vue'
 import AdvertisementPage from '../components/AdvertisementPage.vue'
+import ReviewPage from '../components/ReviewPage'
 
 const routes = [{
     path: '/', 
@@ -36,6 +37,12 @@ const routes = [{
     path: '/advertisement/:id',
     name: 'advertisement',
     component : AdvertisementPage,
+},
+
+{
+    path: '/renterReview/:phone',
+    name: 'review_page',
+    component : ReviewPage,
 }
 ];
 

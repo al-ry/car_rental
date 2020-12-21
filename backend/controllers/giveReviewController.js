@@ -8,6 +8,7 @@ exports.addReview = async (req, res) => {
         idUser: req.session.user.id
     }
     console.log(req.session)
+    console.log(req.body)
     try {
         db = new DBManager()
         await db.connect()

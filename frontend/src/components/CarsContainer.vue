@@ -1,13 +1,5 @@
 <template>
-    <div class="car_container_wrapper">
-        <div class="car-container">
-        <CarCard @click="openAdvertisementPage(car)" v-for="car in advertisements" v-bind:car="car" :key="car.id"/>
-        </div>
-        <div class="pagination_block">
-            <el-pagination v-if="pageCount < 12" layout="prev, pager, next" :total="pageCount * 10" 
-            @next-click="handleNextClick" @prev-click="handlePrevClick" @current-change="handleCurrentChange"></el-pagination>
-        </div>
-    </div>
+    <h2>1231  3</h2>
 </template>
 
 <script>
@@ -26,7 +18,6 @@ export default {
     data()  {
         return {
             advertisements: [],
-
             currentPage: 1,
             advertisementsCount: 12,
             pageCount: 2
@@ -39,7 +30,6 @@ export default {
     
     methods : {
         openAdvertisementPage(car) {
-            console.log(car.id_advertisment)
             this.$router.push({ name:'advertisement', params: {id: car.id_advertisment}})
         },
 
@@ -55,17 +45,7 @@ export default {
             this.loadNewPage(newPageNumber, this.advertisementsCount)
         },
 
-        async loadNewPage(page, count) {
-            await getAdvertisementList(page, count).then(res => {
-                console.log(res.data)
-                this.nextPageNumber = res.data.next.page
-                this.currentPage = res.data.current.page
-                this.advertisements = res.data.rows
-                this.pageCount = res.data.pagesCount
-            }).catch(err => {
-                console.log(err)
-            })  
-        }
+
     },
 
     async created() {

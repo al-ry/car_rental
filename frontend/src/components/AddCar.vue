@@ -203,10 +203,10 @@ export default {
 				});
 
 				addCar(data).then(res => {
-					this.$emit('add-new-advetisement', this.advertisementInfo.form);
-					console.log(res)
+					this.$emit('add-new-advetisement');
+					res
 				}).catch(err => {
-					console.log(err)
+					this.errorMessage = err.response.data.err
 				})
 			}
 		},

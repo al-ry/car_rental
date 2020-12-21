@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS review
 	description VARCHAR(255) NOT NULL,
 	CONSTRAINT review_user_id_user_fk
 		FOREIGN KEY(id_user) 
-			REFERENCES "user"(id_user)
+			REFERENCES "user"(id_user),
 	CONSTRAINT review_user_id_reviewer_fk
 		FOREIGN KEY(id_user) 
 			REFERENCES "user"(id_user)		
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS advertisment
 			REFERENCES city(id_city)
 );
 
-drop table advertisment cascade
+drop table review cascade
 
 CREATE TABLE IF NOT EXISTS booking
 (

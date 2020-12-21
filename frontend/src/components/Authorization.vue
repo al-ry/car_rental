@@ -50,7 +50,7 @@ export default {
         },
         
         goBack() {
-            this.$router.push('/home')
+            this.$router.push('/')
         },
         onSubmit() {
             this.checkInput() 

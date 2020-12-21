@@ -19,7 +19,7 @@
             }
         },
         computed: {
-            ...mapGetters(['isLoggedIn']),
+            ...mapGetters(['isLoggedIn', 'GetUserName']),
             userName() {
                 return this.$store.getters.GetUserName 
             }

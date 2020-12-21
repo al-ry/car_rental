@@ -11,10 +11,9 @@
             <el-input v-model="form.email" type="email"></el-input>
         </el-form-item>
         <el-form-item label="City">
-            <el-select v-model="form.city" placeholder="please select your city">
-                <el-option label="Казань" value="1"></el-option>
-                <el-option label="Йошкар-Ола" value="2"></el-option>
-            </el-select>
+                <el-select filterable v-model="form.city" class="model-select">
+                    <el-option v-for="(city, index) in cities" :value="city" v-bind:key="index"/>
+                </el-select>
         </el-form-item>
         <el-form-item label="Birthday">
             <el-input v-model="form.birthday" type="date" placeholder="Pick a day"></el-input>
@@ -38,7 +37,7 @@
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Create</el-button>
-            <router-link class="go-back-button" to="/home"><el-button>Go back to start page</el-button></router-link>
+            <router-link class="go-back-button" to="/"><el-button>Go back to start page</el-button></router-link>
         </el-form-item>
     </el-form>
 </template>
@@ -46,6 +45,7 @@
 
 <script>
 import {registerUser} from '../../services/registerUser'
+import {getCities} from '../../services/getCities'
   export default {
     data() {
       return {
@@ -62,6 +62,7 @@ import {registerUser} from '../../services/registerUser'
         doesPasswordsMatch: true,
         isValidInput: true,
         isRegistered : true,
+        cities : []
 
       }
     },
@@ -80,7 +81,6 @@ import {registerUser} from '../../services/registerUser'
 
             this.isValidInput = true;
         },
-
         onSubmit() {
             this.checkInput() 
             if(this.isValidInput === true) {
@@ -113,6 +113,16 @@ import {registerUser} from '../../services/registerUser'
                 })
             }  
         },
+    },
+    created() {
+        getCities().then(res => {
+			for(var i in res.data) {
+				this.cities.push(res.data[i]['name'])
+				
+			}
+		}).catch(err => {
+				console.log(err)
+		})
     }
   }
 </script>

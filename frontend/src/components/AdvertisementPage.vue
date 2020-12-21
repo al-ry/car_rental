@@ -1,5 +1,9 @@
 <template>
-    <el-main class="advertisement_page">
+    <el-main class="advertisement_page" 
+    v-loading.fullscreen.lock="fullscreenLoading" element-loading-background="rgba(1, 1, 1, 1)">
+    <el-alert title="Success" type="success" @close="handleClose" :description="successMessage" v-if="successMessage != ''" center show-icon></el-alert>
+    <el-alert title="Error" type="error" @close="handleClose" :description="errorMessage" show-icon v-if="errorMessage != ''"></el-alert>
+    <el-page-header @back="Back" content="Advertisement"></el-page-header>
         <div class="lessor_block">
             <div class="lessor_photo">
                 <el-avatar :size="150" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
@@ -7,8 +11,10 @@
             <div class="lessor_info">
                 <span><i class="el-icon-user icon"></i>{{advertisement.user_name}}</span>
                 <span><i class="el-icon-phone-outline icon"></i>{{advertisement.user_phone}}</span>
-                <span>Rating ....</span>
-                <button @click="ShowAdvertisementInfo">asdas</button>
+                <div class="rate_block">
+                    <el-rate v-model="rate" class="review_rate" disabled></el-rate> 
+                    <span @click="ShowReviews">{{rate}} points ({{reviewCount}} reviews)</span>
+                </div>
             </div>
         </div>
         <div class="car_block">
@@ -51,7 +57,19 @@ export default {
         return {
             advertisement: [],
             blockedDates: null,
-            dateRange: []
+            dateRange: [],
+            rate: 0,
+            reviewCount : 0,
+            showErrorDialog: false,
+            fullscreenLoading: false,
+            modal : {
+                showModal : false,
+                header: '',
+                text: ''
+            },
+
+            successMessage: '',
+            errorMessage: ''
         }
     },
 
@@ -60,16 +78,20 @@ export default {
     },
 
     async created() {
+        this.fullscreenLoading = true
         await this.loginUser()
         await this.requireInfo()
         console.log(this.advertisement)
         await this.getLockedDates()
+        this.setRate()
         this.$refs.carousel.next();
+        this.fullscreenLoading = false
     },
 
     methods : {
-        ShowAdvertisementInfo() {
+        ShowReviews() {
             console.log(this.advertisement)
+            this.$router.push({ name:'review_page', params: {phone: this.advertisement.user_phone, id: this.$route.params.id}})
         },
 
         getModifiedFuel(fuel) {
@@ -125,7 +147,6 @@ export default {
                 for (var range in this.blockedDates) {
                     var startDate = new Date(this.blockedDates[range].start)
                     var endDate = new Date(this.blockedDates[range].end)
-                    console.log(date, new Date(this.blockedDates[range].start), new Date(this.blockedDates[range].end))
                     if (date >= startDate.setDate(startDate.getDate() + 1)
                         && date <= endDate.setDate(endDate.getDate() + 1)) {
                         return true           
@@ -134,21 +155,45 @@ export default {
                 }
             }
         },
+        
+        Back() {
+            this.$router.replace("/")
+        },
+
+        showSuccessAlert(message) {
+            this.successMessage = message
+            this.errorMessage = ''
+        },
+
+        showErrorAlert(message) {
+            this.errorMessage = message
+            this.successMessage = ''
+        },
+        
+        setRate() {
+            for(var index in this.advertisement.rating) {
+                this.rate += this.advertisement.rating[index].rating
+            }
+
+            this.rate = this.rate / this.advertisement.rating.length     
+            this.rate = Math.floor(this.rate * 100) / 100
+            this.reviewCount = this.advertisement.rating.length
+        },
 
         async requireInfo() {
             await getAdvertismentInfo(this.$route.params.id).then(res => {
                 this.advertisement = res.data
+                console.log(res.data)
             }).catch(err => {
-                console.log(err)
+                this.showErrorAlert(err.response.data.err)
             })
         },
 
         async getLockedDates() {
             await getBookedDates(this.$route.params.id).then(res => {
                 this.blockedDates = res.data
-                console.log(res.data)
             }).catch(err => {
-                console.log(err)
+                this.showErrorAlert(err.response.data.err)
             })
         },
 
@@ -158,25 +203,25 @@ export default {
                     this.$store.commit('LoginUser', res.data)
                 }
             }).catch(err => {
-                console.log(err, 'error')
+                this.showErrorAlert(err.response.data.err)
             })
         },
 
-        // checkDateRange() {
-        //     if (this.dateRange.length == 2){
-        //         console.log('d')
-        //     }
-        // },
+        handleClose() {
+            this.errorMessage = ''
+            this.successMessage = ''
+        },
 
         BookCar() {
-            //this.checkDateRange()
-            console.log(new Date(this.dateRange[0]), new Date(this.dateRange[1]))
             if (this.dateRange.length == 2) {
                 bookCar(new Date(this.dateRange[0]), new Date(this.dateRange[1]), this.$route.params.id).then(res => {
-                    console.log(res)
+                    if (res.status == 200) {
+                        this.showSuccessAlert("You have successfully sent request, call lessor to get details")
+                    } 
                 }).catch(err => {
-                    console.log(err)
+                    this.showErrorAlert(err.response.data.err)
                 })
+
                 this.dateRange = []
                 this.getLockedDates()
             }
@@ -192,6 +237,14 @@ html, body {
 	height: 100%;
     margin: 0px;
 }
+
+.el-page-header 
+{
+    padding: 10px 0 10px 20px;
+}
+
+
+
 #app {
     height: 100%;
     overflow: auto;
@@ -212,10 +265,25 @@ background-color: #99a9bf;
 .el-carousel__item:nth-child(2n+1) {
 background-color: #d3dce6;
 }
+
 .icon
 {
     margin-right: 5px;
     font-weight: 700;
+}
+
+.rate_block
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.rate_block:hover {
+    cursor: pointer;
+}
+
+.review_rate {
+    margin-top: 11px;
 }
 
 .image_carousel

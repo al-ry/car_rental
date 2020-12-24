@@ -4,6 +4,6 @@ const addAdvertismentController = require('../controllers/addAdvertismentControl
 const {checkSession} = require('../middlewares/checkSession')
 const {uploadAdvertisment} = require('../config/multerStorageConfig')
 
-addAdvertismentRouter.post('/addAdvertisment', checkSession,uploadAdvertisment.array('files', 6), addAdvertismentController.addAdvertisment)
+addAdvertismentRouter.post('/addAdvertisment', checkSession, uploadAdvertisment.array('files', 6), addAdvertismentController.addAdvertisment)
 
 module.exports = addAdvertismentRouter

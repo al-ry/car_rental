@@ -18,6 +18,19 @@ const storageAdvertismentConfig = multer.diskStorage({
   }
 });
 
+const editedAdvertismentPhotos = multer.diskStorage({
+  destination: (req, file, cb) => {
+    fs.mkdir(path.join(__dirname, process.env.ADVERTISMENT_STORAGE, req.body.folder), function(){
+      cb(null, path.join(__dirname, process.env.ADVERTISMENT_STORAGE, req.body.folder));
+    });
+  },
+  filename: function (req, file, cb) {
+    var ext = file.mimetype.split('/')[1];
+    name = nanoid.nanoid()
+    return cb(null, name + "." + ext);
+  }
+})
+
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/png" || 
     file.mimetype === "image/jpg"|| 
@@ -29,5 +42,6 @@ const fileFilter = (req, file, cb) => {
 }
 
 const uploadAdvertisment = multer({storage:storageAdvertismentConfig, fileFilter: fileFilter})
+const uploadOnEditing = multer({storage:editedAdvertismentPhotos, fileFilter: fileFilter})
 
-module.exports = { uploadAdvertisment }
+module.exports = { uploadAdvertisment, uploadOnEditing}

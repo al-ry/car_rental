@@ -2,10 +2,7 @@ const {DBManager} = require('../database/db')
 const fs = require('fs')
 require('dotenv').config()
 const path = require('path');
-const {uploadAdvertisment} = require('../config/multerStorageConfig')
-const {nanoid} = require('nanoid');
 
-uploadAdvertisment.array('files', 6)
 exports.addAdvertisment = async (req, res) => {
     const advrtsmnt = req.body
     const photosPath = path.join(req.body.uid)
@@ -27,7 +24,6 @@ exports.addAdvertisment = async (req, res) => {
             console.log(err)
         })
         await db.rollbackTransaction()
-        console.log(err)
         res.sendStatus(400)
     } finally {
         await db.close()

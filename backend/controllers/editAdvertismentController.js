@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.edit = async (req, res) => {
-    let data = {
+    let newCarInfo = {
         idAdv: req.body.idAdvertisment,
         cost: req.body.cost,
         description: req.body.desctiption,
@@ -17,10 +17,10 @@ exports.edit = async (req, res) => {
     }
     console.log(req.body.deletedPhotos)
     try {
-        deletePhotosFromFolder(JSON.parse(req.body.deletedPhotos))
         db = new DBManager()
         await db.connect()
-        //await db.updateADvertismentInfo()
+        await db.updateAdvertismentInfo(newCarInfo)
+        deletePhotosFromFolder(JSON.parse(req.body.deletedPhotos))
         await db.close()
         res.sendStatus(200)
     } catch (err) {

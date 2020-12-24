@@ -281,6 +281,10 @@ class DBManager {
     }
   }
 
+  async updateAdvertismentInfo(info) {
+    
+  }
+
   async getAdvertismentInfoForEditing(info) {
     let data = [info.idAdv, info.idUser]
     console.log(data)

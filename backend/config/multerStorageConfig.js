@@ -2,6 +2,7 @@ const multer = require('multer')
 const fs = require('fs');
 const nanoid = require('nanoid')
 const path = require('path');
+const { MulterError } = require('multer');
 require('dotenv').config()
 
 

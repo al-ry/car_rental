@@ -1,10 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
-import MainContainer from '../components/MainContainer.vue'
-import Authorization from '../components/Authorization.vue'
-import Registration from '../components/Registration.vue'
-import UserPage from '../components/UserPage.vue'
-import AdvertisementPage from '../components/AdvertisementPage.vue'
+import MainContainer from '../components/MainContainer'
+import Authorization from '../components/Authorization'
+import Registration from '../components/Registration'
+import UserPage from '../components/UserPage'
+import AdvertisementPage from '../components/AdvertisementPage'
 import ReviewPage from '../components/ReviewPage'
+import EditAdvertisement from '../components/EditAdvertisement'
 
 const routes = [{
     path: '/', 
@@ -43,6 +44,12 @@ const routes = [{
     path: '/renterReview/:phone',
     name: 'review_page',
     component : ReviewPage,
+},
+
+{
+    path: '/advertisement/edit/:id',
+    name : 'edit_page',
+    component : EditAdvertisement
 }
 ];
 

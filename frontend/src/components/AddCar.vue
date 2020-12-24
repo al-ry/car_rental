@@ -87,7 +87,6 @@ import { getMarks } from '../../services/getMarks'
 import { getModels } from '../../services/getModels'
 import { getCities } from '../../services/getCities'
 import {mapGetters} from 'vuex'
-import { v4 as uuidv4 } from 'uuid';
 
 export default {
     data() {
@@ -162,7 +161,6 @@ export default {
 		getCities().then(res => {
 			for(var i in res.data) {
 				this.cities.push(res.data[i]['name'])
-				
 			}
 		}).catch(err => {
 				console.log(err)
@@ -192,7 +190,6 @@ export default {
 			if(this.isCorrectInfo() && this.isLoggedIn)
 			{
 				this.advertisementInfo.form.phone = this.userPhone
-				this.advertisementInfo.form.uid = uuidv4()
 				const data = new FormData();
 				for(const field in this.advertisementInfo.form) {
 					data.append(field, this.advertisementInfo.form[field])

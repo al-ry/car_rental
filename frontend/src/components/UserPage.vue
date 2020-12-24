@@ -70,6 +70,7 @@
                         <template #default="scope">
                             <el-button icon="el-icon-remove" title="Close advertisement" circle v-if="scope.row.is_open == 'Open'" type="danger" @click="handleAdvertisementClose(scope.$index, scope.row)"></el-button>
                             <el-button icon="el-icon-refresh" circle title="Reopen advertisement" v-if="scope.row.is_open == 'Closed'" type="danger" @click="hanbleAdvertisementReopen(scope.$index, scope.row)"></el-button>
+                            <el-button icon="el-icon-setting" circle title="Edit advertisement" type="info" @click="handleEditClicked(scope.$index, scope.row)"></el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -289,6 +290,10 @@ export default {
 
         Back() {
             this.$router.replace("/")
+        },
+
+        handleEditClicked(index, data) {
+            this.$router.push({ name:'edit_page', params: {id: data.id_advertisment, info: data}})
         },
 
         handleAccept(index, data) {

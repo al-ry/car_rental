@@ -1,5 +1,6 @@
 const { DBManager } = require('../database/db')
 const { EditingError } = require('../errors/authorizationErrors')
+const {getFilesPathsFromDirectory} = require('../utils/filesUtil');
 
 exports.edit = async (req, res) => {
     console.log('editing..')
@@ -25,6 +26,8 @@ exports.getInfoForEditing = async (req, res) => {
         db = new DBManager()
         await db.connect()
         let info = await db.getAdvertismentInfoForEditing(data)
+        paths = getFilesPathsFromDirectory(info.photo_path)
+        info.photo_path = paths
         await db.close()
         res.status(200).json(info)
     } catch (err) {

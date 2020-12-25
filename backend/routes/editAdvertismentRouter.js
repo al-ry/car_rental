@@ -5,7 +5,7 @@ const {uploadAdvertismentMiddleware} = require('../middlewares/advertismentEditi
 
 const {checkSession} = require('../middlewares/checkSession')
 
-editAdvertismentRouter.post('/editAdvertisment', checkSession, uploadAdvertismentMiddleware, editAdvertismentController.edit)
+editAdvertismentRouter.post('/editAdvertisement', checkSession, uploadAdvertismentMiddleware, editAdvertismentController.edit)
 
 editAdvertismentRouter.get('/editAdvertisement', checkSession, editAdvertismentController.getInfoForEditing)
 

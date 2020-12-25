@@ -9,24 +9,28 @@ exports.edit = async (req, res) => {
     let newCarInfo = {
         idAdv: req.body.idAdvertisment,
         cost: req.body.cost,
-        description: req.body.desctiption,
+        description: req.body.description,
         fuel: req.body.fuel,
         year: req.body.year,
         city: req.body.city,
         body: req.body.body,
         transmission: req.body.transmission
     }
+    db = new DBManager()
     try {
-        db = new DBManager()
         await db.connect()
+        await db.beginTransaction()
         await db.updateAdvertismentInfo(newCarInfo)
-        await db.close()
+        await db.commitTransaction()
         deletePhotosFromFolder(JSON.parse(req.body.deletedPhotos))
         res.sendStatus(200)
     } catch (err) {
-        console.log(req.files)
+        console.log(err)
+        await db.rollbackTransaction()
         deleteNewFilesOnError(req.files)
         res.sendStatus(400)
+    } finally {
+        await db.close()
     }
 }
 

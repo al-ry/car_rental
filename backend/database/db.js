@@ -282,7 +282,13 @@ class DBManager {
   }
 
   async updateAdvertismentInfo(info) {
-    
+    let city = await this.#client.query('SELECT id_city FROM city WHERE name = $1', [info.city])
+    let car = await this.#client.query('SELECT id_car FROM advertisment WHERE id_advertisment = $1', [info.idAdv])
+    let data = [info.transmission, info.year, info.fuel, info.body, car.rows[0].id_car]
+    await this.#client.query('UPDATE car SET transmission = $1, year = $2, fuel = $3, body = $4 WHERE id_car = $5', data)
+    data = [info.idAdv, info.cost, info.description, city.rows[0].id_city]
+    let query = 'UPDATE advertisment SET cost = $2, description = $3, id_city = $4 WHERE id_advertisment = $1'
+    await this.#client.query(query, data)
   }
 
   async getAdvertismentInfoForEditing(info) {

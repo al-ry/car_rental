@@ -2,7 +2,9 @@ const {DBManager} = require('../database/db')
 
 exports.getList = async (req, res) => {
     results = req.results
-    filters = JSON.parse(req.query.filters)
+    if (res.query.filters) {
+        filters = JSON.parse(req.query.filters)
+    }
     db = new DBManager()
     try {
         await db.connect()

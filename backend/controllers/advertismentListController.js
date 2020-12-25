@@ -2,12 +2,12 @@ const {DBManager} = require('../database/db')
 
 exports.getList = async (req, res) => {
     results = req.results
-    console.log(results)
+    filters = JSON.parse(req.query.filters)
     db = new DBManager()
     try {
         await db.connect()
-        pagesCount = await db.getAdvertismentsCount()
-        results.rows  = await db.getAdvetismentListPart(results.current.startPos, results.current.limit)
+        pagesCount = await db.getAdvertismentsCount(filters)
+        results.rows  = await db.getAdvetismentListPart(results.current.startPos, results.current.limit, filters)
         results.rows.photo_path = addPhotoPathToEachAdvertisments(results.rows)
         await db.close()
         pagesCountInt = parseInt(pagesCount)
@@ -30,7 +30,6 @@ function addPhotoPathToEachAdvertisments(advertisments) {
     advertisments.forEach(advrtsmnt => {
         paths = getFirstImageFromFolder(advrtsmnt.photo_path)
         advrtsmnt.photo_path = paths   
-        console.log(advrtsmnt)
     })
     return advertisments
 }

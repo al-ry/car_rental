@@ -160,14 +160,16 @@ class DBManager {
     return result.rows
   }
 
-  async getAdvetismentListPart(start, limit) {
+  async getAdvetismentListPart(start, limit, filters) {
+    console.log(filters) 
+    let transmissionFilter = (filters.transmission) ? 'AND transmission = ' + filters.transmission + ' ' : ''
     let data = [start, limit]
     let query = 'SELECT id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
                 'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
-                'WHERE is_open = 1' +
+                'WHERE is_open = 1 ' + transmissionFilter +
                 'ORDER BY id_advertisment DESC ' +
                 'LIMIT $2 OFFSET $1'
     let res = await this.#client.query(query, data)
@@ -214,7 +216,6 @@ class DBManager {
 
   async getOutgoingRequests(idUser) {
     let data = [idUser] 
-    console.log(data)
     let query = 'SELECT booking.id_advertisment, state, start, "end", mark_name, model_name FROM booking ' +
                 'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
@@ -226,8 +227,12 @@ class DBManager {
     return res.rows
   }
 
-  async getAdvertismentsCount() {
-    let res = await this.#client.query('SELECT COUNT(is_open) as total_count FROM advertisment WHERE is_open = 1')
+  async getAdvertismentsCount(filters) {
+    let transmissionFilter = (filters.transmission) ? 'AND transmission = ' + filters.transmission + ' ' : ''
+    let query = 'SELECT COUNT(*) as total_count FROM advertisment ' +
+                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
+                'WHERE is_open = 1 ' + transmissionFilter
+    let res = await this.#client.query(query)
     return res.rows[0].total_count
   }
 

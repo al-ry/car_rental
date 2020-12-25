@@ -1,3 +1,5 @@
+const acceptBookingRouter = require("../routes/acceptBooking")
+
 function paginateAdvertismentList(req, res, next) {
     page = parseInt(req.query.page)
     limit = parseInt(req.query.limit)
@@ -25,6 +27,7 @@ function paginateAdvertismentList(req, res, next) {
             limit: limit
         }
     }
+
     req.results = results
     next()
 }

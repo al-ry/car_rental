@@ -6,6 +6,11 @@ const path = require('path');
 exports.addAdvertisment = async (req, res) => {
     const advrtsmnt = req.body
     const photosPath = path.join(req.body.uid)
+    console.log(req.files)
+    if (!req.files) {
+        console.log(req.files)
+        console.log('wrong')
+    }
     db = new DBManager()
     try {
         await db.connect()

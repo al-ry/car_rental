@@ -1,6 +1,5 @@
 const { DBManager } = require('../database/db')
 require('dotenv').config()
-const {addPhotosPathsToEachAdvertisments} = require('../utils/filesUtil')
 
 exports.getReviews = async (req, res) => {
     var phone = req.query.phone

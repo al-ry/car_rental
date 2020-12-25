@@ -27,7 +27,7 @@ const editedAdvertismentPhotos = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     var ext = file.mimetype.split('/')[1];
-    name = nanoid.nanoid()
+    let name = nanoid.nanoid()
     return cb(null, name + "." + ext);
   }
 })
@@ -42,7 +42,7 @@ const fileFilter = (req, file, cb) => {
   }
 }
 
-const uploadAdvertisment = multer({storage:storageAdvertismentConfig, fileFilter: fileFilter})
-const uploadOnEditing = multer({storage:editedAdvertismentPhotos, fileFilter: fileFilter})
+const uploadAdvertisment = multer({storage:storageAdvertismentConfig, fileFilter: fileFilter}).array('files', 6)
+const uploadOnEditing = multer({storage:editedAdvertismentPhotos, fileFilter: fileFilter}).array('files', 6)
 
 module.exports = { uploadAdvertisment, uploadOnEditing}

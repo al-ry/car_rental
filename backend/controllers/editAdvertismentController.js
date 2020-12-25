@@ -3,6 +3,7 @@ const { EditingError } = require('../errors/authorizationErrors')
 const {getFilesPathsFromDirectory} = require('../utils/filesUtil');
 const fs = require('fs');
 const path = require('path');
+const { ERANGE } = require('constants');
 
 exports.edit = async (req, res) => {
     let newCarInfo = {
@@ -15,16 +16,16 @@ exports.edit = async (req, res) => {
         body: req.body.body,
         transmission: req.body.transmission
     }
-    console.log(req.body.deletedPhotos)
     try {
         db = new DBManager()
         await db.connect()
         await db.updateAdvertismentInfo(newCarInfo)
-        deletePhotosFromFolder(JSON.parse(req.body.deletedPhotos))
         await db.close()
+        deletePhotosFromFolder(JSON.parse(req.body.deletedPhotos))
         res.sendStatus(200)
     } catch (err) {
-        console.log(err)
+        console.log(req.files)
+        deleteNewFilesOnError(req.files)
         res.sendStatus(400)
     }
 }
@@ -59,6 +60,17 @@ function deletePhotosFromFolder(arrayOfPhotosNames) {
     arrayOfPhotosNames.forEach(relativePath => {
         const absolutePath = path.join(__dirname, process.env.ADVERTISMENT_STORAGE, relativePath)
         fs.unlink(absolutePath, function(err) {
+            if (err) {
+              throw err
+            }
+          })
+    })
+}
+
+
+function deleteNewFilesOnError(arrayOfNewPhotos) {
+    arrayOfNewPhotos.forEach(elem => {
+        fs.unlink(elem.path, function(err) {
             if (err) {
               throw err
             }

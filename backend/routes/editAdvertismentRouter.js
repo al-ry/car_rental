@@ -1,11 +1,11 @@
 const { Router } = require('express')
 const editAdvertismentRouter = Router()
 const editAdvertismentController = require('../controllers/editAdvertismentController')
-const {uploadOnEditing} = require('../config/multerStorageConfig')
+const {uploadAdvertismentMiddleware} = require('../middlewares/advertismentEditingMiddleware')
 
 const {checkSession} = require('../middlewares/checkSession')
 
-editAdvertismentRouter.post('/editAdvertisment', checkSession, uploadOnEditing.array('files', 6), editAdvertismentController.edit)
+editAdvertismentRouter.post('/editAdvertisment', checkSession, uploadAdvertismentMiddleware, editAdvertismentController.edit)
 
 editAdvertismentRouter.get('/editAdvertisement', checkSession, editAdvertismentController.getInfoForEditing)
 

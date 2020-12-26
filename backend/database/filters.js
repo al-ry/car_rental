@@ -23,6 +23,7 @@ module.exports = {
         return res
     },
     ApplyDateFilter(dateRange) {
+        var range = []
         if (dateRange) {
             range = JSON.parse(dateRange)
         } else {

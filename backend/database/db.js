@@ -3,6 +3,7 @@ const { query } = require('express')
 const { Client } = require('pg')
 const { BookingError, AuthorizationError, RegistrationError, EditingError } = require('../errors/authorizationErrors')
 require('dotenv').config()
+const advFilters = require('./filters')
 
 class DBManager {
   #client
@@ -161,15 +162,16 @@ class DBManager {
   }
 
   async getAdvetismentListPart(start, limit, filters) {
-    console.log(filters) 
-    let transmissionFilter = (filters.transmission) ? 'AND transmission = ' + filters.transmission + ' ' : ''
     let data = [start, limit]
     let query = 'SELECT id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
                 'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
-                'WHERE is_open = 1 ' + transmissionFilter +
+                'WHERE is_open = 1 ' + advFilters.ApplyTransmissionFilter(filters.transmission) +
+                                       advFilters.ApplyCityFilter(filters.city) +
+                                       advFilters.ApplyCostFilter(filters.cost) +
+                                       advFilters.ApplyBodyFilter(filters.body) + 
                 'ORDER BY id_advertisment DESC ' +
                 'LIMIT $2 OFFSET $1'
     let res = await this.#client.query(query, data)

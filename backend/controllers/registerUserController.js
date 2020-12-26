@@ -13,7 +13,7 @@ exports.registerUser = async (req, res) => {
         idCity: data.id_city,
         password: saltAndHash
     } 
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         userData = await db.insertUser(user)

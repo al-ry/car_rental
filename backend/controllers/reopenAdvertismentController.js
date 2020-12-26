@@ -1,8 +1,8 @@
 const { DBManager } = require('../database/db')
 
 exports.reopenAdvertisment = async (req, res) => {
+    const db = new DBManager()
     try {
-        db = new DBManager()
         await db.connect()
         await db.reopenAdvertisment(req.body.id)
         await db.close()

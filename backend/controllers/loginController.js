@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
         phone: data.phone,
         password: data.password
     }
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         const user = await db.getUserDataByPhone(userData.phone)

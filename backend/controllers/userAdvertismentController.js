@@ -3,7 +3,7 @@ require('dotenv').config()
 const {addPhotosPathsToEachAdvertisments} = require('../utils/filesUtil')
 
 exports.getAdvertisments = async (req, res) => {
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         let advertisments = await db.getUserAdvertisments(req.session.user.id)

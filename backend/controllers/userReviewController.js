@@ -3,7 +3,7 @@ require('dotenv').config()
 
 exports.getReviews = async (req, res) => {
     var phone = req.query.phone
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         let reviews = await db.getUserReviewsByPhone(phone)

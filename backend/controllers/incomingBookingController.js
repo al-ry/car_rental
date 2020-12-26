@@ -6,7 +6,6 @@ exports.getIncomingBooking = async (req, res) => {
     try {
         await db.connect()
         rows = await db.getIncomingRequests(req.session.user.id)
-        console.log(rows)
         await db.close()
         res.status(200).json(rows)
     } catch (err) {

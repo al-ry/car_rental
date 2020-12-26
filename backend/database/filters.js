@@ -11,10 +11,18 @@ module.exports = {
     ApplyCostFilter(cost) {
         return (cost) ? 'AND cost <= ' + '\'' + cost + '\'' + ' ' : ''
     },
-    ApplyCostSortByASC(ASCSortType) {
-        return (ASCSortType) ? 'ORDER BY cost ASC ' : 'ORDER BY id_advertisment DESC '
+    ApplyCostSort(ASCSortType, DESCSortType) {
+        let res = ''
+        if(ASCSortType) {
+            res = 'ORDER BY cost ASC '
+        } else if (DESCSortType) {
+            res = 'ORDER BY cost DESC '
+        } else {
+            res = 'ORDER BY id_advertisment DESC '
+        }
+        return res
     },
-    ApplyCostSortByDESC(DESCSortType) {
-        return (DESCSortType) ? 'ORDER BY cost DESC ' : 'ORDER BY id_advertisment DESC '
+    ApplyDateFilter(start, end) {
+        return (start && end) ? '' : ''
     }
 } 

@@ -173,8 +173,7 @@ class DBManager {
                                        advFilters.ApplyCityFilter(filters.city) +
                                        advFilters.ApplyCostFilter(filters.cost) +
                                        advFilters.ApplyBodyFilter(filters.body) + 
-                                       advFilters.ApplyCostSortByASC(filters.sortByCostASC) + 
-                                       advFilters.ApplyCostSortByDESC(filters.sortByCostDESC) +
+                                       advFilters.ApplyCostSort(filters.sortByCostASC, filters.sortByCostDESC) + 
                 'LIMIT $2 OFFSET $1'
     let res = await this.#client.query(query, data)
     return res.rows

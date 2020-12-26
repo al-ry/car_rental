@@ -163,6 +163,7 @@ class DBManager {
 
   async getAdvetismentListPart(start, limit, filters) {
     let data = [start, limit]
+    console.log(filters)
     let query = 'SELECT id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
@@ -180,7 +181,6 @@ class DBManager {
 
   async getIncomingRequests(idUser) {
     let data = [idUser] 
-    console.log(data)
     let query = 'SELECT id_booking, booking.id_advertisment, state, renter_name, renter_phone, start, "end", mark_name, model_name FROM booking ' +
                 'INNER JOIN (SELECT id_user AS id_renter, name AS renter_name, phone AS renter_phone FROM "user") AS renter ON renter.id_renter = booking.id_renter ' +
                 'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
@@ -196,7 +196,6 @@ class DBManager {
   async getUserReviewsByPhone(phone) {
     let data = [phone]
     let id = await this.getUserIdByPhone(phone)
-    console.log(id)
     data = [id]
     let query = 'SELECT reviewer_name, reviewer_phone, rating, description FROM review ' +
                 'INNER JOIN (SELECT id_user AS id_reviewer, name as reviewer_name, phone AS reviewer_phone FROM "user") AS reviewer ' +
@@ -230,12 +229,17 @@ class DBManager {
   }
 
   async getAdvertismentsCount(filters) {
-    let transmissionFilter = (filters.transmission) ? 'AND transmission = ' + filters.transmission + ' ' : ''
-    let query = 'SELECT COUNT(*) as total_count FROM advertisment ' +
+    let query = 'SELECT id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'WHERE is_open = 1 ' + transmissionFilter
+                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
+                'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
+                'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
+                'WHERE is_open = 1 ' + advFilters.ApplyTransmissionFilter(filters.transmission) +
+                                       advFilters.ApplyCityFilter(filters.city) +
+                                       advFilters.ApplyCostFilter(filters.cost) +
+                                       advFilters.ApplyBodyFilter(filters.body)
     let res = await this.#client.query(query)
-    return res.rows[0].total_count
+    return res.rowCount
   }
 
   async closeAdvertisment(id) {

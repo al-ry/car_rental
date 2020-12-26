@@ -6,7 +6,7 @@ module.exports = {
         return (body) ? 'AND body = ' + body + ' ' : ''
     },
     ApplyCityFilter(city) {
-        return (city) ? 'AND city = ' + '\'' +  city + '\'' + ' ' : ''
+        return (city) ? 'AND city = ' + '\'' + city + '\'' + ' ' : ''
     },
     ApplyCostFilter(cost) {
         return (cost) ? 'AND cost <= ' + '\'' + cost + '\'' + ' ' : ''

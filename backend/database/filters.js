@@ -36,7 +36,7 @@ module.exports = {
                             'FROM booking ' +
                             'WHERE (state = 0 OR state = 1)  AND ' +
                             '((start > ' + '\'' + start + '\'' + ' AND start > ' + '\'' + end + '\'' + ') OR ("end" < ' + '\'' + start + '\'' +  '  AND "end" < '  + '\'' + end + '\'' + ')) ' +
-                            'OR ((start >= $2) AND ' +'("end" <= $3)) ' +
+                            'OR ((start >= ' + '\'' + start + '\'' +  ') AND ' +'("end" <= ' + '\'' + start + '\'' + ')) ' +
                          ')' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
 
         return (dateRange) ? queryPart : ''

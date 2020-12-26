@@ -18,7 +18,7 @@ module.exports = {
         } else if (DESCSortType) {
             res = 'ORDER BY cost DESC '
         } else {
-            res = 'ORDER BY id_advertisment DESC '
+            res = 'ORDER BY advertisment.id_advertisment DESC '
         }
         return res
     },

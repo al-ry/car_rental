@@ -27,7 +27,7 @@ module.exports = {
         if (dateRange) {
             range = JSON.parse(dateRange)
         } else {
-            return
+            return ''
         }
         start = range[0]; end = range[1]
         let queryPart  = 'INNER JOIN ' +
@@ -36,7 +36,7 @@ module.exports = {
                             'FROM booking ' +
                             'WHERE (state = 0 OR state = 1)  AND ' +
                             '((start > ' + '\'' + start + '\'' + ' AND start > ' + '\'' + end + '\'' + ') OR ("end" < ' + '\'' + start + '\'' +  '  AND "end" < '  + '\'' + end + '\'' + ')) ' +
-                         ')' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment'
+                         ')' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
 
         return (dateRange) ? queryPart : ''
     }

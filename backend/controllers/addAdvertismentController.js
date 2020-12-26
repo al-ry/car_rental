@@ -11,7 +11,7 @@ exports.addAdvertisment = async (req, res) => {
         console.log(req.files)
         console.log('wrong')
     }
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         await db.beginTransaction()

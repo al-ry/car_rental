@@ -4,9 +4,9 @@ exports.getList = async (req, res) => {
     results = req.results
     var  filters = {}
     if (req.query.filters) {
-        filters = JSON.parse(req.query.filters)
+        filters = await JSON.parse(req.query.filters)
     }
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         pagesCount = await db.getAdvertismentsCount(filters)

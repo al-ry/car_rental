@@ -7,7 +7,6 @@ const { BookingError } = require('../errors/authorizationErrors')
 exports.bookCar = async (req, res) => {
     let data = req.body         
     const db = new DBManager()
-    console.log(req.session)
     const bookingData = {
         start: data.start,
         end: data.end,

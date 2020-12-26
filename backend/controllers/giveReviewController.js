@@ -7,10 +7,8 @@ exports.addReview = async (req, res) => {
         desc: req.body.description,
         idUser: req.session.user.id
     }
-    console.log(req.session)
-    console.log(req.body)
+    const db = new DBManager()
     try {
-        db = new DBManager()
         await db.connect()
         await db.insertReview(review)
         await db.close()

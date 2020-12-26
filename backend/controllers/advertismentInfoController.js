@@ -5,7 +5,7 @@ const {getFilesPathsFromDirectory} = require('../utils/filesUtil');
 const advertismentInfoRouter = require('../routes/advertismentInfoRouter');
 
 exports.getInfo = async (req, res) => {
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         advertisment = await db.getAdvertismentInfo(req.query.id)

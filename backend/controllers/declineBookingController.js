@@ -2,8 +2,8 @@ const { DBManager } = require('../database/db')
 
 exports.decline = async (req, res) => {
     idBooking = req.body.idBooking
+    db = new DBManager()
     try {
-        db = new DBManager()
         await db.connect()
         await db.declineBooking(idBooking)
         await db.close()

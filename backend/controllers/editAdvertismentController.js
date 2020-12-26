@@ -16,7 +16,7 @@ exports.edit = async (req, res) => {
         body: req.body.body,
         transmission: req.body.transmission
     }
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         await db.beginTransaction()

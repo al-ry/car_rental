@@ -1,7 +1,7 @@
 const { DBManager } = require('../database/db')
 
 exports.getCities = async (req, res) => {
-    db = new DBManager()
+    const db = new DBManager()
     try {
         await db.connect()
         let cities = await db.getCities()

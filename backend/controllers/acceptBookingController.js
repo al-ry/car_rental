@@ -1,7 +1,7 @@
 const { DBManager } = require('../database/db')
 
 exports.accept = async (req, res) => {
-    db = new DBManager()
+    const db = new DBManager()
     console.log(req.body.idBooking)
     try {
         await db.connect()

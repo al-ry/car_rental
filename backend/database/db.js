@@ -173,7 +173,8 @@ class DBManager {
                                        advFilters.ApplyCityFilter(filters.city) +
                                        advFilters.ApplyCostFilter(filters.cost) +
                                        advFilters.ApplyBodyFilter(filters.body) + 
-                'ORDER BY id_advertisment DESC ' +
+                                       advFilters.ApplyCostSortByASC(filters.sortByCostASC) + 
+                                       advFilters.ApplyCostSortByDESC(filters.sortByCostDESC) +
                 'LIMIT $2 OFFSET $1'
     let res = await this.#client.query(query, data)
     return res.rows

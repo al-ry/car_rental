@@ -10,5 +10,11 @@ module.exports = {
     },
     ApplyCostFilter(cost) {
         return (cost) ? 'AND cost <= ' + '\'' + cost + '\'' + ' ' : ''
+    },
+    ApplyCostSortByASC(ASCSortType) {
+        return (ASCSortType) ? 'ORDER BY cost ASC ' : 'ORDER BY id_advertisment DESC '
+    },
+    ApplyCostSortByDESC(DESCSortType) {
+        return (DESCSortType) ? 'ORDER BY cost DESC ' : 'ORDER BY id_advertisment DESC '
     }
 } 

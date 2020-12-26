@@ -169,6 +169,7 @@ class DBManager {
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
                 'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
+                advFilters.ApplyDateFilter(filtres.dateRange)
                 'WHERE is_open = 1 ' + advFilters.ApplyTransmissionFilter(filters.transmission) +
                                        advFilters.ApplyCityFilter(filters.city) +
                                        advFilters.ApplyCostFilter(filters.cost) +

@@ -23,7 +23,11 @@ module.exports = {
         return res
     },
     ApplyDateFilter(dateRange) {
-        range = JSON.parse(dateRange)
+        if (dateRange) {
+            range = JSON.parse(dateRange)
+        } else {
+            return
+        }
         start = range[0]; end = range[1]
         let queryPart  = 'INNER JOIN ' +
                          '('

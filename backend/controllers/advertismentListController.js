@@ -4,6 +4,8 @@ exports.getList = async (req, res) => {
     results = req.results
     if (req.query.filters) {
         filters = JSON.parse(req.query.filters)
+    } else {
+        req.query.filters = {}
     }
     db = new DBManager()
     try {

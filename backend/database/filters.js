@@ -22,7 +22,16 @@ module.exports = {
         }
         return res
     },
-    ApplyDateFilter(start, end) {
-        return (start && end) ? '' : ''
+    ApplyDateFilter(dateRange) {
+        range = JSON.parse(dateRange)
+        start = range[0]; end = range[1]
+        let queryPart  = 'INNER JOIN ' +
+                         '('
+                            'SELECT id_advertisment, start, "end", state ' +
+                            'FROM booking ' +
+                            'WHERE (state = 0 OR state = 1)  AND ' +
+                            '((start > ' + '\'' + start + '\'' + ' AND start > ' + '\'' + end + '\'' + ') OR ("end" < ' + '\'' + start + '\'' +  '  AND "end" < '  + '\'' + end + '\'' + '))'
+                         ')'
+        return (start && end) ? queryPart : ''
     }
 } 

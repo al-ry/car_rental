@@ -24,7 +24,6 @@ module.exports = {
     },
     ApplyDateFilter(dateRange) {
         var range = []
-        console.log(dateRange)
         if (dateRange) {
             range = JSON.parse(dateRange)
             if (range.length == 0) {
@@ -34,7 +33,6 @@ module.exports = {
             return ''
         }
         start = range[0]; end = range[1]
-        console.log(start,end)
         let queryPart  = 'LEFT JOIN ' +
                          '(' +
                             'SELECT id_advertisment, start, "end", state ' +

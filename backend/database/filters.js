@@ -27,6 +27,9 @@ module.exports = {
         console.log(dateRange)
         if (dateRange) {
             range = JSON.parse(dateRange)
+            if (range.length == 0) {
+                return ''
+            }
         } else {
             return ''
         }

@@ -24,20 +24,22 @@ module.exports = {
     },
     ApplyDateFilter(dateRange) {
         var range = []
+        console.log(dateRange)
         if (dateRange) {
             range = JSON.parse(dateRange)
         } else {
             return ''
         }
         start = range[0]; end = range[1]
-        let queryPart  = 'INNER JOIN ' +
+        console.log(start,end)
+        let queryPart  = 'LEFT JOIN ' +
                          '(' +
                             'SELECT id_advertisment, start, "end", state ' +
                             'FROM booking ' +
                             'WHERE (state = 0 OR state = 1)  AND ' +
                             '(((start > ' + '\'' + start + '\'' + ' AND start > ' + '\'' + end + '\'' + ') OR ("end" < ' + '\'' + start + '\'' +  '  AND "end" < '  + '\'' + end + '\'' + ')) ' +
                             'OR ((start >= ' + '\'' + start + '\'' +  ') AND ' +'("end" <= ' + '\'' + start + '\'' + '))) ' +
-                         ')' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
+                            ') ' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
 
         return (dateRange) ? queryPart : ''
     }

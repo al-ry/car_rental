@@ -171,9 +171,9 @@ class DBManager {
                  advFilters.ApplyDateFilter(filters.dateRange) +
                 'WHERE is_open = 1 ' + advFilters.ApplyTransmissionFilter(filters.transmission) +
                                        advFilters.ApplyCityFilter(filters.city) +
-                                       advFilters.ApplyCostFilter(filters.sortByCostASC,) +
+                                       advFilters.ApplyCostFilter(filters.cost) +
                                        advFilters.ApplyBodyFilter(filters.body) +
-                                       advFilters.ApplyCostSort(filters.sortByCostASC, filters.sortByCostDESC)   
+                                       advFilters.ApplyCostSort(filters.sortByCostASC, filters.sortByCostDESC) +
                 'LIMIT $2 OFFSET $1'
     let res = await this.#client.query(query, data)
     return res.rows
@@ -236,10 +236,9 @@ class DBManager {
                 'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
                 advFilters.ApplyDateFilter(filters.dateRange) +
                 'WHERE is_open = 1 ' + advFilters.ApplyTransmissionFilter(filters.transmission) +
-                                       advFilters.ApplyCityFilter(filters.city) +
-                                       advFilters.ApplyCostFilter(filters.sortByCostASC,) +
-                                       advFilters.ApplyBodyFilter(filters.body) +
-                                       advFilters.ApplyCostSort(filters.sortByCostASC, filters.sortByCostDESC)                            
+                                      advFilters.ApplyCityFilter(filters.city) +
+                                      advFilters.ApplyCostFilter(filters.cost) +
+                                      advFilters.ApplyBodyFilter(filters.body)                       
     let res = await this.#client.query(query)
     return res.rowCount
   }

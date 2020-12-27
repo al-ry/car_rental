@@ -13,7 +13,7 @@ module.exports = {
     },
     ApplyCostSort(ASCSortType, DESCSortType) {
         let res = ''
-        if(ASCSortType) {
+        if (ASCSortType) {
             res = 'ORDER BY cost ASC '
         } else if (DESCSortType) {
             res = 'ORDER BY cost DESC '
@@ -33,15 +33,16 @@ module.exports = {
             return ''
         }
         start = range[0]; end = range[1]
-        let queryPart  = 'LEFT JOIN ' +
+        let queryPart  = 'INNER JOIN ' +
                          '(' +
                             'SELECT id_advertisment, start, "end", state ' +
                             'FROM booking ' +
                             'WHERE (state = 0 OR state = 1)  AND ' +
-                            '(((start > ' + '\'' + start + '\'' + ' AND start > ' + '\'' + end + '\'' + ') OR ("end" < ' + '\'' + start + '\'' +  '  AND "end" < '  + '\'' + end + '\'' + ')) ' +
-                            'OR ((start >= ' + '\'' + start + '\'' +  ') AND ' +'("end" <= ' + '\'' + start + '\'' + '))) ' +
-                            ') ' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
+                            '((start > ' + '\'' + start + '\'' + ' AND start > ' + '\'' + end + '\'' + ') OR ("end" < ' + '\'' + start + '\'' +  '  AND "end" < '  + '\'' + end + '\'' + ')) ' +
+                            'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
 
         return (dateRange) ? queryPart : ''
     }
 } 
+
+function parseArray()

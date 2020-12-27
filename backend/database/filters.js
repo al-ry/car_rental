@@ -33,7 +33,9 @@ module.exports = {
             return ''
         }
         start = '\'' + range[0] + '\''; end = '\'' + range[1] + '\''
-        let queryPart  = 'SELECT id_booking, id_advertisment FROM booking ' +
+        let queryPart  = 
+        'INNER JOIN ' +
+        'SELECT id_booking, id_advertisment FROM booking ' +
         'WHERE id_advertisment NOT IN ' + 
         '( ' +
             'SELECT id_advertisment FROM booking ' +
@@ -42,7 +44,8 @@ module.exports = {
             '((start <= ' + start + ' AND "end" >= ' + start + ') OR (start <= ' + end + '  AND "end" >= ' + end + ')) OR ' +
             '(((start >= ' + start + ') AND ("end" <= ' + end + '))) ' +
             ') ' +
-        ')'
+        ') ' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
+
 
         return (dateRange) ? queryPart : ''
     }

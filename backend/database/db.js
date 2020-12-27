@@ -163,7 +163,7 @@ class DBManager {
 
   async getAdvetismentListPart(start, limit, filters) {
     let data = [start, limit]
-    let query = 'SELECT DISTINCT advertisment.id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+    let query = 'SELECT advertisment.id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
@@ -229,7 +229,7 @@ class DBManager {
   }
 
   async getAdvertismentsCount(filters) {
-    let query = 'SELECT DISTINCT advertisment.id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
+    let query = 'SELECT  advertisment.id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
                 'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +

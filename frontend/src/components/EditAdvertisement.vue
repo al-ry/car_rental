@@ -1,58 +1,46 @@
 <template>
-    <div>
+    <div class="edit_advertisement_container">
+    <h2 class="edit_header">Edit advertisement</h2>
     <el-form ref="form" class="form" :model="form">
         <el-form-item label="Year" > 
-            <el-select v-model="advertisementInfo.form.year" class="model-select" placeholder="Select">
+            <el-select v-model="advertisement.year" class="car_info_select" placeholder="Select">
             <el-option v-for="year in years" :value="year" v-bind:key="year"/>
             </el-select>
         </el-form-item>
 
         <el-form-item label="City" >   
-            <el-select filterable v-model="advertisementInfo.form.city" class="model-select">
+            <el-select filterable v-model="advertisement.city" class="car_info_select">
             <el-option v-for="(city, index) in cities" :value="city" v-bind:key="index"/>
             </el-select>
         </el-form-item>
 
         <el-form-item label="Body" > 
-            <el-select v-model="advertisementInfo.form.body" class="model-select" placeholder="Select">
+            <el-select v-model="advertisement.body" class="car_info_select" placeholder="Select">
                 <el-option v-for="(body, index) in bodies" :label='body' :value='index+1' v-bind:key="index"/>
             </el-select>
         </el-form-item>
 
         <el-form-item label="Fuel" >   
-            <el-select filterable v-model="advertisementInfo.form.fuel" class="model-select">
-                <el-option label='Petrol' value='1' />
-                <el-option label='Diesel' value='2' />
-                <el-option label='Hybrid/Electro' value='3' />
+            <el-select filterable v-model="advertisement.fuel"  :value='advertisement.fuel' class="car_info_select">
+                <el-option label='Petrol' value=1 />
+                <el-option label='Diesel' value=2 />
+                <el-option label='Hybrid/Electro' value=3 />
             </el-select>
         </el-form-item>
-<!-- 
-        
-        <el-form-item>
- 
 
-            <el-form-item label="Fuel" >   
-                <el-select filterable v-model="advertisementInfo.form.fuel" class="model-select">
-                    <el-option label='Petrol' value='1' />
-                    <el-option label='Diesel' value='2' />
-                    <el-option label='Hybrid/Electro' value='3' />
-                </el-select>
-            </el-form-item>
+        <el-form-item label="Transmisson" >   
+            <el-select filterable v-model="advertisement.transmission" class="car_info_select">
+                <el-option label='Manual' value='1'/>
+                <el-option label='Auto' value='2'/>
+            </el-select>
+        </el-form-item>
 
-            <el-form-item label="Transmisson" >   
-                <el-select filterable v-model="advertisementInfo.form.transmission" class="model-select">
-                    <el-option label='Manual' value='1'/>
-                    <el-option label='Auto' value='2'/>
-                </el-select>
-            </el-form-item>
-
-            <el-form-item label="Price a day ₽" >   
-                <el-input v-model="advertisementInfo.form.cost" type="number" min="1"></el-input>
-            </el-form-item> -->
-        <!-- </el-form-item> -->
+        <el-form-item label="Price a day ₽" >   
+            <el-input v-model="advertisement.cost" :value="getModifiedPrice(advertisement.cost)" type="number" min="1"></el-input>
+        </el-form-item>
         <el-form-item label="Uploaded photos">
             <div class="photos">
-                <div class="photo_container" v-for="(photo, index) in fileList" v-bind:key="index">
+                <div class="photo_container" v-for="(photo, index) in visibleCarPhotos" v-bind:key="index">
                     <img class="car_photo" :src="getModifiedPath(photo)" alt="">
                     <div class="overlay" @click="handleImageRemove(photo)">
                         <i class="el-icon-delete icon"></i>
@@ -60,17 +48,17 @@
                 </div>
             </div>
         </el-form-item>
-        <!-- <el-form-item label="New photos" class="upload_photo_block" style={text-align:left}>
-            <el-upload class="upload-demo" :auto-upload="false" :file-list="fileList" :limit=6 :on-change="handleChange"
+        <el-form-item label="New photos" class="upload_photo_block" style={text-align:left}>
+            <el-upload class="upload-demo" :auto-upload="false" :file-list="newPhotos" :limit=getPhotoCount() :on-change="handleChange"
                 :on-remove="handleRemove" :list-type=picture>
                 <template #default>
                     <el-button size="medium" type="primary">select file</el-button>
                 </template>
             </el-upload>
-            </el-form-item> -->
-            <!-- <el-form-item class="description_block">
+            </el-form-item>
+            <el-form-item class="description_block">
                 <el-form-item label="Description">
-                    <el-input type="textarea"  resize="none" size="medium" v-model="advertisementInfo.form.description"></el-input>
+                    <el-input type="textarea"  resize="none" size="medium" v-model="advertisement.description"></el-input>
                 </el-form-item>
                 <el-form-item v-if="errorMessage != ''" class="error_message">
                     <span>{{errorMessage}}</span>
@@ -80,7 +68,7 @@
             <el-form-item class="form_buttons_block">
                 <el-button type="submit" v-on:click="onSubmit">Create</el-button>
                 <el-button v-on:click="$emit('close')">Cancel</el-button>
-            </el-form-item> -->
+            </el-form-item>
     </el-form>
     
     </div>
@@ -88,16 +76,14 @@
 
 
 <script>
-//import {getAdvertismentInfo} from '../../services/getAdvertisementInfo'
-// import { getCities } from '../../services/getCities'
+
 import {continueSession} from '../../services/continueSession'
-import {getMutableAdvertisement} from '../../services/editAdvertisement'
+import {getMutableAdvertisement, postMutableAdvertisement} from '../../services/editAdvertisement'
 import { getCities } from '../../services/getCities'
-// import {}
 
 export default {
-    created() {
-        console.log(this.$route.params)
+    async created() {
+        await this.loginUser()
         this.getCitiesList()
         this.requireInfo()
     },
@@ -105,18 +91,11 @@ export default {
     data() {
         return {
             advertisement: [],
-            fileList: [],
+            newPhotos: [],
             visibleCarPhotos: [],
+            deletedPhotos: [],
             cities: [],
-            advertisementInfo: {
-                form : {
-                    description: '',
-                    cost: 0,
-                    transmission: 0,
-                    fuel: 0,
-                    year: 0
-                }
-            }
+            imageDirectory: ''
         }
     },
 
@@ -131,7 +110,56 @@ export default {
 		},
     },
 
+
     methods: {
+        getPhotoCount() {
+            return 6 - this.visibleCarPhotos.length
+        },
+
+        getModifiedPrice(stringPrice) {
+            if (stringPrice != undefined) {
+                stringPrice = stringPrice.slice(0, stringPrice.length - 5)
+                stringPrice = stringPrice.replace(/\D/g, '');
+                
+                return parseInt(stringPrice, 10)
+            }
+        },
+
+        isCorrectInfo() {
+			for(const field in this.advertisement) {
+				if(!this.advertisement[field]) {
+					console.log(field)
+					return false;
+				}
+			}
+
+			if (this.advertisement.cost < 1) {
+                console.log("Price should be at least 1 RUB")
+				return false
+            }
+            
+			else if (this.advertisement.cost > 500000 || 
+			this.advertisement.cost < 500) {
+				console.log("Price cant be > 500000 and < 500")
+				return false
+			}
+			else if(this.newPhotos.length + this.visibleCarPhotos.length == 0) {
+                console.log("No photo attached")
+				return false
+			}
+
+			return true
+		},
+
+        async loginUser() {
+            await continueSession().then(res => {
+                if (res.status == 200) {
+                    this.$store.commit('LoginUser', res.data)
+                }
+            }).catch(err => {
+                this.showErrorAlert(err.response.data.err)
+            })
+        },
 
         getCitiesList() {
             getCities().then(res => {
@@ -144,8 +172,17 @@ export default {
         },
 
         handleChange(file) {
-			this.fileList.push(file['raw'])
-			console.log(this.fileList, file,  "That was on select file action")
+			this.newPhotos.push(file['raw'])
+        },
+        
+        handleRemove(file) {
+			for (let i = 0; i < this.newPhotos.length; i++) {
+				if(this.newPhotos[i].uid == file.uid)
+				{
+					this.newPhotos.splice(i, 1)
+					return;
+				}
+			}
 		},
 
         getModifiedPath(photo) {          
@@ -153,12 +190,44 @@ export default {
         },
 
         handleImageRemove(photo) {
-            console.log(photo)
             for (var index in this.visibleCarPhotos) {
                 if (this.visibleCarPhotos[index] == photo) {
+                    this.deletedPhotos.push(this.visibleCarPhotos[index])
                     this.visibleCarPhotos.splice(index, 1); 
                 }
             }
+        },
+
+        onSubmit() {
+            if (this.isCorrectInfo()) {
+                const data = new FormData();
+
+                for(const field in this.advertisement) {
+                    data.append(field, this.advertisement[field])
+                }
+                
+                data.append('deletedPhotos', JSON.stringify(this.deletedPhotos))
+                data.append('idAdvertisment', this.$route.params.id)
+                data.append('folder', this.imageDirectory)
+
+                this.newPhotos.forEach(element => {
+                    data.append('files', element)
+                });
+
+
+
+                console.log(this.imageDirectory)
+
+                postMutableAdvertisement(data).then(res => {
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+        },
+
+        getPhotoFolder(imagePath) {
+            return imagePath[0].split('/')[0]
         },
 
         async requireInfo() {
@@ -170,16 +239,16 @@ export default {
                 this.showErrorAlert(err.response.data.err)
             })
 
+
+
             console.log(this.$route.params.id)
-            await getMutableAdvertisement(this.$route.params.id).then(res =>{
-                console.log(res)
-                console.log(res.data.photo_path)
+            await getMutableAdvertisement(this.$route.params.id).then(res => {
                 this.advertisement = res.data
-                this.fileList = res.data.photo_path
+                this.visibleCarPhotos = res.data.photo_path
+                this.imageDirectory = this.getPhotoFolder(this.advertisement.photo_path)
             }).catch(err => {
                 console.log(err)
             })
-
 
 
             // await getAdvertismentInfo(this.$route.params.id).then(res => {
@@ -196,8 +265,14 @@ export default {
 
 <style scoped>
 
+.car_info_select
+{
+    width: 100%;
+}
+
 .form {
-    max-width: 700px;
+    max-width: 600px;
+    padding: 0 5px 30px 5px;
     margin:auto
 }
 
@@ -218,11 +293,12 @@ export default {
 .photo_container
 {
     position: relative;
-    max-height: 200px;
-    max-width: 200px;
+    max-height: 150px;
+    max-width: 150px;
     width: 200px;
-    margin: 5px 5px 5px 5px;
+    margin: 10px 5px 5px 5px;
 }
+
 .photo_container:hover 
     .overlay {
         opacity: 1;
@@ -252,4 +328,14 @@ export default {
   background-color: red;
 }
 
+.edit_advertisement_container
+{
+    max-width: 600px;
+    margin: 40px auto 0 auto
+}
+
+.edit_header
+{
+    margin: 20px auto 20px auto
+}
 </style>

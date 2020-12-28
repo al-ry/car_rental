@@ -348,9 +348,11 @@ class DBManager {
   async insertReview(rev) {
     let data = [rev.idAdv, rev.idUser, rev.rate, rev.desc]
     let query = `INSERT INTO review VALUES 
-                (DEFAULT, 
-                (SELECT id_user FROM advertisment WHERE id_advertisment = $1), 
-                $2, $3, $4)
+                (
+                  DEFAULT, 
+                  (SELECT id_user FROM advertisment WHERE id_advertisment = $1), 
+                  $2, $3, $4
+                )
                 `
     await this.#client.query(query, data)
   }

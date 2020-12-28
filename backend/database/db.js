@@ -92,24 +92,28 @@ class DBManager {
       throw new RegistrationError('Email already used')
     }
   }
-
+//test
   async getAdvertismentInfo(id) {
     let data = [id]
-    let query = 'SELECT user_name, user_phone, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
-                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
-                'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
-                'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
-                'INNER JOIN (SELECT id_user, name AS user_name, phone AS user_phone FROM \"user\") AS \"user\" ON \"user\".id_user = advertisment.id_user ' +
-                'WHERE advertisment.id_advertisment = $1'
+    let query = `
+                SELECT user_name, user_phone, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment
+                INNER JOIN car ON car.id_car = advertisment.id_car
+                INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city
+                INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark
+                INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model
+                INNER JOIN (SELECT id_user, name AS user_name, phone AS user_phone FROM \"user\") AS \"user\" ON \"user\".id_user = advertisment.id_user
+                WHERE advertisment.id_advertisment = $1
+                `
     let res = await this.#client.query(query, data)
     return res.rows[0]
   }
 
   async getBookedDates(idAdvertisment) {
     let data = [idAdvertisment]
-    let query = 'SELECT start, "end" FROM booking ' +
-                'WHERE id_advertisment = $1 AND state = 1'
+    let query = `
+                SELECT start, "end" FROM booking
+                WHERE id_advertisment = $1 AND state = 1
+                `
     let res = await this.#client.query(query, data)
     console.log(res)
     return res.rows
@@ -158,12 +162,14 @@ class DBManager {
 
   async getUserAdvertisments(userId) { 
     let data = [userId]
-    let query = 'SELECT id_advertisment, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
-                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
-                'INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark ' +
-                'INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model ' +
-                'WHERE id_user = $1'
+    let query = `
+                SELECT id_advertisment, cost, description, transmission, is_open, photo_path, fuel, year, body, mark, model, city FROM advertisment 
+                INNER JOIN car ON car.id_car = advertisment.id_car 
+                INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city 
+                INNER JOIN (SELECT id_mark, name AS mark FROM mark) AS mark  ON car.id_mark = mark.id_mark 
+                INNER JOIN (SELECT id_model, name AS model FROM model) AS model ON car.id_model = model.id_model 
+                WHERE id_user = $1
+                `
     let result = await this.#client.query(query, data)
     return result.rows
   }
@@ -188,14 +194,16 @@ class DBManager {
 
   async getIncomingRequests(idUser) {
     let data = [idUser] 
-    let query = 'SELECT id_booking, booking.id_advertisment, state, renter_name, renter_phone, start, "end", mark_name, model_name FROM booking ' +
-                'INNER JOIN (SELECT id_user AS id_renter, name AS renter_name, phone AS renter_phone FROM "user") AS renter ON renter.id_renter = booking.id_renter ' +
-                'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
-                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark ' +
-                'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model ' +
-                'WHERE advertisment.id_user = $1 ' +
-                'ORDER BY state ASC'
+    let query = `
+                SELECT id_booking, booking.id_advertisment, state, renter_name, renter_phone, start, "end", mark_name, model_name FROM booking 
+                INNER JOIN (SELECT id_user AS id_renter, name AS renter_name, phone AS renter_phone FROM "user") AS renter ON renter.id_renter = booking.id_renter 
+                INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment 
+                INNER JOIN car ON car.id_car = advertisment.id_car 
+                INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark 
+                INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model 
+                WHERE advertisment.id_user = $1 
+                ORDER BY state ASC
+                `
     let res = await this.#client.query(query, data)
     return res.rows
   }
@@ -204,19 +212,23 @@ class DBManager {
     let data = [phone]
     let id = await this.getUserIdByPhone(phone)
     data = [id]
-    let query = 'SELECT reviewer_name, reviewer_phone, rating, description FROM review ' +
-                'INNER JOIN (SELECT id_user AS id_reviewer, name as reviewer_name, phone AS reviewer_phone FROM "user") AS reviewer ' +
-                'ON reviewer.id_reviewer = review.id_reviewer ' +
-                'WHERE id_user = $1'
+    let query = `
+                SELECT reviewer_name, reviewer_phone, rating, description FROM review
+                INNER JOIN (SELECT id_user AS id_reviewer, name as reviewer_name, phone AS reviewer_phone FROM "user") AS reviewer
+                ON reviewer.id_reviewer = review.id_reviewer
+                WHERE id_user = $1
+                `
     let res = await this.#client.query(query, data)
     return res.rows
   }
 
   async getUserRating(idAdv) {
     let data = [idAdv]
-    let query = 'SELECT rating FROM review ' +
-                'INNER JOIN advertisment ON advertisment.id_user = review.id_user ' +
-                'WHERE id_advertisment = $1'
+    let query = `
+                SELECT rating FROM review 
+                INNER JOIN advertisment ON advertisment.id_user = review.id_user 
+                WHERE id_advertisment = $1
+                `
     let res = await this.#client.query(query, data)
     return res.rows
   }
@@ -224,13 +236,15 @@ class DBManager {
 
   async getOutgoingRequests(idUser) {
     let data = [idUser] 
-    let query = 'SELECT booking.id_advertisment, state, start, "end", mark_name, model_name FROM booking ' +
-                'INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment ' +
-                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark ' +
-                'INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model ' +
-                'WHERE booking.id_renter = $1 ' + 
-                'ORDER BY state ASC'
+    let query = `
+                SELECT booking.id_advertisment, state, start, "end", mark_name, model_name FROM booking 
+                INNER JOIN advertisment ON advertisment.id_advertisment = booking.id_advertisment 
+                INNER JOIN car ON car.id_car = advertisment.id_car 
+                INNER JOIN (SELECT id_mark, name AS mark_name FROM mark) AS mark ON car.id_mark = mark.id_mark 
+                INNER JOIN (SELECT id_model, name AS model_name FROM model) AS model ON model.id_model = car.id_model 
+                WHERE booking.id_renter = $1 
+                ORDER BY state ASC
+                `
     let res = await this.#client.query(query, data)
     return res.rows
   }
@@ -264,8 +278,10 @@ class DBManager {
 
   async insertAdvertisment(advrtsmnt) {
     let data = [advrtsmnt.idCar, advrtsmnt.idUser, advrtsmnt.idCity, advrtsmnt.cost, advrtsmnt.description, advrtsmnt.isOpen, advrtsmnt.photosPath]
-    let query = 'INSERT INTO advertisment (id_advertisment, id_car, id_user, id_city, cost, description, is_open, photo_path) ' +
-                'VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7)'
+    let query = `
+                INSERT INTO advertisment (id_advertisment, id_car, id_user, id_city, cost, description, is_open, photo_path) 
+                VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7)
+                `
     await this.#client.query(query, data)
   }
   async insertCarBooking(booking) {
@@ -275,13 +291,15 @@ class DBManager {
       throw new BookingError('Advertisment was closed by user')
     }
     let data = [booking.idAdvertisement, booking.start, booking.end]
-    query = 'SELECT * FROM booking ' +
-            'WHERE state = 1 AND ' +
-            'id_advertisment = $1 AND ' +
-            '( ' +
-            '((start <= $2 AND "end" >= $2) OR (start <= $3  AND "end" >= $3)) OR ' +
-            '(((start >= $2) AND ' +'("end" <= $3))) ' +
-            ')'
+    query = `
+            SELECT * FROM booking 
+            WHERE state = 1 AND 
+            id_advertisment = $1 AND 
+            ( 
+            ((start <= $2 AND "end" >= $2) OR (start <= $3  AND "end" >= $3)) OR 
+            (((start >= $2) AND ' +'("end" <= $3)))
+            )
+            `
     res = await this.#client.query(query, data)
     if (res.rowCount > 0) {
       throw new BookingError('Date already booked')
@@ -313,10 +331,12 @@ class DBManager {
   async getAdvertismentInfoForEditing(info) {
     let data = [info.idAdv, info.idUser]
     console.log(data)
-    let query = 'SELECT cost, description, transmission, photo_path, fuel, year, body, city FROM advertisment ' +
-                'INNER JOIN car ON car.id_car = advertisment.id_car ' +
-                'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
-                'WHERE advertisment.id_advertisment = $1 AND id_user = $2'
+    let query = `
+                SELECT cost, description, transmission, photo_path, fuel, year, body, city FROM advertisment
+                INNER JOIN car ON car.id_car = advertisment.id_car
+                INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city
+                WHERE advertisment.id_advertisment = $1 AND id_user = $2
+                `
     let res = await this.#client.query(query, data)
     console.log(res.rows)
     if (res.rowCount == 0) {
@@ -327,10 +347,11 @@ class DBManager {
 
   async insertReview(rev) {
     let data = [rev.idAdv, rev.idUser, rev.rate, rev.desc]
-    let query = 'INSERT INTO review VALUES ' +
-                '(DEFAULT, ' + 
-                '(SELECT id_user FROM advertisment WHERE id_advertisment = $1), ' +
-                '$2, $3, $4)'
+    let query = `INSERT INTO review VALUES 
+                (DEFAULT, 
+                (SELECT id_user FROM advertisment WHERE id_advertisment = $1), 
+                $2, $3, $4)
+                `
     await this.#client.query(query, data)
   }
 

@@ -36,10 +36,10 @@ module.exports = {
         let queryPart  = `
         INNER JOIN
         (
-            SELECT id_booking, id_advertisment FROM booking 
+            SELECT id_advertisment FROM advertisment
             WHERE id_advertisment NOT IN
             (
-                SELECT id_advertisment FROM bookin
+                SELECT id_advertisment FROM booking
                 WHERE state = 1 AND
                 (
                 ((start <= ${start} AND "end" >= ${start}) OR (start <= ${end}  AND "end" >= ${end})) OR

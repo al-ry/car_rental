@@ -10,25 +10,25 @@ exports.registerUser = async (req, res) => {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        idCity: data.id_city,
         password: saltAndHash
     } 
     const db = new DBManager()
     try {
         await db.connect()
+        const idCity = await db.getCityIdByName(data.cityName)
+        user.idCity = idCity
         userData = await db.insertUser(user)
-        console.log(userData)
         req.session.user = userData
-        const cityName = await db.getCityNameById(userData.id_city)
         await db.close()
         const userInfo = {
             name: userData.name,
             phone: userData.phone,
             email: userData.email,
-            city: cityName
+            city: data.cityName
         }
         res.status(200).json(userInfo)
     } catch (err) {
+        console.log(err)
         if (err instanceof RegistrationError) {
             res.status(400).json({errror: err.message})
         } 

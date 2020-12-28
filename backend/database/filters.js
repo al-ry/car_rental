@@ -33,22 +33,21 @@ module.exports = {
             return ''
         }
         start = '\'' + range[0] + '\''; end = '\'' + range[1] + '\''
-        let queryPart  = 
-        'INNER JOIN ' +
-        '( ' +
-            'SELECT id_booking, id_advertisment FROM booking ' +
-            'WHERE id_advertisment NOT IN ' + 
-            '( ' +
-                'SELECT id_advertisment FROM booking ' +
-                'WHERE state = 1 AND ' +
-                '( ' +
-                '((start <= ' + start + ' AND "end" >= ' + start + ') OR (start <= ' + end + '  AND "end" >= ' + end + ')) OR ' +
-                '(((start >= ' + start + ') AND ("end" <= ' + end + '))) ' +
-                ') ' +
-            ') ' +
-        ') ' + 'AS booking ON booking.id_advertisment = advertisment.id_advertisment '
-
-
+        let queryPart  = `
+        INNER JOIN
+        (
+            SELECT id_booking, id_advertisment FROM booking 
+            WHERE id_advertisment NOT IN
+            (
+                SELECT id_advertisment FROM bookin
+                WHERE state = 1 AND
+                (
+                ((start <= ${start} AND "end" >= ${start}) OR (start <= ${end}  AND "end" >= ${end})) OR
+                (((start >= ${start}) AND ("end" <= ${end})))
+                )
+            )
+        ) AS booking ON booking.id_advertisment = advertisment.id_advertisment
+        `
         return (dateRange) ? queryPart : ''
     }
 } 

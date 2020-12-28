@@ -8,11 +8,8 @@ export async function getMutableAdvertisement(advertisementId) {
         withCredentials: true});
 }
 
-// export async function postMutableAdvertisement(advertisementId) {
-//     return await axios.post('/advertismentInfo', {
-//         params: {
-//             id: advertisementId
-//         },
-//         withCredentials: true});
-// }
+export async function postMutableAdvertisement(data) {
+    return await axios.post('/editAdvertisement', data, { 
+        withCredentials: true});
+}
 

@@ -87,6 +87,7 @@ import { getMarks } from '../../services/getMarks'
 import { getModels } from '../../services/getModels'
 import { getCities } from '../../services/getCities'
 import {mapGetters} from 'vuex'
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     data() {
@@ -189,11 +190,12 @@ export default {
 			this.advertisementInfo.form.model = this.selectedModel
 			if(this.isCorrectInfo() && this.isLoggedIn)
 			{
+				this.advertisementInfo.form.uid = uuidv4();
 				this.advertisementInfo.form.phone = this.userPhone
 				const data = new FormData();
 				for(const field in this.advertisementInfo.form) {
 					data.append(field, this.advertisementInfo.form[field])
-				}	
+				}
 
 				this.fileList.forEach(element => {
 					data.append('files', element)
@@ -201,6 +203,7 @@ export default {
 
 				addCar(data).then(res => {
 					this.$emit('add-new-advetisement');
+					console.log(this.fileList)
 					res
 				}).catch(err => {
 					this.errorMessage = err.response.data.err
@@ -223,8 +226,9 @@ export default {
 				this.errorMessage = "Price should be at least 1 RUB"
 				return false
 			}
-			else if (this.advertisementInfo.form.cost > 500000) {
-				this.errorMessage = "Price cant be < 500000"
+			else if (this.advertisementInfo.form.cost > 500000 || 
+			this.advertisementInfo.form.cost < 500) {
+				this.errorMessage = "Price cant be > 500000 and < 500"
 				return false
 			}
 			else if(this.fileList.length == 0) {

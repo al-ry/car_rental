@@ -6,13 +6,69 @@
 
 		<el-main>
             <div class="car_container_wrapper">
+                <div class="filters_container">
+                    <el-collapse v-model="activeNames" @change="handleChange" class="filters">
+                        <el-collapse-item title="Filters" name="1">
+                            <div class="filters_block">
+                                <div class="select_container">
+                                    <div class="transmission_select filter_selector">
+                                        <span class="filter_title">Transmission </span>
+                                        <el-select filterable v-model="filters.selectedFilters.transmission" name="Transmission" class="filter_select">
+                                            <el-option label='Manual' value='1'/>
+                                            <el-option label='Auto' value='2'/>
+                                        </el-select>
+                                    </div>
+                                    <div class="body_select filter_selector">
+                                        <span class="filter_title">Body </span>
+                                        <el-select v-model="filters.selectedFilters.body" class="filter_select" placeholder="Select"> 
+                                            <el-option v-for="(body, index) in bodies" :label='body' :value='index+1' v-bind:key="index"/>
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div class="select_container">
+                                    <div class="city_select filter_selector">
+                                        <span class="filter_title"> City </span>
+                                        <el-select filterable v-model="filters.selectedFilters.city" class="filter_select">
+                                            <el-option v-for="(city, index) in cities" :value="city" v-bind:key="index"/>
+                                        </el-select>
+                                    </div>
+                                    <div class="cost_select filter_selector">
+                                        <span class="filter_title"> Max price </span>
+                                        <el-input v-model="filters.selectedFilters.cost" type="number" min="500" class="filter_select"></el-input>
+                                    </div>
+                                </div>
+                                 <div class="select_container">
+                                    <div class="sort_by_price">
+                                        <span class="filter_title   ">From min to max price </span>
+                                        <el-switch v-model="filters.selectedFilters.sortByCostASC" 
+                                        :disabled="filters.selectedFilters.sortByCostDESC" @change="sortByCostASCSelected"></el-switch> 
+                                    </div>
+                                    <div class="sort_by_price">
+                                        <span class="filter_title sort_title">From max to min price</span>
+                                        <el-switch v-model="filters.selectedFilters.sortByCostDESC" :disabled="filters.selectedFilters.sortByCostASC"
+                                        @change="sortByCostDESCSelected"></el-switch>
+                                    </div>    
+                                </div>
+                                <div class="date_picker filter_selector">
+                                    <span class="filter_title"> Date </span>
+                                    <el-date-picker size="medium" v-model="filters.selectedFilters.dateRange" type="daterange" range-separator="To"
+                                    :start-placeholder="filters.selectedFilters.dateRange[0]" :end-placeholder="filters.selectedFilters.dateRange[1]" :disabledDate="validateDate">
+                                    </el-date-picker>
+                                </div>
+                             </div>
+                            <el-button @click="getAdvertisementsWithFilters" type="success">Show result</el-button>
+                        </el-collapse-item>
+                    </el-collapse>
+                </div>
                 <div class="car-container">
-                    <CarCard @click="openAdvertisementPage(car)" v-for="car in advertisements" v-bind:car="car" :key="car.id"/>
+                    <CarCard class="car_card" @click="openAdvertisementPage(car)" v-for="car in advertisements" v-bind:car="car" :key="car.id"/>
                 </div>
                 <div class="pagination_block">
                     <el-pagination layout="prev, pager, next" :total="pageCount * 10" 
                     @next-click="handleNextClick" @prev-click="handlePrevClick" @current-change="handleCurrentChange"></el-pagination>
                 </div>
+
+                
             </div>  
         </el-main>
         <AddCar v-if="isVisibleAddMenu == true" v-on:close="isVisibleAddMenu = false"
@@ -27,6 +83,7 @@ import CarCard from './CarCard.vue'
 import {continueSession} from '../../services/continueSession'
 import {getAdvertisementList} from '../../services/getAdvertisementList'
 import {mapGetters} from 'vuex'
+import { getCities } from '../../services/getCities'
 
 export default {
 
@@ -40,12 +97,29 @@ export default {
             advertisements: [],
             currentPage: 1,
             advertisementsCount: 8,
-            pageCount: 2
+            pageCount: 2,
+            cities: [],
+
+            filters : {
+                currentFilters: null,
+                selectedFilters : {
+                    dateRange: [],
+                    transmission: null,
+                    body: null,
+                    city: null,
+                    cost: null,
+                    sortByCostASC: null,
+                    sortByCostDESC: null,
+                }
+            }
         }
     },
 
     computed: {
-        ...mapGetters(['GetUserInfo'])
+        ...mapGetters(['GetUserInfo']),
+        bodies () {
+			return ["Sedan", "Cabriolet", "Coupe", "Crossover","Hatchback", "Limousine", "Wagon", "SUV", "Track"]
+		},
     },
 
     components: {
@@ -55,6 +129,14 @@ export default {
     },
 
     methods: {
+        sortByCostDESCSelected() {
+            this.filters.selectedFilters.sortByCostASC = false;
+        },
+
+        sortByCostASCSelected() {
+            this.filters.selectedFilters.sortByCostDESC = false;
+        },
+
         AddNewAdvertisement() {
             this.isVisibleAddMenu = false;
             this.loadNewPage(this.currentPage, this.advertisementsCount)
@@ -88,6 +170,7 @@ export default {
         },
 
         handleNextClick() {
+            console.log(this.filters.currentFilters)
             this.loadNewPage(++this.currentPage, this.advertisementsCount)
         },
 
@@ -99,9 +182,25 @@ export default {
             this.loadNewPage(newPageNumber, this.advertisementsCount)
         },
 
+        getCitiesList() {
+            getCities().then(res => {
+                for(var i in res.data) {
+                    this.cities.push(res.data[i]['name'])
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        async getAdvertisementsWithFilters() {
+            this.currentPage = 1;
+            this.pageCount = 2;
+            this.filters.currentFilters = this.filters.selectedFilters
+            await this.loadNewPage(this.currentPage, this.advertisementsCount)
+        },
+
         async loadNewPage(page, count) {
-            await getAdvertisementList(page, count).then(res => {
-                console.log(res.data)
+            await getAdvertisementList(page, count, this.filters.currentFilters).then(res => {
                 this.nextPageNumber = res.data.next.page
                 this.currentPage = res.data.current.page
                 this.advertisements = res.data.rows
@@ -123,6 +222,7 @@ export default {
             this.showErrorAlert(err.response.data.err)
         })
         this.loadNewPage(this.currentPage, this.advertisementsCount)
+        this.getCitiesList()
     },
 }
 
@@ -187,6 +287,21 @@ html, body {
     padding: 10px 10px;
 }
 
+.filters_container
+{
+    max-width: 1200px;
+    margin: auto;
+}
+
+.select_container
+{
+    max-width: 400px;
+    margin-right: 20px;
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+
 .pagination_block 
 {
     width: 100%;
@@ -213,5 +328,66 @@ html, body {
     min-height: 100%;
     margin-bottom: 20px;
 }
+
+.el-collapse-item__header, .el-collapse-item__wrap
+{
+    background: #f2f2f2 ;
+}
+
+.filter_title
+{
+    font-size: 18px;
+    margin: 0 10px 0 10px;
+    white-space: nowrap;
+}
+
+.filters_block
+{
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.car_card 
+{
+    cursor: pointer;
+}
+
+.filter_selector
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: 400px;
+    margin-bottom: 5px;
+}
+
+.el-collapse-item__header 
+{
+    font-size: 22px;
+}
+
+.el-switch
+{
+    padding-top: 10px;
+}
+
+.sort_title 
+{
+    padding-top: 5px;
+}
+
+.sort_by_price
+{
+    display: flex;
+}
+
+.filter_select
+{
+    width: 200px;
+}
+
+
 
 </style>

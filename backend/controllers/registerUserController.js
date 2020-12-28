@@ -18,14 +18,15 @@ exports.registerUser = async (req, res) => {
         const idCity = await db.getCityIdByName(data.cityName)
         user.idCity = idCity
         userData = await db.insertUser(user)
-        req.session.user = userData
         await db.close()
         const userInfo = {
+            id: userData.id_user,
             name: userData.name,
             phone: userData.phone,
             email: userData.email,
             city: data.cityName
         }
+        req.session.user = userInfo
         res.status(200).json(userInfo)
     } catch (err) {
         console.log(err)

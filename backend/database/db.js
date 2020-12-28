@@ -297,7 +297,7 @@ class DBManager {
             id_advertisment = $1 AND 
             ( 
             ((start <= $2 AND "end" >= $2) OR (start <= $3  AND "end" >= $3)) OR 
-            (((start >= $2) AND ' +'("end" <= $3)))
+            (((start >= $2) AND ("end" <= $3)))
             )
             `
     res = await this.#client.query(query, data)

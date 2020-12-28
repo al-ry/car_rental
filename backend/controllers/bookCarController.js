@@ -20,6 +20,7 @@ exports.bookCar = async (req, res) => {
         db.close()
         res.sendStatus(200)
     } catch (err) {
+        console.log(err)
         if (err instanceof BookingError) {
             res.status(400).json({err: err.message})
         }

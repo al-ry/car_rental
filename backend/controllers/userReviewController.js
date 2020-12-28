@@ -7,8 +7,13 @@ exports.getReviews = async (req, res) => {
     try {
         await db.connect()
         let reviews = await db.getUserReviewsByPhone(phone)
+        let userName = await db.getUserNameByPhone(phone)
         await db.close()
-        res.status(200).json(reviews)
+        console.log(reviews)
+        res.status(200).json({
+            reviews: reviews,
+            userName: userName
+        })
     } catch (err) {
         console.log(err)
         res.sendStatus(400)

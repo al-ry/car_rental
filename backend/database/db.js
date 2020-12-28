@@ -40,6 +40,13 @@ class DBManager {
     return result.rows[0]
   }
 
+  async getUserNameByPhone(phone) {
+    let data = [phone]
+    let query = 'SELECT name FROM "user" WHERE phone = $1'
+    let result = await this.#client.query(query, data)
+    return result.rows[0].name
+  }
+
   async getUserIdByPhone(phone) { 
     let data = [phone]
     let query = 'SELECT id_user FROM \"user\" WHERE phone = $1'

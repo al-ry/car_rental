@@ -259,7 +259,8 @@ class DBManager {
                 'WHERE is_open = 1 ' + advFilters.ApplyTransmissionFilter(filters.transmission) +
                                       advFilters.ApplyCityFilter(filters.city) +
                                       advFilters.ApplyCostFilter(filters.cost) +
-                                      advFilters.ApplyBodyFilter(filters.body)                       
+                                      advFilters.ApplyBodyFilter(filters.body) +
+                                      advFilters.ApplyMarkFilter(filters.mark)                       
     let res = await this.#client.query(query)
     return res.rowCount
   }

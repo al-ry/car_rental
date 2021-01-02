@@ -11,6 +11,9 @@ module.exports = {
     ApplyCostFilter(cost) {
         return (cost) ? 'AND cost <= ' + '\'' + cost + '\'' + ' ' : ''
     },
+    ApplyMarkFilter(mark) {
+        return (cost) ? 'AND mark = ' + '\'' + mark + '\'' + ' ' : ''
+    },
     ApplyCostSort(ASCSortType, DESCSortType) {
         let res = ''
         if (ASCSortType) {

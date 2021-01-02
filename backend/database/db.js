@@ -366,6 +366,20 @@ class DBManager {
     }
   }
 
+  async getPopularMarksWithLimit(limit) {
+    let data = [limit]
+    let query = `
+        SELECT name, COUNT(id_advertisment) AS cars_count FROM advertisment
+        INNER JOIN car ON car.id_car = advertisment.id_car
+        INNER JOIN mark ON mark.id_mark = car.id_mark
+        GROUP BY name
+        ORDER BY cars_count  DESC
+        LIMIT $1        
+    `
+    let res = await this.#client.query(query, data)
+    return res.rows
+  }
+
   async beginTransaction() {
     await this.#client.query('BEGIN')
   }

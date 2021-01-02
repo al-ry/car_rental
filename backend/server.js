@@ -24,6 +24,7 @@ const incomingBookingRouter = require('./routes/incomingBookingRouter');
 const outgoingBookingRouter = require('./routes/outgoingBookingRouter');
 const userReviewRouter = require('./routes/userReviewRouter');
 const giveReviewRouter = require('./routes/giveReviewRouter');
+const popularMarksRouter = require('./routes/popularMarks');
 
 app.use(cors({  
   credentials: true,
@@ -58,6 +59,7 @@ app.use(incomingBookingRouter)
 app.use(outgoingBookingRouter)
 app.use(userReviewRouter)
 app.use(giveReviewRouter)
+app.use(popularMarksRouter)
 
 
 app.listen(3000, () => {

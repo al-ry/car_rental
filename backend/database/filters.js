@@ -12,7 +12,7 @@ module.exports = {
         return (cost) ? 'AND cost <= ' + '\'' + cost + '\'' + ' ' : ''
     },
     ApplyMarkFilter(mark) {
-        return (cost) ? 'AND mark = ' + '\'' + mark + '\'' + ' ' : ''
+        return (mark) ? 'AND mark = ' + '\'' + mark + '\'' + ' ' : ''
     },
     ApplyCostSort(ASCSortType, DESCSortType) {
         let res = ''

@@ -5,11 +5,11 @@
                 <el-avatar :size="150" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             </div>
             <div class="lessor_info">
-                <span><i class="el-icon-user icon"></i>{{GetUserName}}</span>
+                <span><i class="el-icon-user icon"></i>{{userName}}</span>
                 <span><i class="el-icon-phone-outline icon"></i>{{$route.params.phone}}</span>
                 <div class="rate_block">
                     <el-rate v-model="rate" class="review_rate" disabled></el-rate> 
-                    <span v-if="rate != 0">{{rate}} points ({{reviews.length}} reviews)</span>
+                    <span>{{rate}} points ({{reviews.length}} reviews)</span>
                 </div>
             </div>
         </div>
@@ -43,7 +43,10 @@ export default {
         return {
             fullscreenLoading: false,
             rate: 0,
-            reviews: []
+            userName: '',
+            reviews: [{
+                rating: 0
+            }]
         }
     },
 
@@ -56,8 +59,13 @@ export default {
             for(var index in this.reviews) {
                 this.rate += this.reviews[index].rating
             }
-            this.rate = this.rate / this.reviews.length
-            this.rate = Math.floor(this.rate * 100) / 100
+
+            if (this.rate == 0) {
+                this.reviewCount = 0
+            } else {
+                this.rate = this.rate / this.reviews.length
+                this.rate = Math.floor(this.rate * 100) / 100
+            }
         }
     },
 
@@ -72,7 +80,9 @@ export default {
         })
 
         await getUserReviews(this.$route.params.phone).then(res => {
-            this.reviews = res.data
+            this.reviews = res.data.reviews
+            this.userName = res.data.userName
+            console.log(res.data.reviews)
         }).catch(err => {
             console.log(err, 'error')
         })

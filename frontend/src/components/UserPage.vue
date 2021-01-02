@@ -37,14 +37,14 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="renter_name" label="User" width="180">
+                    <el-table-column prop="renter_name" label="User" width="250">
                         <template #default="scope">
                             <el-tag size="medium" @click="showAdvertisement(scope.$index, scope.row)">{{ scope.row.renter_phone }}</el-tag>
                             <span style="margin-left: 10px">{{scope.row.renter_name}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="start" label="Start" width="180"></el-table-column>
-                    <el-table-column prop="end" label="End" width="180"></el-table-column>
+                    <el-table-column prop="start" label="Start" width="150"></el-table-column>
+                    <el-table-column prop="end" label="End" width="150"></el-table-column>
                     <el-table-column prop="state" label="Status" width="100"></el-table-column>
                     <el-table-column  label="Operations" width="120">
                         <template #default="scope">
@@ -135,12 +135,10 @@ export default {
     },
 
     async created() {
-        this.openLoadingScreen()
         await this.relogUser()
         if  (this.isLoggedIn) {
             this.showIncomingRequests()
         }
-        this.closeLoadingScreen()
     },
 
     methods: {
@@ -181,13 +179,17 @@ export default {
         },
 
         async relogUser() {
+            this.openLoadingScreen()
             await continueSession().then(res => {
                 if (res.status == 200) {
                     this.$store.commit('LoginUser', res.data)
                     this.userInfo = this.$store.getters.GetUserInfo
+                    this.closeLoadingScreen()
                 }
             }).catch(err => {
-                this.showErrorAlert(err.response.data.err)
+                if (err.response.status != 403) {  
+                    this.showErrorAlert(err.response.data.err)
+                }
             })
         },
 

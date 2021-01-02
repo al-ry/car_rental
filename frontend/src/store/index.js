@@ -11,7 +11,6 @@ const store = createStore({
             state.loggedUser = payload
         },
         LogOutUser(state) {
-            
             state.loggedUser = null
         }
     },

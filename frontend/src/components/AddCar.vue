@@ -400,12 +400,7 @@ h2 {
 {
 	margin-left: 40px;
 }
-/* .el-upload-list--picture-card .el-upload-list__item 
-{
-  height: 60px;
-  width: 60px;
-  line-height: 70px;
-} */
+
 .el-upload-list
 {
     display: flex;

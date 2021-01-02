@@ -176,6 +176,7 @@ class DBManager {
 
   async getAdvetismentListPart(start, limit, filters) {
     let data = [start, limit]
+    console.log(filters.mark)
     let query = 'SELECT DISTINCT advertisment.id_advertisment, cost, transmission, photo_path, fuel, year, body, mark, model, city FROM advertisment ' +
                 'INNER JOIN car ON car.id_car = advertisment.id_car ' +
                 'INNER JOIN (SELECT id_city, name AS city FROM city) AS city ON city.id_city = advertisment.id_city ' +
@@ -186,7 +187,8 @@ class DBManager {
                                        advFilters.ApplyCityFilter(filters.city) +
                                        advFilters.ApplyCostFilter(filters.cost) +
                                        advFilters.ApplyBodyFilter(filters.body) +
-                                       advFilters.ApplyCostSort(filters.sortByCostASC, filters.sortByCostDESC) +
+                                       advFilters.ApplyMarkFilter(filters.mark) +
+                                       advFilters.ApplyCostSort(filters.sortByCostASC, filters.sortByCostDESC) +               
                 'LIMIT $2 OFFSET $1'
     let res = await this.#client.query(query, data)
     return res.rows

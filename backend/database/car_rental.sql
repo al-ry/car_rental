@@ -96,8 +96,6 @@ CREATE TABLE IF NOT EXISTS booking
 	id_advertisment SERIAL NOT NULL,
 	id_renter SERIAL NOT NULL,
 	state SMALLINT NOT NULL,
-	/*     
-	*/
 	"start" DATE NOT NULL,
 	"end" DATE NOT NULL,
 	CONSTRAINT booking_advertisment_id_advertisment_fk
@@ -117,3 +115,34 @@ CREATE TABLE IF NOT EXISTS lessors_review
 		FOREIGN KEY(id_renter) 
 			REFERENCES "user"(id_user)
 );
+
+
+drop table "user" cascade
+drop table booking cascade
+drop table advertisment cascade
+drop table car cascade
+drop table review cascade
+
+truncate table session
+
+-- SELECT id_booking, id_advertisment FROM booking
+-- WHERE id_advertisment NOT IN (
+--     SELECT id_advertisment FROM booking
+--     WHERE state = 1 AND (
+--         ((start <= '23-02-2021' AND "end" >= '25-02-2021') OR
+--             (start <= '23-02-2021'  AND "end" >= '25-02-2021')) OR
+--     (((start >= '23-02-2021') AND ("end" <= '25-02-2021'))))
+-- )) AS booking ON booking.id_advertisment = advertisment.id_advertisment
+
+SELECT id_advertisment FROM advertisment
+WHERE id_advertisment NOT IN
+(
+    SELECT id_advertisment FROM booking
+    WHERE state = 1 AND
+    (
+    (start <= '20-02-2021' AND "end" >= '20-02-2021') OR (start <= '25-02-2021'  AND "end" >= '25-02-2021') OR
+    ((start >= '20-02-2021') AND ("end" <= '25-02-2021'))
+    )
+)
+
+select id_advertisment from advertisment

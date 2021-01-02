@@ -22,16 +22,13 @@
 
         <el-form-item label="Fuel" >   
             <el-select filterable v-model="advertisement.fuel"  :value='advertisement.fuel' class="car_info_select">
-                <el-option label='Petrol' value=1 />
-                <el-option label='Diesel' value=2 />
-                <el-option label='Hybrid/Electro' value=3 />
+                <el-option v-for="(type, index) in fuel" v-bind:key="index" :label='type' :value='index + 1'/>
             </el-select>
         </el-form-item>
 
         <el-form-item label="Transmisson" >   
             <el-select filterable v-model="advertisement.transmission" class="car_info_select">
-                <el-option label='Manual' value='1'/>
-                <el-option label='Auto' value='2'/>
+                <el-option v-for="(type, index) in transmission" v-bind:key="index" :label='type' :value='index + 1'/>
             </el-select>
         </el-form-item>
 
@@ -66,8 +63,8 @@
             </el-form-item>
 
             <el-form-item class="form_buttons_block">
-                <el-button type="submit" v-on:click="onSubmit">Create</el-button>
-                <el-button v-on:click="$emit('close')">Cancel</el-button>
+                <el-button type="submit" v-on:click="onSubmit">Submit</el-button>
+                <el-button v-on:click="back">Back</el-button>
             </el-form-item>
     </el-form>
     
@@ -95,7 +92,8 @@ export default {
             visibleCarPhotos: [],
             deletedPhotos: [],
             cities: [],
-            imageDirectory: ''
+            imageDirectory: '',
+            errorMessage: ''
         }
     },
 
@@ -107,11 +105,24 @@ export default {
 
 		bodies () {
 			return ["Sedan", "Cabriolet", "Coupe", "Crossover","Hatchback", "Limousine", "Wagon", "SUV", "Track"]
-		},
+        },
+        
+        transmission() {
+            return ["Manual", "Auto"]
+        },
+
+        fuel() {
+            return ["Petrol", "Diesel", "Hybrid/Electro"]
+        }
     },
 
 
     methods: {
+
+        back() {
+            this.$router.push("/user_page")
+        },
+        
         getPhotoCount() {
             return 6 - this.visibleCarPhotos.length
         },
@@ -128,23 +139,23 @@ export default {
         isCorrectInfo() {
 			for(const field in this.advertisement) {
 				if(!this.advertisement[field]) {
-					console.log(field)
+                    this.errorMessage = "All fields should be filled"
 					return false;
 				}
 			}
 
 			if (this.advertisement.cost < 1) {
-                console.log("Price should be at least 1 RUB")
+                this.errorMessage = "Price should be at least 1 RUB"
 				return false
             }
             
 			else if (this.advertisement.cost > 500000 || 
 			this.advertisement.cost < 500) {
-				console.log("Price cant be > 500000 and < 500")
+				this.errorMessage = "Price cant be > 500000 and < 500"
 				return false
 			}
 			else if(this.newPhotos.length + this.visibleCarPhotos.length == 0) {
-                console.log("No photo attached")
+                this.errorMessage = "No photo attached"
 				return false
 			}
 
@@ -199,8 +210,10 @@ export default {
         },
 
         onSubmit() {
+            console.log(this.advertisement)
             if (this.isCorrectInfo()) {
                 const data = new FormData();
+
 
                 for(const field in this.advertisement) {
                     data.append(field, this.advertisement[field])
@@ -214,12 +227,11 @@ export default {
                     data.append('files', element)
                 });
 
-
-
                 console.log(this.imageDirectory)
 
                 postMutableAdvertisement(data).then(res => {
-                    console.log(res)
+                    this.$router.push('/user_page')
+                    res
                 }).catch(err => {
                     console.log(err)
                 })
@@ -239,9 +251,6 @@ export default {
                 this.showErrorAlert(err.response.data.err)
             })
 
-
-
-            console.log(this.$route.params.id)
             await getMutableAdvertisement(this.$route.params.id).then(res => {
                 this.advertisement = res.data
                 this.visibleCarPhotos = res.data.photo_path
@@ -249,14 +258,6 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
-
-
-            // await getAdvertismentInfo(this.$route.params.id).then(res => {
-            //     this.advertisement = res.data
-            //     this.visibleCarPhotos = res.data.photo_path 
-            // }).catch(err => {
-            //     this.showErrorAlert(err.response.data.err)
-            // })
         },
     }
 }
@@ -338,4 +339,9 @@ export default {
 {
     margin: 20px auto 20px auto
 }
+.error_message
+{
+    color : red;
+}
+
 </style>

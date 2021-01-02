@@ -29,6 +29,7 @@
                 <div class="technical_block">
                     <span><i class="el-icon-s-tools icon"></i> {{getModifiedTransmission(advertisement.transmission)}}</span>
                     <span><i class="el-icon-truck icon"></i> {{getModifiedFuel(advertisement.fuel)}}</span>
+                    <span><i class="el-icon-house icon"></i> {{getModifiedBody(advertisement.body)}}</span>
                 </div>
                 <div class="price_block"><span>Price a day: {{getModifiedPrice(advertisement.cost)}}  &#x20bd;</span></div>
             </div>
@@ -110,6 +111,44 @@ export default {
             return modifiedFuel
         },
 
+        getModifiedBody(body) {
+            var modifiedBody
+            switch(body) {
+                case 1:
+                    modifiedBody = "Sedan";
+                    break;
+                case 2:
+                    modifiedBody = "Cabriolet";
+                    break;
+                case 3:
+                    modifiedBody = "Coupe";
+                    break;
+                case 4:
+                    modifiedBody = "Crossover"
+                    break
+                case 5:
+                    modifiedBody = "Hatchback"
+                    break
+                case 6:
+                    modifiedBody = "Limousine"
+                    break
+                case 7:
+                    modifiedBody = "Wagon"
+                    break
+                case 8:
+                    modifiedBody = "SUV"
+                    break
+                case 9:
+                    modifiedBody = "Track"
+                    break
+                default:
+                    modifiedBody = "Sedan"
+                    break
+            }
+
+            return modifiedBody
+        },
+
         getModifiedTransmission(transmission) {
             var modifiedTransmission
             switch(transmission) {
@@ -174,10 +213,14 @@ export default {
             for(var index in this.advertisement.rating) {
                 this.rate += this.advertisement.rating[index].rating
             }
-
-            this.rate = this.rate / this.advertisement.rating.length     
-            this.rate = Math.floor(this.rate * 100) / 100
-            this.reviewCount = this.advertisement.rating.length
+            
+            if (this.rate == 0) {
+                this.reviewCount = 0
+            } else {
+                this.rate = this.rate / this.advertisement.rating.length     
+                this.rate = Math.floor(this.rate * 100) / 100
+                this.reviewCount = this.advertisement.rating.length
+            }
         },
 
         async requireInfo() {
@@ -203,7 +246,9 @@ export default {
                     this.$store.commit('LoginUser', res.data)
                 }
             }).catch(err => {
-                this.showErrorAlert(err.response.data.err)
+                if (err.response.status != 403) {  
+                    this.showErrorAlert(err.response.data.err)
+                }
             })
         },
 
@@ -313,6 +358,7 @@ background-color: #d3dce6;
 
 .lessor_info
 {
+    margin-left: 20px;
     display:flex;
     flex-direction: column;
     font: Courier, monospace;
@@ -357,7 +403,7 @@ background-color: #d3dce6;
 }
 
 .location_block 
-{
+{   
     font-size: 18px;
     margin-top: 10px;
     font-size: 20px;
@@ -369,7 +415,7 @@ background-color: #d3dce6;
     font-size: 28px;
     display: flex;
     justify-content: flex-end;
-    margin-top: 70px
+    margin-top: 40px
 }
 
 .book_button

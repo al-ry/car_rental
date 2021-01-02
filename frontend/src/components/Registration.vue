@@ -26,14 +26,8 @@
         <el-form-item label="Confirm password">
             <el-input type="password" v-model="form.confirmPassword"></el-input>
         </el-form-item>
-        <el-form-item v-if="doesPasswordsMatch == false" class="error_message">
-            <span>Passwords does not math</span>
-        </el-form-item>
-        <el-form-item v-if="isValidInput == false" class="error_message">
-            <span>All fields should be filled</span>
-        </el-form-item>
-        <el-form-item v-if="isRegistered == false" class="error_message">
-            <span>User already exists</span>
+        <el-form-item v-if="errorMessage != ''" class="error_message">
+            <span>{{errorMessage}}</span>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -62,6 +56,7 @@ import {getCities} from '../../services/getCities'
         doesPasswordsMatch: true,
         isValidInput: true,
         isRegistered : true,
+        errorMessage : '',
         cities : []
 
       }
@@ -72,45 +67,45 @@ import {getCities} from '../../services/getCities'
             {
                 if(!this.form[field])
                 {
-                    this.isRegistered = true
-                    this.doesPasswordsMatch = true,
-                    this.isValidInput = false;
-                    return;
+                    this.errorMessage = "All fields should be filled"
+                    return false;
                 }
             }
 
-            this.isValidInput = true;
+            if (this.form.phone.length != 11) {
+                this.errorMessage = "Phone number should contain 11 digits"
+                return false
+            }
+
+            return true
         },
         onSubmit() {
-            this.checkInput() 
-            if(this.isValidInput === true) {
-                if (this.form.password != this.form.confirmPassword) {
-                    this.doesPasswordsMatch = false
-                    return;
-                }
-
+            if(this.checkInput() ) {
                 let user = {
                     name: this.form.name,
                     phone: this.form.phone,
                     email: this.form.email,
-                    id_city: this.form.city,
+                    cityName: this.form.city,
                     password: this.form.password
                 }
 
+                if (this.form.password != this.form.confirmPassword) {
+                    console.log(this.form.password, this.form.confirmPassword)
+                    this.errorMessage = "Passwords does not match"
+                    return
+                }
                 registerUser(user).then(res => {
-                    if (res.status == 200) {
-                        this.$router.push({name : "main_page"})
-                        this.$store.commit('LoginUser', this.form)
-                    }        
-                    else {
-                        this.isEmptyInput = false;
-                        this.isRegistered = false;
-                        this.doesPasswordsMatch = true;
-                        console.log('user exists')
-                    }
+                    console.log(user)
+                        if (res.status == 200) {
+                            this.$router.push({name : "main_page"})
+                            this.$store.commit('LoginUser', this.form)
+                        }        
+                        else {
+                            console.log(res)
+                        }
                     }).catch(err => {
-                        console.log(err, "sdasdasd")
-                })
+                        console.log(err.response.data)
+                    })
             }  
         },
     },
@@ -121,7 +116,7 @@ import {getCities} from '../../services/getCities'
 				
 			}
 		}).catch(err => {
-				console.log(err)
+			console.log(err)
 		})
     }
   }

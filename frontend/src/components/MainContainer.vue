@@ -8,8 +8,13 @@
             <div class="car_container_wrapper">
                 <div class="filters_container">
                     <el-collapse v-model="activeNames" @change="handleChange" class="filters">
-                        <el-collapse-item title="Filters" name="1">
-                            <div class="filters_block">
+                        <el-collapse-item title="Popular marks" name="1" >
+                            <el-checkbox-group v-model="selectedUser" @change="handlePopularMarkSelected" :max="1">
+                                <el-checkbox v-for="(mark, index) in popularMarks" :label="mark" v-bind:key="index">{{mark.name}} ({{mark.cars_count}} adv)</el-checkbox>
+                            </el-checkbox-group>
+                        </el-collapse-item>
+                        <el-collapse-item title="Filters" name="2">
+                            <div class="filters_block"> 
                                 <div class="select_container">
                                     <div class="transmission_select filter_selector">
                                         <span class="filter_title">Transmission </span>
@@ -80,8 +85,9 @@
 import Navbar from './Navbar.vue'
 import AddCar from './AddCar.vue'
 import CarCard from './CarCard.vue'
-import {continueSession} from '../../services/continueSession'
-import {getAdvertisementList} from '../../services/getAdvertisementList'
+import { continueSession } from '../../services/continueSession'
+import { getAdvertisementList } from '../../services/getAdvertisementList'
+import { getPopularMarks } from '../../services/getPopularMarks'
 import {mapGetters} from 'vuex'
 import { getCities } from '../../services/getCities'
 
@@ -110,8 +116,12 @@ export default {
                     cost: null,
                     sortByCostASC: null,
                     sortByCostDESC: null,
+                    mark: null
                 }
-            }
+            },
+
+            selectedUser : [],
+            popularMarks: [],
         }
     },
 
@@ -129,6 +139,11 @@ export default {
     },
 
     methods: {
+        handlePopularMarkSelected(mark) {
+            this.filters.selectedFilters.mark = this.filters.selectedFilters.mark ? null : mark[0].name
+            this.getAdvertisementsWithFilters()
+        },
+
         sortByCostDESCSelected() {
             this.filters.selectedFilters.sortByCostASC = false;
         },
@@ -143,11 +158,12 @@ export default {
             this.showSuccessAlert("Your advertisement successfully added!")
         },
 
-        openFullScreen1() {
+        openLoadingScreen() {
             this.fullscreenLoading = true;
-            setTimeout(() => {
+        },
+
+        closeLoadingScreen() {
             this.fullscreenLoading = false;
-            }, 500);
         },
 
         handleClose() {
@@ -192,7 +208,16 @@ export default {
             })
         },
 
+        getPopularMarksList(limit) {
+            getPopularMarks(limit).then(res => {
+                this.popularMarks = res.data
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+
         async getAdvertisementsWithFilters() {
+            console.log("with filters called")
             this.currentPage = 1;
             this.pageCount = 2;
             this.filters.currentFilters = this.filters.selectedFilters
@@ -213,16 +238,20 @@ export default {
     },
 
     async created() {
-        this.openFullScreen1()
+        this.openLoadingScreen()
         await continueSession().then(res => {
             if (res.status == 200) {
                 this.$store.commit('LoginUser', res.data)
             }
         }).catch(err => {
-            this.showErrorAlert(err.response.data.err)
+            if (err.response.status != 403) {  
+                this.showErrorAlert(err.response.data.err)
+            }
         })
-        this.loadNewPage(this.currentPage, this.advertisementsCount)
+        await this.loadNewPage(this.currentPage, this.advertisementsCount)
         this.getCitiesList()
+        this.getPopularMarksList()
+        this.closeLoadingScreen()
     },
 }
 
